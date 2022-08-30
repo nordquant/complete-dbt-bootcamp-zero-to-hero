@@ -1,6 +1,6 @@
-Greetings to the **MOST COMPLETE, CONTINUOUSLY UPDATED dbt (Data Build Tool) course in the world - as of 2022!**
+Greetings to the MOST COMPLETE, CONTINUOUSLY UPDATED independent dbt™ (Data Build Tool) software course in the world - as of 2022! This course is both the TOP RATED and the BESTSELLER dbt course on Udemy! 
 
-Thank you for joining us for 2022 Complete dbt (Data Build Tool) Bootcamp: Zero to Hero - we are super excited to have you in the course!
+Course website: https://www.udemy.com/course/complete-dbt-data-build-tool-bootcamp-zero-to-hero-learn-dbt/?referralCode=659B6722C93EF4096D11
 
 The structure of the course is designed to have a top-down approach. It starts with the theory - all you need to know is to put dbt (Data Build Tool) in context and to have an understanding of how it fits into the modern data stack. We start with the big picture, then we go deeper and deeper. Once you learned about the pieces, we are going to shift to the technicalities - a practical section -, which will focus on putting together the dbt “puzzle”. The practical section will cover each and every single dbt feature present today through the construction of a complete, real-world project; Airbnb. This presents an opportunity for us to show you which features should be used at what stage in a given project, and you will see how dbt is used in the industry.
 
