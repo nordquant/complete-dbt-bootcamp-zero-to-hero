@@ -736,7 +736,7 @@ GRANT SELECT ON FUTURE VIEWS IN SCHEMA AIRBNB.DEV TO ROLE REPORTER;
 The contents of `analyses/full_moon_no_sleep.sql`:
 ```sql
 WITH mart_fullmoon_reviews AS (
-    SELECT * FROM ref('mart_fullmoon_reviews')
+    SELECT * FROM {{ ref('mart_fullmoon_reviews') }}
 )
 SELECT
     is_full_moon,
