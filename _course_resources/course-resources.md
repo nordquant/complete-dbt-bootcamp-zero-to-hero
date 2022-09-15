@@ -99,6 +99,36 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
 
 ```
 
+# Python and Virtualenv setup, and dbt installation - Windows
+
+## Python
+This is the Python installer you want to use: 
+
+https://www.python.org/ftp/python/3.10.7/python-3.10.7-amd64.exe 
+
+Please make sure that you work with Python 3.11 as newer versions of python might not be compatible with some of the dbt packages.
+
+## Virtualenv setup
+Here are the commands we executed in this lesson:
+```
+cd Desktop
+mkdir course
+cd course
+
+virtualenv venv
+venv\Scripts\activate
+```
+
+## dbt installation
+
+__Make sure that you are working in the _Desktop/course_ folder and that you have virtualenv activated before installing dbt.__
+
+Here are the commands we executed in this lesson:
+```
+pip install dbt-snowflake==1.2.0
+dbt
+```
+
 # Virtualenv setup and dbt installation - Mac
 
 ## iTerm2
