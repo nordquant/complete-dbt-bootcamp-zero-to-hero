@@ -842,6 +842,6 @@ dbt test --select source:airbnb.listings
 dbt --debug test --select dim_listings_w_hosts
 ```
 
-_Keep in mind that in the lecture we didn't use the _--debug_ flag after all as taking a look at the compiled sql file is the better way of debugging tests.
+Keep in mind that in the lecture we didn't use the _--debug_ flag after all as taking a look at the compiled sql file is the better way of debugging tests.
 
 
