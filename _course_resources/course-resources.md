@@ -469,7 +469,7 @@ FROM
   ON (TO_DATE(r.review_date) = DATEADD(DAY, 1, fm.full_moon_date))
 ```
 
-# Sources and Seeds
+# Snapshots
 
 ## Snapshots for listing
 The contents of `snapshots/scd_raw_listings.sql`:
