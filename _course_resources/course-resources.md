@@ -554,7 +554,7 @@ models:
 ```
 
 ### Generic test for minimum nights check
-The contents of `tests/dim_listings_minumum_nights.yml`:
+The contents of `tests/dim_listings_minumum_nights.sql`:
 
 ```sql
 SELECT
