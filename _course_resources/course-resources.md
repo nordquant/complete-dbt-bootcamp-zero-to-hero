@@ -105,6 +105,8 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
 
 ```
 
+-- END OF SNOWFLAKE DATA IMPORT
+
 # Python and Virtualenv setup, and dbt installation - Windows
 
 ## Python
