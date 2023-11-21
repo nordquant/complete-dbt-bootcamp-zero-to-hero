@@ -46,7 +46,7 @@ GRANT ALL ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE transform;
 
 Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
 
-```{ .sql #snowflake_import }
+```sql
 -- Set up the defaults
 USE WAREHOUSE COMPUTE_WH;
 USE DATABASE airbnb;
