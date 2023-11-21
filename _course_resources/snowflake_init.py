@@ -1,4 +1,8 @@
+# %%
+
 #pip install sqlalchemy snowflake-sqlalchemy markdown pyyaml
+
+import streamlit as st
 
 import sqlalchemy as sa
 from sqlalchemy import create_engine
@@ -8,9 +12,14 @@ from bs4 import BeautifulSoup
 import yaml
 import argparse
 import os
+from sqlalchemy.dialects import registry
+
+registry.register('snowflake', 'snowflake.sqlalchemy', 'dialect')
+
 
 CURRENT_DIR=os.path.dirname(os.path.abspath(__file__))
 
+# %%
 def load_dbt_profiles(profiles_path, user, password):
     with open(profiles_path, 'r') as f:
         profiles = yaml.safe_load(f)
@@ -21,28 +30,27 @@ def load_dbt_profiles(profiles_path, user, password):
             output['password'] = password
     return profiles
 
-def get_snowflake_connection(profile):
-    user = profile['user']
-    password = profile['password']
-    account = profile['account']
-    warehouse = profile['warehouse']
-    database = profile['database']
-    schema = profile['schema']
+def get_snowflake_connection(account, username, password):
 
-    engine = create_engine(f'snowflake://{user}:{password}@{account}/{database}/{schema}?warehouse={warehouse}')
+    engine = create_engine(f'snowflake://{username}:{password}@{account}/AIRBNB/DEV?warehouse=COMPUTE_WH&role=ACCOUNTADMIN&account_identifier={account}')
     connection = engine.connect()
 
     return connection
+
 
 def read_sql_from_md(file_path):
     with open(file_path, 'r') as f:
         md_text = f.read()
 
     html = markdown(md_text, extensions=[CodeHiliteExtension()])
+    st.write(html)
     soup = BeautifulSoup(html, 'html.parser')
 
-    code_blocks = soup.find_all('code')
-    sql_blocks = [block.text for block in code_blocks if block.get('class') and 'sql' in block.get('class')]
+    code_blocks = soup.find_all('#snowflake_setup')
+    #sql_blocks = [block.text for block in code_blocks if block.get('class') and 'sql' in block.get('class')]
+    st.write(code_blocks)
+    st.write(code_blocks.text)
+    return code_blocks
 
     return sql_blocks
 
@@ -50,27 +58,24 @@ def execute_sql(connection, sql_blocks):
     for sql in sql_blocks:
         if "-- END OF SNOWFLAKE DATA IMPORT" in sql:
             break
-        result = connection.execute(sql)
-        for row in result:
-            print(row)
+        st.write(sql)
+        # result = connection.execute(sql)
+        # for row in result:
+        #     st.write(row)
+
 
 def main():
-    parser = argparse.ArgumentParser(description='Execute SQL from markdown file against Snowflake.')
-    parser.add_argument('--username', required=True, help='Snowflake username')
-    parser.add_argument('--password', required=True, help='Snowflake password')
-    args = parser.parse_args()
+    pw = os.environ.get("SNOWFLAKE_PASSWORD") if os.environ.get("SNOWFLAKE_PASSWORD") else ""
+    hostname = st.text_input('Hostname', 'laimquw-pfb79199')
+    username = st.text_input('USername', 'admin')
+    password = st.text_input('Password', 'ps')
+    if st.button("check"):
+        st.write(f"megklikkelte {hostname} {username} {password}")
 
-    profiles_path = os.path.expanduser('~/.dbt_profiles.yml')
-    md_file_path = os.path.join(CURRENT_DIR, 'course-resources.md')
+        connection = get_snowflake_connection(hostname, username, password)
 
-    profiles = load_dbt_profiles(profiles_path, args.username, args.password)
-    snowflake_profile = profiles['your_profile_name']['outputs']['your_target_name']
-
-    connection = get_snowflake_connection(snowflake_profile)
-
-    sql_blocks = read_sql_from_md(md_file_path)
-
-    execute_sql(connection, sql_blocks)
+        sql_blocks = read_sql_from_md(CURRENT_DIR + "/course-resources.md")
+        #execute_sql(connection, sql_blocks)
 
 if __name__ == '__main__':
     main()

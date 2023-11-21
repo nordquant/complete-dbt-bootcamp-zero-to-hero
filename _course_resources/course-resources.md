@@ -5,7 +5,7 @@ Copy these SQL statements into a Snowflake Worksheet, select all and execute the
 
 If you see a _Grant partially executed: privileges [REFERENCE_USAGE] not granted._ message when you execute `GRANT ALL ON DATABASE AIRBNB to ROLE transform`, that's just an info message and you can ignore it. 
 
-```sql
+``` #snowflake_setup
 -- Use an admin role
 USE ROLE ACCOUNTADMIN;
 
@@ -46,7 +46,7 @@ GRANT ALL ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE transform;
 
 Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
 
-```sql
+```{ .sql #snowflake_import }
 -- Set up the defaults
 USE WAREHOUSE COMPUTE_WH;
 USE DATABASE airbnb;
