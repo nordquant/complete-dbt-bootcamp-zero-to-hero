@@ -5,7 +5,7 @@ Copy these SQL statements into a Snowflake Worksheet, select all and execute the
 
 If you see a _Grant partially executed: privileges [REFERENCE_USAGE] not granted._ message when you execute `GRANT ALL ON DATABASE AIRBNB to ROLE transform`, that's just an info message and you can ignore it. 
 
-``` #snowflake_setup
+```sql {#snowflake_setup}
 -- Use an admin role
 USE ROLE ACCOUNTADMIN;
 
@@ -39,14 +39,13 @@ GRANT ALL ON ALL SCHEMAS IN DATABASE AIRBNB to ROLE transform;
 GRANT ALL ON FUTURE SCHEMAS IN DATABASE AIRBNB to ROLE transform;
 GRANT ALL ON ALL TABLES IN SCHEMA AIRBNB.RAW to ROLE transform;
 GRANT ALL ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE transform;
-
 ```
 
 ## Snowflake data import
 
 Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
 
-```sql
+```sql {#snowflake_import}
 -- Set up the defaults
 USE WAREHOUSE COMPUTE_WH;
 USE DATABASE airbnb;
@@ -102,10 +101,7 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
                    from 's3://dbtlearn/hosts.csv'
                     FILE_FORMAT = (type = 'CSV' skip_header = 1
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
-
 ```
-
--- END OF SNOWFLAKE DATA IMPORT
 
 # Python and Virtualenv setup, and dbt installation - Windows
 
