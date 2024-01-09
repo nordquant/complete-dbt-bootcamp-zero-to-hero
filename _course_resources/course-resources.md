@@ -148,7 +148,7 @@ create course
 cd course
 virtualenv venv
 . venv/bin/activate
-pip install dbt-snowflake==1.5.0
+pip install dbt-snowflake==1.7.1
 which dbt
 ```
 
