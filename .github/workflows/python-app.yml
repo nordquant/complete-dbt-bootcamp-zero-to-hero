@@ -19,20 +19,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.11"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Create dbt profile
       env:
         PROFILES_YML: ${{ secrets.PROFILES_YML }}
       run: |
         mkdir -p ~/.dbt
-        echo $DBT_CREDENTIALS > ~/.dbt/profiles.yml
+        echo $PROFILES_YML > ~/.dbt/profiles.yml
+        echo "Number of lines in ~/.dbt/profiles.yml: $(wc -l ~/.dbt/profiles.yml)"
+        cat ~/.dbt/profiles.yml >&2
     - name: Execute dbt debug
       run: |
         dbt debug
