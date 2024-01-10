@@ -25,7 +25,7 @@ jobs:
       run: |
         mkdir -p ~/.dbt
         echo $PROFILES_YML > ~/.dbt/profiles.yml
-        echo "Number of lines in ~/.dbt/profiles.yml: $(wc -l ~/.dbt/profiles.yml)"
+        echo "Number of chars in ~/.dbt/profiles.yml: $(wc -c ~/.dbt/profiles.yml)"
         cat ~/.dbt/profiles.yml >&2
     - name: Execute dbt debug
       run: |
