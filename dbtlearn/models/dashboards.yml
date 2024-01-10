@@ -1,7 +1,8 @@
 version: 2
 
 exposures:
-  - name: Executive Dashboard
+  - name: executive_dashboard
+    label: Executive Dashboard
     type: dashboard
     maturity: low
     url: https://7e942fbd.us2a.app.preset.io:443/r/2
