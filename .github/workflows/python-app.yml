@@ -28,7 +28,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Create dbt profile
-      with:
+      env:
         PROFILES_YML: ${{ secrets.PROFILES_YML }}
       run: |
         mkdir -p ~/.dbt
