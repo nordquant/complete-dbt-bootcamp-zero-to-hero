@@ -2,6 +2,8 @@ dbtlearn/package-lock.yml
 
 dbtlearn/target/
 dbtlearn/dbt_packages/
+archive
+
 logs/
 venv/
 
