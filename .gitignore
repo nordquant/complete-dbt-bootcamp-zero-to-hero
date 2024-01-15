@@ -3,6 +3,7 @@ dbtlearn/package-lock.yml
 dbtlearn/target/
 dbtlearn/dbt_packages/
 archive
+dbt_dagster_project
 
 logs/
 venv/
