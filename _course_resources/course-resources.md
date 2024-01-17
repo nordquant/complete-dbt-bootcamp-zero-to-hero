@@ -851,4 +851,42 @@ dbt --debug test --select dim_listings_w_hosts
 
 Keep in mind that in the lecture we didn't use the _--debug_ flag after all as taking a look at the compiled sql file is the better way of debugging tests.
 
+## dbt Orchestration 
+
+### Links to different orchestrators
+
+ * [dbt integrations](https://docs.getdbt.com/docs/deploy/deployment-tools)
+ * [Apache Airflow](https://airflow.apache.org/)
+ * [Prefect](https://www.prefect.io/)
+ * [Prefect dbt Integration](https://www.prefect.io/blog/dbt-and-prefect)
+ * [Azure Data Factory](https://azure.microsoft.com/en-us/products/data-factory)
+ * [dbt Cloud](https://cloud.getdbt.com/deploy/)
+ * [Dagster](https://dagster.io/)
+
+### Dagster
+
+#### Set up your environment
+Let's create a virtualenv and install dbt and dagster. These packages are located in [requirements.txt](requirements.txt).
+```
+virutalenv venv -p python3.11
+pip install -r requirements.txt
+```
+
+#### Create a dagster project
+Dagster has a command for creating a dagster project from an existing dbt project: 
+```
+dagster-dbt project scaffold --project-name dbt_dagster_project --dbt-project-dir=dbtlearn
+```
+
+_At this point in the course, open [schedules.py](dbt_dagster_project/dbt_dagster_project/schedules.py) and uncomment the schedule logic._
+
+#### Start dagster
+Now that our project is created, start the Dagster server:
+
+```
+cd dbt_dagster_project
+DAGSTER_DBT_PARSE_PROJECT_ON_LOAD=1 dagster dev
+```
+
+We will continue our work on the dagster UI at [http://localhost:3000/](http://localhost:3000) 
 
