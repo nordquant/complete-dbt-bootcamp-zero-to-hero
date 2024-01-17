@@ -5,7 +5,7 @@ Copy these SQL statements into a Snowflake Worksheet, select all and execute the
 
 If you see a _Grant partially executed: privileges [REFERENCE_USAGE] not granted._ message when you execute `GRANT ALL ON DATABASE AIRBNB to ROLE transform`, that's just an info message and you can ignore it. 
 
-```sql
+```sql {#snowflake_setup}
 -- Use an admin role
 USE ROLE ACCOUNTADMIN;
 
@@ -39,14 +39,13 @@ GRANT ALL ON ALL SCHEMAS IN DATABASE AIRBNB to ROLE transform;
 GRANT ALL ON FUTURE SCHEMAS IN DATABASE AIRBNB to ROLE transform;
 GRANT ALL ON ALL TABLES IN SCHEMA AIRBNB.RAW to ROLE transform;
 GRANT ALL ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE transform;
-
 ```
 
 ## Snowflake data import
 
 Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
 
-```sql
+```sql {#snowflake_import}
 -- Set up the defaults
 USE WAREHOUSE COMPUTE_WH;
 USE DATABASE airbnb;
@@ -102,10 +101,7 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
                    from 's3://dbtlearn/hosts.csv'
                     FILE_FORMAT = (type = 'CSV' skip_header = 1
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
-
 ```
-
--- END OF SNOWFLAKE DATA IMPORT
 
 # Python and Virtualenv setup, and dbt installation - Windows
 
@@ -855,4 +851,42 @@ dbt --debug test --select dim_listings_w_hosts
 
 Keep in mind that in the lecture we didn't use the _--debug_ flag after all as taking a look at the compiled sql file is the better way of debugging tests.
 
+## dbt Orchestration 
+
+### Links to different orchestrators
+
+ * [dbt integrations](https://docs.getdbt.com/docs/deploy/deployment-tools)
+ * [Apache Airflow](https://airflow.apache.org/)
+ * [Prefect](https://www.prefect.io/)
+ * [Prefect dbt Integration](https://www.prefect.io/blog/dbt-and-prefect)
+ * [Azure Data Factory](https://azure.microsoft.com/en-us/products/data-factory)
+ * [dbt Cloud](https://cloud.getdbt.com/deploy/)
+ * [Dagster](https://dagster.io/)
+
+### Dagster
+
+#### Set up your environment
+Let's create a virtualenv and install dbt and dagster. These packages are located in [requirements.txt](requirements.txt).
+```
+virutalenv venv -p python3.11
+pip install -r requirements.txt
+```
+
+#### Create a dagster project
+Dagster has a command for creating a dagster project from an existing dbt project: 
+```
+dagster-dbt project scaffold --project-name dbt_dagster_project --dbt-project-dir=dbtlearn
+```
+
+_At this point in the course, open [schedules.py](dbt_dagster_project/dbt_dagster_project/schedules.py) and uncomment the schedule logic._
+
+#### Start dagster
+Now that our project is created, start the Dagster server:
+
+```
+cd dbt_dagster_project
+DAGSTER_DBT_PARSE_PROJECT_ON_LOAD=1 dagster dev
+```
+
+We will continue our work on the dagster UI at [http://localhost:3000/](http://localhost:3000) 
 

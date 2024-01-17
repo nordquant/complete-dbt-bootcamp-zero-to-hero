@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Python application
+name: Test App
 
 on:
   push:
@@ -14,26 +14,37 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.10
+    - name: Set up Python 3.11
       uses: actions/setup-python@v3
       with:
-        python-version: "3.10"
+        python-version: "3.11"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
+    - name: Create dbt profile
+      env:
+        PROFILES_YML: ${{ secrets.PROFILES_YML }}
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+        mkdir -p ~/.dbt
+        echo "$PROFILES_YML" > ~/.dbt/profiles.yml
+    - name: Execute dbt debug
       run: |
-        pytest
+        cd dbtlearn
+        dbt debug
+    - name: Install packages
+      run: |
+        cd dbtlearn
+        dbt deps
+    - name: dbt build
+      run: |
+        cd dbtlearn
+        dbt build
+    - name: dbt docs generate
+      run: |
+        cd dbtlearn
+        dbt docs generate
+
