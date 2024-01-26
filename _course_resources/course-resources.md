@@ -883,6 +883,22 @@ _At this point in the course, open [schedules.py](dbt_dagster_project/dbt_dagste
 #### Start dagster
 Now that our project is created, start the Dagster server:
 
+##### On Windows - PowerShell (Like the VSCode Terminal Window)
+```
+cd dbt_dagster_project
+$env:DAGSTER_DBT_PARSE_PROJECT_ON_LOAD = 1
+dagster dev
+```
+
+##### On Windows (Using cmd)
+```
+cd dbt_dagster_project
+setx DAGSTER_DBT_PARSE_PROJECT_ON_LOAD 1
+dagster dev
+```
+
+##### On Linux / Mac
+
 ```
 cd dbt_dagster_project
 DAGSTER_DBT_PARSE_PROJECT_ON_LOAD=1 dagster dev
