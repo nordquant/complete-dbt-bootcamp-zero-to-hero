@@ -792,6 +792,12 @@ ORDER BY
     is_full_moon,
     review_sentiment
 ```
+## Creating a Dashboard in Preset
+
+Getting the Snowflake credentials up to the screen:
+
+* Mac / Linux / Windows Powershell: `cat ~/.dbt/profiles.yml `
+* Windows (cmd): `type %USERPROFILE%\.dbt\profiles.yml`
 
 ## Exposures
 The contents of `models/dashboard.yml`:
