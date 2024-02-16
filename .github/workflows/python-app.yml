@@ -5,9 +5,9 @@ name: Test App
 
 on:
   push:
-    branches: [ "orchestration" ]
+    branches: [ "**" ]
   pull_request:
-    branches: [ "orchestration" ]
+    branches: [ "**" ]
 
 permissions:
   contents: read
