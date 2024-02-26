@@ -74,7 +74,4 @@ Once again, thank you for being a part of this course.
 We can't wait to get started with you soon!
 
 All the best,
-
 Zoltan C. Toth
-
-Miklos Petridisz
