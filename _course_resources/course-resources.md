@@ -776,15 +776,15 @@ GRANT USAGE ON SCHEMA AIRBNB.DEV TO ROLE REPORTER;
 ## Analyses
 The contents of `analyses/full_moon_no_sleep.sql`:
 ```sql
-WITH mart_fullmoon_reviews AS (
-    SELECT * FROM {{ ref('mart_fullmoon_reviews') }}
+WITH fullmoon_reviews AS (
+    SELECT * FROM {{ ref('fullmoon_reviews') }}
 )
 SELECT
     is_full_moon,
     review_sentiment,
     COUNT(*) as reviews
 FROM
-    mart_fullmoon_reviews
+    fullmoon_reviews
 GROUP BY
     is_full_moon,
     review_sentiment
@@ -802,13 +802,14 @@ Getting the Snowflake credentials up to the screen:
 ## Exposures
 The contents of `models/dashboard.yml`:
 ```yaml
-version: 2
+ersion: 2
 
 exposures:
-  - name: Executive Dashboard
+  - name: executive_dashboard
+    label: Executive Dashboard
     type: dashboard
     maturity: low
-    url: https://7e942fbd.us2a.app.preset.io:443/r/2
+    url: https://00d200da.us1a.app.preset.io/superset/dashboard/x/?edit=true&native_filters_key=fnn_HJZ0z42ZJtoX06x7gRbd9oBFgFLbnPlCW2o_aiBeZJi3bZuyfQuXE96xfgB
     description: Executive Dashboard about Airbnb listings and hosts
       
 
@@ -818,7 +819,7 @@ exposures:
 
     owner:
       name: Zoltan C. Toth
-      email: hello@learndbt.com
+      email: dbtstudent@gmail.com
 ```
 
 ## Post-hook
