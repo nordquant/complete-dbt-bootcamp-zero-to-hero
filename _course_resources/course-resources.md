@@ -857,6 +857,55 @@ dbt --debug test --select dim_listings_w_hosts
 
 Keep in mind that in the lecture we didn't use the _--debug_ flag after all as taking a look at the compiled sql file is the better way of debugging tests.
 
+### Logging
+
+The contents of `macros/logging.sql`:
+```
+{% macro learn_logging() %}
+    {{ log("Call your mom!") }}
+    {{ log("Call your dad!", info=True) }} --> Logs to the screen, too
+--  {{ log("Call your dad!", info=True) }} --> This will be put to the screen
+    {% log("Call your dad!", info=True) %} --> This won't be executed
+{% endmacro %}
+```
+
+Executing the macro: 
+```
+dbt run-operation learn_logging
+```
+
+## Variables
+The contents of `marcos/variables.sql`:
+```
+{% macro learn_variables() %}
+
+    {% set your_name_jinja = "Zoltan" %}
+    {{ log("Hello " ~ your_name_jinja, info=True) }}
+
+    {{ log("Hello dbt user " ~ var("user_name", "NO USERNAME IS SET!!") ~ "!", info=True) }}
+
+    {% if var("in_test", False) %}
+       {{ log("In test", info=True) }}
+    {% else %}
+       {{ log("NOT in test", info=True) }}
+    {% endif %}
+
+{% endmacro %}
+```
+
+We've added the following block to the end of `dbt_project.yml`:
+```
+vars:
+  user_name: default_user_name_for_this_project
+```
+
+An example of passing variables:
+```
+dbt run-operation learn_variables --vars '{user_name: zoltanctoth}'
+```
+
+More information on variable passing: https://docs.getdbt.com/docs/build/project-variables
+
 ## dbt Orchestration 
 
 ### Links to different orchestrators
@@ -912,3 +961,39 @@ DAGSTER_DBT_PARSE_PROJECT_ON_LOAD=1 dagster dev
 
 We will continue our work on the dagster UI at [http://localhost:3000/](http://localhost:3000) 
 
+#### Making incremental models compatible with orchestrators:
+The updated contents of `models/fct/fct_reviews.sql`:
+```
+{{
+  config(
+    materialized = 'incremental',
+    on_schema_change='fail'
+    )
+}}
+WITH src_reviews AS (
+  SELECT * FROM {{ ref('src_reviews') }}
+)
+SELECT 
+  {{ dbt_utils.generate_surrogate_key(['listing_id', 'review_date', 'reviewer_name', 'review_text']) }} as review_id,
+  *
+FROM src_reviews
+WHERE review_text is not null
+
+{% if is_incremental() %}
+  {% if var("start_date", False) and var("end_date", False) %}
+    {{ log('Loading ' ~ this ~ ' incrementally (start_date: ' ~ var("start_date") ~ ', end_date: ' ~ var("end_date") ~ ')', info=True) }}
+    AND review_date >= '{{ var("start_date") }}'
+    AND review_date < '{{ var("end_date") }}'
+  {% else %}
+    AND review_date > (select max(review_date) from {{ this }})
+    {{ log('Loading ' ~ this ~ ' incrementally (all missing dates)', info=True)}}
+  {% endif %}
+{% endif %}
+```
+
+Passing a time range to our incremental model:
+```
+dbt run --select fct_reviews  --vars '{start_date: "2024-02-15 00:00:00", end_date: "2024-03-15 23:59:59"}'
+```
+
+Reference - Working with incremental strategies: https://docs.getdbt.com/docs/build/incremental-models#about-incremental_strategy
