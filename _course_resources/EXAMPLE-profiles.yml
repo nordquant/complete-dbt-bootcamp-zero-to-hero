@@ -9,5 +9,5 @@ dbtlearn:
       threads: 1
       type: snowflake
       user: dbt
-      warehouse: compute_wh
+      warehouse: COMPUTE_WH
   target: dev
