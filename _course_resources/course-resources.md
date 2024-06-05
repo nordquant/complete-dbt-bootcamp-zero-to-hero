@@ -140,12 +140,12 @@ https://brew.sh/
 Here are the commands we execute in this lesson:
 
 ```sh
-create course
+mkdir course
 cd course
 virtualenv venv
 . venv/bin/activate
 pip install dbt-snowflake==1.7.1
-which dbt
+#On Linux/Mac: which dbt
 ```
 
 ## dbt setup
