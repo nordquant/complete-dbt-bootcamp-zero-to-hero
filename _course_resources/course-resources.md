@@ -802,7 +802,7 @@ Getting the Snowflake credentials up to the screen:
 ## Exposures
 The contents of `models/dashboard.yml`:
 ```yaml
-ersion: 2
+version: 2
 
 exposures:
   - name: executive_dashboard
