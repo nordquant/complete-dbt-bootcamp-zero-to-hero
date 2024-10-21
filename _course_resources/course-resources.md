@@ -1,5 +1,14 @@
 # Introduction and Environment Setup
 
+## How to figure out my Snowflake Account URL?
+The easiest is to take a look at your Snowflake Registration email and copy the string before `.snowflakecomputing.com`. In my case this is `frgcsyo-ie17820`. Keep in mind that sometimes urls include the `.aws` tag, too, such as `frgcsyo-ie17820.aws`. This isn't simple, I know. Even dbt Labs (https://docs.getdbt.com/docs/cloud/connect-data-platform/connect-snowflake)[has it's own section] on how to figure it out.
+<img width="980" alt="Screenshot 2024-10-21 at 10 36 03" src="https://github.com/user-attachments/assets/54faccde-5b57-413d-8e7c-2d5bbea5585a">
+
+## Fast track the Snowflake Setup
+If you want to skip the manual user creation and raw table import, we've created an auto-importer for you. 
+Take a look at https://dbt-data-importer.streamlit.app/ where we set up Snowflake for you with a click of a button!
+
+
 ## Snowflake user creation
 Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
 
