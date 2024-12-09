@@ -1,14 +1,14 @@
 dbtlearn:
   outputs:
     dev:
-      account: # Fill in the Snowflake Account Name here (someting like: yczmxn-dk96978)
+      account:yba41802.east-us-2.azure # Fill in the Snowflake Account Name here (someting like: yczmxn-dk96978)
       database: AIRBNB
-      password: dbtPassword123
+      password: Welcome123$$
       role: transform
       schema: dev
       threads: 1
       type: snowflake
-      user: dbt
+      user: 9632455899
       warehouse: COMPUTE_WH
   target: dev
   
