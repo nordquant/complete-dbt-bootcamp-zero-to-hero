@@ -154,7 +154,7 @@ mkdir course
 cd course
 virtualenv venv
 . venv/bin/activate
-pip install dbt-snowflake==1.7.1
+pip install dbt-snowflake==1.9.0
 #On Linux/Mac: which dbt
 ```
 
