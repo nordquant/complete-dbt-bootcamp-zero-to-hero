@@ -635,7 +635,7 @@ The contents of `packages.yml`:
 ```yaml
 packages:
   - package: dbt-labs/dbt_utils
-    version: 0.8.0
+    version: 1.3.0
 ```
 
 The contents of ```models/fct_reviews.sql```:
