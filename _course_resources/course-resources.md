@@ -787,7 +787,7 @@ GRANT USAGE ON SCHEMA AIRBNB.DEV TO ROLE REPORTER;
 The contents of `analyses/full_moon_no_sleep.sql`:
 ```sql
 WITH fullmoon_reviews AS (
-    SELECT * FROM {{ ref('fullmoon_reviews') }}
+    SELECT * FROM {{ ref('mart_fullmoon_reviews') }}
 )
 SELECT
     is_full_moon,
@@ -934,7 +934,7 @@ More information on variable passing: https://docs.getdbt.com/docs/build/project
 #### Set up your environment
 Let's create a virtualenv and install dbt and dagster. These packages are located in [requirements.txt](requirements.txt).
 ```
-virutalenv venv -p python3.11
+virtualenv venv -p python3.11
 pip install -r requirements.txt
 ```
 
