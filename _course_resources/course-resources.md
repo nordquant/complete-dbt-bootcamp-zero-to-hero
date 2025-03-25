@@ -36,6 +36,7 @@ CREATE USER IF NOT EXISTS dbt
   DEFAULT_ROLE=TRANSFORM
   DEFAULT_NAMESPACE='AIRBNB.RAW'
   COMMENT='DBT user used for data transformation';
+ALTER USER dbt SET TYPE = LEGACY_SERVICE;
 GRANT ROLE TRANSFORM to USER dbt;
 
 -- Create our database and schemas
@@ -843,7 +844,7 @@ Add this to your `dbt_project.yml`:
 # Debugging Tests and Testing with dbt-expectations
 
 * The original Great Expectations project on GitHub: https://github.com/great-expectations/great_expectations
-* dbt-expectations: https://github.com/calogica/dbt-expectations 
+* dbt-expectations: https://github.com/metaplane/dbt-expectations
 
 For the final code in _packages.yml_, _models/schema.yml_ and _models/sources.yml_, please refer to the course's Github repo:
 https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero
