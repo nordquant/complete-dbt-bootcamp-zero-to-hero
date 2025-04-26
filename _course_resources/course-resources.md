@@ -942,7 +942,7 @@ pip install -r requirements.txt
 #### Create a dagster project
 Dagster has a command for creating a dagster project from an existing dbt project: 
 ```
-dagster-dbt project scaffold --project-name dbt_dagster_project --dbt-project-dir=dbtlearn
+dagster-dbt project scaffold --project-name my_dbt_dagster_project --dbt-project-dir=dbtlearn
 ```
 
 _At this point in the course, open [schedules.py](dbt_dagster_project/dbt_dagster_project/schedules.py) and uncomment the schedule logic._
