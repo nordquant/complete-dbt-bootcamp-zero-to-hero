@@ -11,3 +11,7 @@ venv/
 **/__pycache__/
 *.pyc
 tmp*/
+
+dbt_internal_packages/
+dbtlearn/profiles.yml
+dbtlearn/.user.yml
