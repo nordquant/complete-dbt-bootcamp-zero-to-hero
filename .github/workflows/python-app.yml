@@ -9,6 +9,8 @@ on:
   pull_request:
     branches: [ "**" ]
   workflow_dispatch:
+  schedule:
+    - cron: '0 1 * * *'  # 2 AM CET (1 AM UTC)
 
 permissions:
   contents: read
