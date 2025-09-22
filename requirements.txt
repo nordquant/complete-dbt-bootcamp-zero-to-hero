@@ -1,3 +1,2 @@
-dbt-snowflake==1.7.1 # This is kept at 1.7.1 in order to let Dagster work
-dagster-dbt==0.22.0
-dagster-webserver==1.6.0
+dbt-snowflake==1.10.2
+dbt-autofix==0.12.9
