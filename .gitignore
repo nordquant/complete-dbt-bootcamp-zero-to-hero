@@ -1,9 +1,11 @@
 dbtlearn/package-lock.yml
 dbtlearn/target/
 dbtlearn/dbt_packages/
+dbtlearn/dbt_internal_packages/
 
 archive
 dbt_dagster_project/tmp*
+dbtlearn/profiles.yml
 
 logs/
 venv/
@@ -12,6 +14,7 @@ venv/
 *.pyc
 tmp*/
 
-dbt_internal_packages/
-dbtlearn/profiles.yml
-dbtlearn/.user.yml
+.claude
+.user.yml
+
+.python-version
