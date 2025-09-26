@@ -16,12 +16,18 @@ jobs:
   build:
     if: github.repository == 'nordquant/complete-dbt-bootcamp-zero-to-hero'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.11", "3.10", "3.9"]
+        runs-on: [ubuntu-latest, ubuntu-latest-arm64]
+    env:
+      full_test_python: "3.12"
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.11
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
-        python-version: "3.11"
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -41,10 +47,12 @@ jobs:
         cd dbtlearn
         dbt deps
     - name: dbt build
+      if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
       run: |
         cd dbtlearn
         dbt build
     - name: dbt docs generate
+      if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
       run: |
         cd dbtlearn
         dbt docs generate
