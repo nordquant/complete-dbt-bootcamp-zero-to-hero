@@ -1,2 +1,1 @@
-dbt-snowflake==1.10.2
-dbt-autofix==0.12.9
+dbt-snowflake~=1.10.0
