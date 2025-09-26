@@ -148,15 +148,19 @@ https://brew.sh/
 
 ## dbt installation
 
+Supported Python Versions: https://docs.getdbt.com/faqs/Core/install-python-compatibility
+
 Here are the commands we execute in this lesson:
+
 
 ```sh
 mkdir course
 cd course
 virtualenv venv
 . venv/bin/activate
-pip install dbt-snowflake==1.9.0
-#On Linux/Mac: which dbt
+python --version
+pip install dbt-snowflake==1.10.2
+dbt --version
 ```
 
 ## dbt setup
@@ -173,6 +177,14 @@ mkdir %userprofile%\.dbt
 Create a dbt project (all platforms):
 ```sh
 dbt init dbtlearn
+```
+
+## Adding a dbt Core compatibility flag to our project
+Add this to your `dbt_project.yml`:
+
+```
+flags:
+  require_generic_test_arguments_property: false
 ```
 
 # Models
