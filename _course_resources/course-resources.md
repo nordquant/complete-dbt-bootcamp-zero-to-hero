@@ -858,8 +858,10 @@ Add this to your `dbt_project.yml`:
  * [dbt Core x dbt Fusion Feature Matrix](https://docs.getdbt.com/docs/fusion/supported-features)
  * [License: Tristan Handy's (dbt Labs CEO) blog post](https://www.getdbt.com/blog/new-code-new-license-understanding-the-new-license-for-the-dbt-fusion-engine)
  * [License FAQ](https://www.getdbt.com/licenses-faq)
+ * [Supported Platforms and Installation](https://docs.getdbt.com/docs/fusion/install-fusion)
+ * [Fusion CLI Installation](https://docs.getdbt.com/docs/fusion/install-fusion-cli)
+ * [dbt-autofix on GitHub](https://github.com/dbt-labs/dbt-autofix)
  
-
 # Debugging Tests and Testing with dbt-expectations
 
 * The original Great Expectations project on GitHub: https://github.com/great-expectations/great_expectations
