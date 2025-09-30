@@ -853,6 +853,13 @@ Add this to your `dbt_project.yml`:
       - "GRANT SELECT ON {{ this }} TO ROLE REPORTER"
 ```
 
+# dbt Fusion
+
+ * [dbt Core x dbt Fusion Feature Matrix](https://docs.getdbt.com/docs/fusion/supported-features)
+ * [License: Tristan Handy's (dbt Labs CEO) blog post](https://www.getdbt.com/blog/new-code-new-license-understanding-the-new-license-for-the-dbt-fusion-engine)
+ * [License FAQ](https://www.getdbt.com/licenses-faq)
+ 
+
 # Debugging Tests and Testing with dbt-expectations
 
 * The original Great Expectations project on GitHub: https://github.com/great-expectations/great_expectations
