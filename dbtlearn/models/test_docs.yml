@@ -1,0 +1,9 @@
+macros:
+  - name: minimum_row_count
+    description: "Test that a model has at least a minimum number of rows."
+    arguments:
+      - name: model
+        description: "The model to test."
+      - name: min_row_count
+        description: "The minimum number of rows the model should have."
+  
