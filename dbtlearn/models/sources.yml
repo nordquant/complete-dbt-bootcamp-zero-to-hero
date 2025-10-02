@@ -10,17 +10,20 @@ sources:
           - name: room_type
             tests:
               - dbt_expectations.expect_column_distinct_count_to_equal:
-                  value: 4
+                  arguments:
+                    value: 4
           - name: price
             tests:
               - dbt_expectations.expect_column_values_to_match_regex:
-                  regex: "^\\\\$[0-9][0-9\\\\.]+$"
+                  arguments:
+                    regex: "^\\\\$[0-9][0-9\\\\.]+$"
       - name: hosts
         identifier: raw_hosts
 
       - name: reviews
         identifier: raw_reviews
-        loaded_at_field: date
-        freshness:
-          warn_after: {count: 1, period: hour}
-          error_after: {count: 24, period: hour}
+        config:
+          loaded_at_field: date
+          freshness:
+            warn_after: {count: 12, period: hour}
+            error_after: {count: 2, period: day}
