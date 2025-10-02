@@ -1,5 +1,3 @@
-version: 2
-
 exposures:
   - name: executive_dashboard
     label: Executive Dashboard

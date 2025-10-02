@@ -450,8 +450,6 @@ curl https://dbtlearn.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv -o see
 
 ## Contents of models/sources.yml
 ```yaml
-version: 2
-
 sources:
   - name: airbnb
     schema: raw
@@ -554,8 +552,6 @@ select * FROM {{ source('airbnb', 'hosts') }}
 The contents of `models/schema.yml`:
 
 ```sql
-version: 2
-
 models:
   - name: dim_listings_cleansed
     columns:
@@ -677,7 +673,6 @@ WHERE review_text is not null
 
 The `models/schema.yml` after adding the documentation:
 ```yaml
-version: 2
 
 models:
   - name: dim_listings_cleansed
@@ -825,7 +820,6 @@ Getting the Snowflake credentials up to the screen:
 ## Exposures
 The contents of `models/dashboard.yml`:
 ```yaml
-version: 2
 
 exposures:
   - name: executive_dashboard

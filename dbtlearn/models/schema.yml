@@ -1,5 +1,3 @@
-version: 2
-
 models:
   - name: dim_listings_cleansed
     description: Cleansed table which contains Airbnb listings.
