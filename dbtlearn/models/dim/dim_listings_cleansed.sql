@@ -15,12 +15,8 @@ SELECT
     ELSE minimum_nights
   END AS minimum_nights,
   host_id,
-  REPLACE(
-    price_str,
-    '$'
-  ) :: NUMBER(
-    10,
-    2
+  CAST(
+    REPLACE(price_str, '$', '') AS DECIMAL(10, 2)
   ) AS price,
   created_at,
   updated_at

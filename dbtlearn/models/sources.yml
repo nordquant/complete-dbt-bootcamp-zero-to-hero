@@ -1,6 +1,7 @@
 sources:
   - name: airbnb
-    schema: raw
+    schema: airbnb
+    database: workspace
     tables:
       - name: listings
         identifier: raw_listings

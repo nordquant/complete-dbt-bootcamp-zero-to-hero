@@ -32,12 +32,14 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   dbtlearn:
     +materialized: view
-    +post-hook:
-      - "GRANT SELECT ON {{ this }} TO ROLE REPORTER"
+    +file_format: delta 
     dim:
       +materialized: table
     src:
       +materialized: ephemeral
 
-vars:
-  user_name: "YOUR_USERNAME"
+seeds:
+  +file_format: delta
+
+snapshots:
+  +file_format: delta

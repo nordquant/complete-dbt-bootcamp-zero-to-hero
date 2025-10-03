@@ -10,5 +10,14 @@ dbtlearn:
       type: snowflake
       user: dbt
       warehouse: COMPUTE_WH
-  target: dev
+    databricks:
+      type: databricks
+      catalog: shell_prep
+      host: XXXXX.cloud.databricks.com
+      http_path: /sql/1.0/warehouses/XXXXX
+      schema: airbnb
+      threads: 4
+      auth_type: oauth
+  
+  target: databricks
   
