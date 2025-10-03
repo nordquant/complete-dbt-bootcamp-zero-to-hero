@@ -1,0 +1,70 @@
+integration_tests:
+  target: duckdb
+  outputs:
+    bigquery:
+      type: "bigquery"
+      method: "service-account-json"
+      project: "{{ env_var('BIGQUERY_PROJECT') }}"
+      dataset: "{{ env_var('BIGQUERY_SCHEMA') }}_{{ modules.datetime.datetime.now().strftime('%f') }}"
+      threads: 10
+      keyfile_json: "{{ env_var('BIGQUERY_KEYFILE_JSON') | as_native}}"
+      job_retries: 3
+      location: US
+
+    databricks:
+      type: databricks
+      catalog: "{{ env_var('DATABRICKS_CATALOG', 'hive_metastore') }}"
+      http_path: "{{ env_var('DATABRICKS_HTTP_PATH') }}"
+      host: "{{ env_var('DATABRICKS_HOST') }}"
+      schema: "{{ env_var('DATABRICKS_SCHEMA') }}_{{ modules.datetime.datetime.now().strftime('%f') }}"
+      threads: 8
+      token: "{{ env_var('DBT_ENV_SECRET_DATABRICKS_TOKEN') }}"
+
+    duckdb:
+      type: "duckdb"
+      path: "./db.duckdb"
+      threads: 5
+
+    postgres:
+      type: "postgres"
+      host: "{{ env_var('POSTGRES_HOST') }}"
+      user: "{{ env_var('POSTGRES_USER') }}"
+      pass: "{{ env_var('DBT_ENV_SECRET_POSTGRES_PASS') }}"
+      port: "{{ env_var('POSTGRES_PORT') | as_number }}"
+      dbname: "{{ env_var('POSTGRES_DATABASE') }}"
+      schema: "{{ env_var('POSTGRES_SCHEMA') }}"
+      threads: 5
+
+    snowflake:
+      type: "snowflake"
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('DBT_ENV_SECRET_SNOWFLAKE_PASS') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      schema: "{{ env_var('SNOWFLAKE_SCHEMA') }}"
+      threads: 10
+
+    spark:
+      type: spark
+      host: "{{ env_var('SPARK_HOST') }}"
+      schema: "{{ env_var('SPARK_SCHEMA') }}"
+      user: "{{ env_var('SPARK_USER') }}"
+      method: "{{ env_var('SPARK_METHOD') }}"
+      port: "{{ env_var('SPARK_PORT') | as_number}}"
+      connect_retries: 3
+      connect_timeout: 5
+      threads: 5
+
+    trino:
+      type: trino
+      method: "{{ env_var('TRINO_METHOD') }}"
+      user: "{{ env_var('TRINO_USER') }}"
+      password: "{{ env_var('DBT_ENV_SECRET_TRINO_PASS') }}"
+      host: "{{ env_var('TRINO_HOST') }}"
+      port: "{{ env_var('TRINO_PORT') | as_number}}"
+      catalog: "{{ env_var('TRINO_CATALOG') }}"
+      schema: "{{ env_var('TRINO_SCHEMA') }}"
+      timezone: "{{ env_var('TRINO_TIMEZONE') }}"
+      threads: 12

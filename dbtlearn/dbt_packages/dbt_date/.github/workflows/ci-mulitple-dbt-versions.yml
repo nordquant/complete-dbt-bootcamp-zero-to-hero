@@ -1,0 +1,80 @@
+name: Integration testing (multiple dbt versions)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request_target:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  DBT_PROJECT_DIR: integration_tests
+  DBT_PROFILES_DIR: integration_tests
+  BIGQUERY_PROJECT: dbt-date
+  BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
+  BIGQUERY_SCHEMA: "integration_tests_bigquery_${{ github.run_number }}"
+  DBT_ENV_SECRET_DATABRICKS_TOKEN: "${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}"
+  DATABRICKS_HTTP_PATH: "${{ vars.DATABRICKS_HTTP_PATH }}"
+  DATABRICKS_HOST: "${{ vars.DATABRICKS_HOST }}"
+  DATABRICKS_SCHEMA: "dbt_date_${{ github.run_number }}"
+  DBT_ENV_SECRET_POSTGRES_PASS: dbt
+  POSTGRES_DATABASE: metastore
+  POSTGRES_HOST: localhost
+  POSTGRES_PORT: 5432
+  POSTGRES_SCHEMA: dbt_date
+  POSTGRES_USER: dbt
+  SPARK_HOST: localhost
+  SPARK_METHOD: thrift
+  SPARK_PORT: 10000
+  SPARK_SCHEMA: dbt_date
+  SPARK_USER: dbt
+  DBT_ENV_SECRET_TRINO_PASS: dbt
+  TRINO_CATALOG: dbt
+  TRINO_HOST: localhost
+  TRINO_METHOD: none
+  TRINO_PORT: "8080"
+  TRINO_SCHEMA: dbt
+  TRINO_TIMEZONE: UTC
+  TRINO_USER: dbt
+
+jobs:
+  integration_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        adapter:
+          - bigquery
+          - databricks
+          - duckdb
+          - postgres
+          - spark
+          - trino
+        dbt-version:
+          - "1.10"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+
+      - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }} (including Spark extra)
+        if: ${{ matrix.adapter == 'spark' }}
+        run: pip install "dbt-${{ matrix.adapter }}[PyHive]" "dbt-core~=${{ matrix.dbt-version }}" tox
+
+      - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}
+        if: ${{ matrix.adapter != 'spark' && !(matrix.adapter == 'bigquery' && matrix.dbt-version == '1.6') }}
+        run: pip install "dbt-${{ matrix.adapter }}" "dbt-core~=${{ matrix.dbt-version }}" tox
+
+      - name: Install testing dependencies (non-python)
+        if: ${{ matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' }}
+        run: |
+          docker compose -f ./integration_tests/docker-compose.yml up -d dbt-${{ matrix.adapter }}
+          sleep 30
+
+      - name: Run integration tests (${{ matrix.adapter }})
+        run: |
+          tox -e dbt_integration_${{ matrix.adapter }}

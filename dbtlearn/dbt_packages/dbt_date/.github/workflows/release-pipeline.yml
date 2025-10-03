@@ -1,0 +1,83 @@
+---
+name: Release pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_bump_type:
+        description: The version bump type to perform.
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+          - premajor
+          - preminor
+          - prepatch
+          - prerelease
+
+env:
+  POETRY_VERSION: "2.0.1"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch tags
+        run: git fetch --prune --unshallow --tags
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          installer-parallel: true
+          version: ${{ env.POETRY_VERSION }}
+
+      - name: Bump version
+        run: |
+          poetry init
+          poetry version $(git tag --sort version:refname | tail -n 1)
+          poetry version ${{ inputs.version_bump_type }}
+
+      - name: Save version to env var
+        id: version
+        run: |
+          export version=$(poetry version --short)
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "version: $version"
+
+      - name: Determine if prerelease flag is necessary
+        run: |
+          [ "${{ inputs.version_bump_type }}" = "premajor" ] || [ "${{ inputs.version_bump_type }}" = "preminor" ] || [ "${{ inputs.version_bump_type }}" = "prepatch" ] || [ "${{ inputs.version_bump_type }}" = "prerelease" ] && export PRERELEASE="--prerelease" || export PRERELEASE="--latest"
+          echo "PRERELEASE: $PRERELEASE"
+          echo PRERELEASE=$PRERELEASE >> "$GITHUB_ENV"
+
+      - name: Tag commit and push
+        run: |
+          git config --global user.email "bot@github.com"
+          git config --global user.name "github-actions[bot]"
+
+          # Tag and push
+          git tag -f \
+            -a ${{ steps.version.outputs.version }} \
+            -m "${{ steps.version.outputs.version }}"
+          git push -f origin "${{ steps.version.outputs.version }}"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.PAT_GITHUB }}
+        run: |
+          export LAST_RELEASE=$(gh release list --repo ${{ github.repository }} --order desc --json name --limit 1 | jq -r '.[0].name')
+          echo $LAST_RELEASE
+          gh release create ${{ steps.version.outputs.version }} \
+              --generate-notes \
+              --repo ${{ github.repository }} \
+              --notes-start-tag $LAST_RELEASE \
+              --target main \
+              --title '${{ steps.version.outputs.version }}' \
+              $PRERELEASE \
+              --verify-tag

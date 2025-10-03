@@ -1,0 +1,15 @@
+.tox/
+.venv/
+dbt_date.egg-info/
+dbt_packages/
+integration_tests/.hive-metastore/
+integration_tests/.spark-warehouse/
+integration_tests/docker/
+integration_tests/dbt_packages/
+integration_tests/logs/
+integration_tests/target/
+integration_tests/.user.yml
+logs/
+target/
+.env
+db.duckdb

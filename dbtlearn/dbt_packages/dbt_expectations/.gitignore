@@ -1,0 +1,8 @@
+
+target/
+dbt_packages/
+logs/
+env*/
+.python-version
+integration_tests/.spark-warehouse
+integration_tests/.hive-metastore
