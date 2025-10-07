@@ -5,60 +5,22 @@ The easiest is to take a look at your Snowflake Registration email and copy the 
 
 <img width="980" alt="Screenshot 2024-10-21 at 10 36 03" src="https://github.com/user-attachments/assets/54faccde-5b57-413d-8e7c-2d5bbea5585a">
 
-## Fast track the Snowflake Setup
-If you want to skip the manual user creation and raw table import, we've created an auto-importer for you. 
-Take a look at https://dbt-data-importer.streamlit.app/ where we set up Snowflake for you with a click of a button!
+## Automized Snowflake Setup
+I encourage you to go through the automized Snowflake Setup as importing the data and setting the permissions from scratch might take quite some time.
+Follow the instructions here https://dbt-data-importer.streamlit.app/ to we set up your Snowflake database with a click of a button!
 
-
-## Snowflake user creation
-Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
-
-If you see a _Grant partially executed: privileges [REFERENCE_USAGE] not granted._ message when you execute `GRANT ALL ON DATABASE AIRBNB to ROLE transform`, that's just an info message and you can ignore it. 
-
-```sql {#snowflake_setup}
--- Use an admin role
-USE ROLE ACCOUNTADMIN;
-
--- Create the `transform` role
-CREATE ROLE IF NOT EXISTS TRANSFORM;
-GRANT ROLE TRANSFORM TO ROLE ACCOUNTADMIN;
-
--- Create the default warehouse if necessary
-CREATE WAREHOUSE IF NOT EXISTS COMPUTE_WH;
-GRANT OPERATE ON WAREHOUSE COMPUTE_WH TO ROLE TRANSFORM;
-
--- Create the `dbt` user and assign to role
-CREATE USER IF NOT EXISTS dbt
-  PASSWORD='dbtPassword123'
-  LOGIN_NAME='dbt'
-  MUST_CHANGE_PASSWORD=FALSE
-  DEFAULT_WAREHOUSE='COMPUTE_WH'
-  DEFAULT_ROLE=TRANSFORM
-  DEFAULT_NAMESPACE='AIRBNB.RAW'
-  COMMENT='DBT user used for data transformation';
-ALTER USER dbt SET TYPE = LEGACY_SERVICE;
-GRANT ROLE TRANSFORM to USER dbt;
-
--- Create our database and schemas
-CREATE DATABASE IF NOT EXISTS AIRBNB;
-CREATE SCHEMA IF NOT EXISTS AIRBNB.RAW;
-
--- Set up permissions to role `transform`
-GRANT ALL ON WAREHOUSE COMPUTE_WH TO ROLE TRANSFORM; 
-GRANT ALL ON DATABASE AIRBNB to ROLE TRANSFORM;
-GRANT ALL ON ALL SCHEMAS IN DATABASE AIRBNB to ROLE TRANSFORM;
-GRANT ALL ON FUTURE SCHEMAS IN DATABASE AIRBNB to ROLE TRANSFORM;
-GRANT ALL ON ALL TABLES IN SCHEMA AIRBNB.RAW to ROLE TRANSFORM;
-GRANT ALL ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE TRANSFORM;
-```
-
-## Snowflake data import
+## Snowflake data import (manual)
+_Only execute these commands if you decided to skip the Automized Snowflake Setup._
 
 Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
 
 ```sql {#snowflake_import}
 -- Set up the defaults
+CREATE WAREHOUSE IF NOT EXISTS COMPUTE_WH;
 USE WAREHOUSE COMPUTE_WH;
+
+CREATE DATABASE IF NOT EXISTS AIRBNB;
+CREATE SCHEMA IF NOT EXISTS AIRBNB.RAW;
 USE DATABASE airbnb;
 USE SCHEMA RAW;
 
@@ -114,14 +76,78 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
 ```
 
+## Snowflake user creation
+_Only execute these commands if you decided to skip the Automized Snowflake Setup._
+
+Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
+
+```sql {#snowflake_setup}
+-- Use an admin role
+USE ROLE ACCOUNTADMIN;
+
+-- Create the `transform` role
+DROP ROLE IF EXISTS TRANSFORM;
+CREATE ROLE TRANSFORM;
+GRANT ROLE TRANSFORM TO ROLE ACCOUNTADMIN;
+
+-- Create the default warehouse if necessary
+GRANT OPERATE ON WAREHOUSE COMPUTE_WH TO ROLE TRANSFORM;
+
+-- Create the `dbt` user and assign to role
+DROP USER IF EXISTS dbt;
+CREATE USER IF NOT EXISTS dbt
+  LOGIN_NAME='dbt'
+  TYPE=SERVICE
+  RSA_PUBLIC_KEY="<<Add Your Public Key File's content here>>"
+  DEFAULT_ROLE=TRANSFORM
+  DEFAULT_WAREHOUSE='COMPUTE_WH'
+  DEFAULT_NAMESPACE='AIRBNB.RAW'
+  COMMENT='DBT user used for data transformation';
+
+GRANT ROLE TRANSFORM to USER dbt;
+
+-- Set up permissions to role `transform`
+GRANT ALL ON WAREHOUSE COMPUTE_WH TO ROLE TRANSFORM; 
+GRANT ALL ON DATABASE AIRBNB to ROLE TRANSFORM;
+GRANT ALL ON ALL SCHEMAS IN DATABASE AIRBNB to ROLE TRANSFORM;
+GRANT ALL ON FUTURE SCHEMAS IN DATABASE AIRBNB to ROLE TRANSFORM;
+GRANT ALL ON ALL TABLES IN SCHEMA AIRBNB.RAW to ROLE TRANSFORM;
+GRANT ALL ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE TRANSFORM;
+
+-- Create the user and permissions for Preset.io
+USE ROLE ACCOUNTADMIN;
+
+DROP ROLE IF EXISTS REPORTER;
+CREATE ROLE REPORTER;
+
+DROP USER IF EXISTS PRESET;
+CREATE USER PRESET
+  LOGIN_NAME='preset'
+  TYPE=SERVICE
+  RSA_PUBLIC_KEY="<<Add Your Public Key File's content here>>"
+  DEFAULT_WAREHOUSE='COMPUTE_WH'
+  DEFAULT_ROLE=REPORTER
+  DEFAULT_NAMESPACE='AIRBNB.DEV'
+ COMMENT='Preset user for creating reports';
+
+GRANT ROLE REPORTER TO USER PRESET;
+GRANT ROLE REPORTER TO ROLE ACCOUNTADMIN;
+GRANT ALL ON WAREHOUSE COMPUTE_WH TO ROLE REPORTER;
+GRANT USAGE ON DATABASE AIRBNB TO ROLE REPORTER;
+GRANT USAGE ON ALL SCHEMAS IN DATABASE AIRBNB to ROLE REPORTER;
+GRANT USAGE ON FUTURE SCHEMAS IN DATABASE AIRBNB to ROLE REPORTER;
+GRANT SELECT ON ALL TABLES IN SCHEMA AIRBNB.RAW to ROLE REPORTER;
+GRANT SELECT ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE REPORTER;
+```
+
 # Python and Virtualenv setup, and dbt installation - Windows
 
 ## Python
-This is the Python installer you want to use: 
+You want to use Python 3.12 as this is the most recent version that is compatible with every database adapter, Snowflake included.
 
-[https://www.python.org/ftp/python/3.10.7/python-3.10.7-amd64.exe ](https://www.python.org/downloads/release/python-3113/)
+[https://www.python.org/downloads/release/python-31211/](https://www.python.org/downloads/release/python-31211/)
 
-Please make sure that you work with Python 3.11 as newer versions of python might not be compatible with some of the dbt packages.
+Please make sure that you work with Python 3.12 as newer versions of python might not be compatible with some of the dbt packages.
 
 ## Virtualenv setup
 Here are the commands we executed in this lesson:
@@ -130,8 +156,11 @@ cd Desktop
 mkdir course
 cd course
 
-virtualenv venv
+python -m venv venv
+# Windows:
 venv\Scripts\activate
+# Mac:
+source venv/bin/activate
 ```
 
 # Virtualenv setup and dbt installation - Mac
@@ -140,11 +169,6 @@ venv\Scripts\activate
 We suggest you to use _iTerm2_ instead of the built-in Terminal application.
 
 https://iterm2.com/
-
-## Homebrew
-Homebrew is a widely popular application manager for the Mac. This is what we use in the class for installing a virtualenv.
-
-https://brew.sh/
 
 ## dbt installation
 
@@ -157,17 +181,6 @@ virtualenv venv
 . venv/bin/activate
 pip install dbt-snowflake==1.9.0
 #On Linux/Mac: which dbt
-```
-
-## dbt setup
-Initialize the dbt profiles folder on Mac/Linux:
-```sh
-mkdir ~/.dbt
-```
-
-Initialize the dbt profiles folder on Windows:
-```sh
-mkdir %userprofile%\.dbt
 ```
 
 Create a dbt project (all platforms):
