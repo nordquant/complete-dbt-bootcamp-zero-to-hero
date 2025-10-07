@@ -19,3 +19,9 @@ tmp*/
 
 .claude
 .user.yml
+
+dbx-terraform/.terraform/
+*.tfstate
+*.tfstate.*
+*.
+*.tfvars
