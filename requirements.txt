@@ -1,3 +1,1 @@
-dbt-snowflake==1.7.1 # This is kept at 1.7.1 in order to let dagsater work
-dagster-dbt==0.22.0
-dagster-webserver==1.6.0
+dbt-snowflake~=1.10.0

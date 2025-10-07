@@ -172,20 +172,32 @@ https://iterm2.com/
 
 ## dbt installation
 
+Supported Python Versions: https://docs.getdbt.com/faqs/Core/install-python-compatibility
+
 Here are the commands we execute in this lesson:
+
 
 ```sh
 mkdir course
 cd course
 virtualenv venv
 . venv/bin/activate
-pip install dbt-snowflake==1.9.0
-#On Linux/Mac: which dbt
+python --version
+pip install dbt-snowflake==1.10.2
+dbt --version
 ```
 
 Create a dbt project (all platforms):
 ```sh
 dbt init dbtlearn
+```
+
+## Adding a dbt Core compatibility flag to our project
+Add this to your `dbt_project.yml`:
+
+```
+flags:
+  require_generic_test_arguments_property: false
 ```
 
 # Models
@@ -955,7 +967,7 @@ pip install -r requirements.txt
 #### Create a dagster project
 Dagster has a command for creating a dagster project from an existing dbt project: 
 ```
-dagster-dbt project scaffold --project-name dbt_dagster_project --dbt-project-dir=dbtlearn
+dagster-dbt project scaffold --project-name my_dbt_dagster_project --dbt-project-dir=dbtlearn
 ```
 
 _At this point in the course, open [schedules.py](dbt_dagster_project/dbt_dagster_project/schedules.py) and uncomment the schedule logic._
