@@ -945,14 +945,12 @@ More information on variable passing: https://docs.getdbt.com/docs/build/project
 ### Dagster
 
 #### Set up your environment
-Let's create a virtualenv and install dbt and dagster. These packages are located in [requirements.txt](requirements.txt).
+Let's install the `dagster-dbt` and the `dagster-webserver` package. These packages are located in [requirements.txt](requirements.txt).
 ```
-virtualenv venv -p python3.11
 pip install -r requirements.txt
 ```
 
 #### Create a dagster project
-Dagster has a command for creating a dagster project from an existing dbt project: 
 ```
 dagster-dbt project scaffold --project-name my_dbt_dagster_project --dbt-project-dir=dbtlearn
 ```
@@ -965,22 +963,7 @@ Now that our project is created, start the Dagster server:
 ##### On Windows - PowerShell (Like the VSCode Terminal Window)
 ```
 cd dbt_dagster_project
-$env:DAGSTER_DBT_PARSE_PROJECT_ON_LOAD = 1
 dagster dev
-```
-
-##### On Windows (Using cmd)
-```
-cd dbt_dagster_project
-setx DAGSTER_DBT_PARSE_PROJECT_ON_LOAD 1
-dagster dev
-```
-
-##### On Linux / Mac
-
-```
-cd dbt_dagster_project
-DAGSTER_DBT_PARSE_PROJECT_ON_LOAD=1 dagster dev
 ```
 
 We will continue our work on the dagster UI at [http://localhost:3000/](http://localhost:3000) 
