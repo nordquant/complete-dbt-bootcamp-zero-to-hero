@@ -16,3 +16,5 @@ tmp*/
 
 .claude
 .user.yml
+.DS_Store
+.python-version

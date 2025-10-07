@@ -1,1 +1,2 @@
 dbt-snowflake~=1.10.0
+dbt-autofix~=0.13.1
