@@ -7,12 +7,17 @@ The easiest is to take a look at your Snowflake Registration email and copy the 
 
 ## Automized Snowflake Setup
 I encourage you to go through the automized Snowflake Setup as importing the data and setting the permissions from scratch might take quite some time.
-Follow the instructions here https://dbt-data-importer.streamlit.app/ to we set up your Snowflake database with a click of a button!
+Follow the instructions here https://bit.ly/dbt-course-setup to we set up your Snowflake database with a click of a button!
 
 ## Snowflake data import (manual)
 _Only execute these commands if you decided to skip the Automized Snowflake Setup._
 
-Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
+Resources presented:
+* [Snowflake Key-Pair Authentication page](https://docs.snowflake.com/en/user-guide/key-pair-auth)
+* [PuttyGen for Windows](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+* [AirBnb Source data locations](https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero/blob/main/_course_resources/source-data-locations.md)
+
+Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
 
 ```sql {#snowflake_import}
 -- Set up the defaults
@@ -21,6 +26,8 @@ USE WAREHOUSE COMPUTE_WH;
 
 CREATE DATABASE IF NOT EXISTS AIRBNB;
 CREATE SCHEMA IF NOT EXISTS AIRBNB.RAW;
+CREATE SCHEMA IF NOT EXISTS AIRBNB.DEV;
+
 USE DATABASE airbnb;
 USE SCHEMA RAW;
 
@@ -45,7 +52,7 @@ COPY INTO raw_listings (id,
                         price,
                         created_at,
                         updated_at)
-                   from 's3://dbtlearn/listings.csv'
+                   from 's3://dbt-datasets/listings.csv'
                     FILE_FORMAT = (type = 'CSV' skip_header = 1
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
                     
@@ -58,7 +65,7 @@ CREATE OR REPLACE TABLE raw_reviews
                      sentiment string);
                     
 COPY INTO raw_reviews (listing_id, date, reviewer_name, comments, sentiment)
-                   from 's3://dbtlearn/reviews.csv'
+                   from 's3://dbt-datasets/reviews.csv'
                     FILE_FORMAT = (type = 'CSV' skip_header = 1
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
                     
@@ -71,7 +78,7 @@ CREATE OR REPLACE TABLE raw_hosts
                      updated_at datetime);
                     
 COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
-                   from 's3://dbtlearn/hosts.csv'
+                   from 's3://dbt-datasets/hosts.csv'
                     FILE_FORMAT = (type = 'CSV' skip_header = 1
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
 ```
@@ -79,7 +86,7 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
 ## Snowflake user creation
 _Only execute these commands if you decided to skip the Automized Snowflake Setup._
 
-Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
+Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
 
 ```sql {#snowflake_setup}
 -- Use an admin role
@@ -136,8 +143,9 @@ GRANT ALL ON WAREHOUSE COMPUTE_WH TO ROLE REPORTER;
 GRANT USAGE ON DATABASE AIRBNB TO ROLE REPORTER;
 GRANT USAGE ON ALL SCHEMAS IN DATABASE AIRBNB to ROLE REPORTER;
 GRANT USAGE ON FUTURE SCHEMAS IN DATABASE AIRBNB to ROLE REPORTER;
-GRANT SELECT ON ALL TABLES IN SCHEMA AIRBNB.RAW to ROLE REPORTER;
-GRANT SELECT ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE REPORTER;
+GRANT SELECT ON ALL TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
+GRANT SELECT ON FUTURE TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
+
 ```
 
 # Python and Virtualenv setup, and dbt installation - Windows
@@ -188,7 +196,7 @@ dbt --version
 
 Create a dbt project (all platforms):
 ```sh
-dbt init dbtlearn
+dbt init --skip-profile-setup airbnb
 ```
 
 ## Adding a dbt Core compatibility flag to our project
@@ -451,13 +459,13 @@ DROP VIEW AIRBNB.DEV.SRC_REVIEWS;
 
 ## Full Moon Dates CSV
 Download the CSV from the lesson's _Resources_ section, or download it from the following S3 location:
-https://dbtlearn.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv
+https://dbt-datasets.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv
 
 Then place it to the `seeds` folder
 
 If you download from S3 on a Mac/Linux, can you import the csv straight to your seed folder by executing this command:
 ```sh
-curl https://dbtlearn.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv -o seeds/seed_full_moon_dates.csv
+curl https://dbt-datasets.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv -o seeds/seed_full_moon_dates.csv
 ```
 
 ## Contents of models/sources.yml
@@ -774,7 +782,7 @@ The contents of `models/overview.md`:
 Hey, welcome to our Airbnb pipeline documentation!
 
 Here is the schema of our input data:
-![input schema](https://dbtlearn.s3.us-east-2.amazonaws.com/input_schema.png)
+![input schema](https://dbt-datasets.s3.us-east-2.amazonaws.com/input_schema.png)
 
 {% enddocs %}
 ```
@@ -800,6 +808,33 @@ ORDER BY
     is_full_moon,
     review_sentiment
 ```
+
+## Hooks
+Changes made to `dbt_project.yml`:
+
+```
+on-run-start:
+  - "CREATE TABLE IF NOT EXISTS {{ target.schema }}.audit_log (
+      model_name STRING,
+      run_timestamp TIMESTAMP
+    )"
+
+models:
+  airbnb:
+    ...
+    +post-hook:
+      - "INSERT INTO {{ target.schema }}.audit_log VALUES ('{{ this }}', CURRENT_TIMESTAMP)"
+```
+
+## Grants
+Add `grants` to `dbt_project.yml`:
+```
+models:
+  airbnb:
+    grants:
+      select: ["reporter"]
+```
+
 ## Creating a Dashboard in Preset
 
 Getting the Snowflake credentials up to the screen:
@@ -828,14 +863,6 @@ exposures:
     owner:
       name: Zoltan C. Toth
       email: dbtstudent@gmail.com
-```
-
-## Post-hook
-Add this to your `dbt_project.yml`:
-
-```
-+post-hook:
-      - "GRANT SELECT ON {{ this }} TO ROLE REPORTER"
 ```
 
 # Debugging Tests and Testing with dbt-expectations
@@ -939,7 +966,7 @@ pip install -r requirements.txt
 #### Create a dagster project
 Dagster has a command for creating a dagster project from an existing dbt project: 
 ```
-dagster-dbt project scaffold --project-name my_dbt_dagster_project --dbt-project-dir=dbtlearn
+dagster-dbt project scaffold --project-name my_dbt_dagster_project --dbt-project-dir=airbnb
 ```
 
 _At this point in the course, open [schedules.py](dbt_dagster_project/dbt_dagster_project/schedules.py) and uncomment the schedule logic._
