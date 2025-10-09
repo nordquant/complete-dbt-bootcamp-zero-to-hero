@@ -50,20 +50,20 @@ jobs:
         echo "$PROFILES_YML" > ~/.dbt/profiles.yml
     - name: Execute dbt debug
       run: |
-        cd dbtlearn
+        cd airbnb
         dbt debug
     - name: Install packages
       run: |
-        cd dbtlearn
+        cd airbnb
         dbt deps
     - name: dbt build
       if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
       run: |
-        cd dbtlearn
+        cd airbnb
         dbt build
     - name: dbt docs generate
       if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
       run: |
-        cd dbtlearn
+        cd airbnb
         dbt docs generate
 
