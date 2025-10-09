@@ -832,7 +832,7 @@ Add `grants` to `dbt_project.yml`:
 models:
   airbnb:
     grants:
-      select: ["reporter"]
+      select: ["transform", "reporter"]
 ```
 
 ## Creating a Dashboard in Preset
