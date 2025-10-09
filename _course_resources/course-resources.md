@@ -1,64 +1,33 @@
 # Introduction and Environment Setup
 
 ## How to figure out my Snowflake Account URL?
-The easiest is to take a look at your Snowflake Registration email and copy the string before `.snowflakecomputing.com`. In my case this is `frgcsyo-ie17820`. Keep in mind that sometimes urls include the `.aws` tag, too, such as `frgcsyo-ie17820.aws`. This isn't simple, I know. Even _dbt Labs_ [has it's own section](https://docs.getdbt.com/docs/cloud/connect-data-platform/connect-snowflake) on how to figure it out.
+The easiest way is to take a look at your Snowflake Registration email and copy the string before `.snowflakecomputing.com`. In my case, this is `frgcsyo-ie17820`. Keep in mind that sometimes URLs include the `.aws` tag, too, such as `frgcsyo-ie17820.aws`. This isn't simple, I know. Even _dbt Labs_ [has its own section](https://docs.getdbt.com/docs/cloud/connect-data-platform/connect-snowflake) on how to figure it out.
 
 <img width="980" alt="Screenshot 2024-10-21 at 10 36 03" src="https://github.com/user-attachments/assets/54faccde-5b57-413d-8e7c-2d5bbea5585a">
 
-## Fast track the Snowflake Setup
-If you want to skip the manual user creation and raw table import, we've created an auto-importer for you. 
-Take a look at https://dbt-data-importer.streamlit.app/ where we set up Snowflake for you with a click of a button!
+## Automated Snowflake Setup
+I encourage you to go through the automated Snowflake Setup as importing the data and setting the permissions from scratch might take quite some time.
+Follow the instructions here https://bit.ly/dbt-course-setup to set up your Snowflake database with a click of a button!
 
+## Snowflake data import (manual)
+_Only execute these commands if you decided to skip the Automated Snowflake Setup._
 
-## Snowflake user creation
-Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
+Resources presented:
+* [Snowflake Key-Pair Authentication page](https://docs.snowflake.com/en/user-guide/key-pair-auth)
+* [PuttyGen for Windows](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+* [AirBnb Source data locations](https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero/blob/main/_course_resources/source-data-locations.md)
 
-If you see a _Grant partially executed: privileges [REFERENCE_USAGE] not granted._ message when you execute `GRANT ALL ON DATABASE AIRBNB to ROLE transform`, that's just an info message and you can ignore it. 
-
-```sql {#snowflake_setup}
--- Use an admin role
-USE ROLE ACCOUNTADMIN;
-
--- Create the `transform` role
-CREATE ROLE IF NOT EXISTS TRANSFORM;
-GRANT ROLE TRANSFORM TO ROLE ACCOUNTADMIN;
-
--- Create the default warehouse if necessary
-CREATE WAREHOUSE IF NOT EXISTS COMPUTE_WH;
-GRANT OPERATE ON WAREHOUSE COMPUTE_WH TO ROLE TRANSFORM;
-
--- Create the `dbt` user and assign to role
-CREATE USER IF NOT EXISTS dbt
-  PASSWORD='dbtPassword123'
-  LOGIN_NAME='dbt'
-  MUST_CHANGE_PASSWORD=FALSE
-  DEFAULT_WAREHOUSE='COMPUTE_WH'
-  DEFAULT_ROLE=TRANSFORM
-  DEFAULT_NAMESPACE='AIRBNB.RAW'
-  COMMENT='DBT user used for data transformation';
-ALTER USER dbt SET TYPE = LEGACY_SERVICE;
-GRANT ROLE TRANSFORM to USER dbt;
-
--- Create our database and schemas
-CREATE DATABASE IF NOT EXISTS AIRBNB;
-CREATE SCHEMA IF NOT EXISTS AIRBNB.RAW;
-
--- Set up permissions to role `transform`
-GRANT ALL ON WAREHOUSE COMPUTE_WH TO ROLE TRANSFORM; 
-GRANT ALL ON DATABASE AIRBNB to ROLE TRANSFORM;
-GRANT ALL ON ALL SCHEMAS IN DATABASE AIRBNB to ROLE TRANSFORM;
-GRANT ALL ON FUTURE SCHEMAS IN DATABASE AIRBNB to ROLE TRANSFORM;
-GRANT ALL ON ALL TABLES IN SCHEMA AIRBNB.RAW to ROLE TRANSFORM;
-GRANT ALL ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE TRANSFORM;
-```
-
-## Snowflake data import
-
-Copy these SQL statements into a Snowflake Worksheet, select all and execute them (i.e. pressing the play button).
+Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
 
 ```sql {#snowflake_import}
 -- Set up the defaults
+CREATE WAREHOUSE IF NOT EXISTS COMPUTE_WH;
 USE WAREHOUSE COMPUTE_WH;
+
+CREATE DATABASE IF NOT EXISTS AIRBNB;
+CREATE SCHEMA IF NOT EXISTS AIRBNB.RAW;
+CREATE SCHEMA IF NOT EXISTS AIRBNB.DEV;
+
 USE DATABASE airbnb;
 USE SCHEMA RAW;
 
@@ -83,7 +52,7 @@ COPY INTO raw_listings (id,
                         price,
                         created_at,
                         updated_at)
-                   from 's3://dbtlearn/listings.csv'
+                   from 's3://dbt-datasets/listings.csv'
                     FILE_FORMAT = (type = 'CSV' skip_header = 1
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
                     
@@ -96,7 +65,7 @@ CREATE OR REPLACE TABLE raw_reviews
                      sentiment string);
                     
 COPY INTO raw_reviews (listing_id, date, reviewer_name, comments, sentiment)
-                   from 's3://dbtlearn/reviews.csv'
+                   from 's3://dbt-datasets/reviews.csv'
                     FILE_FORMAT = (type = 'CSV' skip_header = 1
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
                     
@@ -109,19 +78,84 @@ CREATE OR REPLACE TABLE raw_hosts
                      updated_at datetime);
                     
 COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
-                   from 's3://dbtlearn/hosts.csv'
+                   from 's3://dbt-datasets/hosts.csv'
                     FILE_FORMAT = (type = 'CSV' skip_header = 1
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
+```
+
+## Snowflake user creation
+_Only execute these commands if you decided to skip the Automated Snowflake Setup._
+
+Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
+
+```sql {#snowflake_setup}
+-- Use an admin role
+USE ROLE ACCOUNTADMIN;
+
+-- Create the `transform` role
+DROP ROLE IF EXISTS TRANSFORM;
+CREATE ROLE TRANSFORM;
+GRANT ROLE TRANSFORM TO ROLE ACCOUNTADMIN;
+
+-- Create the default warehouse if necessary
+GRANT OPERATE ON WAREHOUSE COMPUTE_WH TO ROLE TRANSFORM;
+
+-- Create the `dbt` user and assign to role
+DROP USER IF EXISTS dbt;
+CREATE USER IF NOT EXISTS dbt
+  LOGIN_NAME='dbt'
+  TYPE=SERVICE
+  RSA_PUBLIC_KEY="<<Add Your Public Key File's content here>>"
+  DEFAULT_ROLE=TRANSFORM
+  DEFAULT_WAREHOUSE='COMPUTE_WH'
+  DEFAULT_NAMESPACE='AIRBNB.RAW'
+  COMMENT='DBT user used for data transformation';
+
+GRANT ROLE TRANSFORM to USER dbt;
+
+-- Set up permissions to role `transform`
+GRANT ALL ON WAREHOUSE COMPUTE_WH TO ROLE TRANSFORM; 
+GRANT ALL ON DATABASE AIRBNB to ROLE TRANSFORM;
+GRANT ALL ON ALL SCHEMAS IN DATABASE AIRBNB to ROLE TRANSFORM;
+GRANT ALL ON FUTURE SCHEMAS IN DATABASE AIRBNB to ROLE TRANSFORM;
+GRANT ALL ON ALL TABLES IN SCHEMA AIRBNB.RAW to ROLE TRANSFORM;
+GRANT ALL ON FUTURE TABLES IN SCHEMA AIRBNB.RAW to ROLE TRANSFORM;
+
+-- Create the user and permissions for Preset.io
+USE ROLE ACCOUNTADMIN;
+
+DROP ROLE IF EXISTS REPORTER;
+CREATE ROLE REPORTER;
+
+DROP USER IF EXISTS PRESET;
+CREATE USER PRESET
+  LOGIN_NAME='preset'
+  TYPE=SERVICE
+  RSA_PUBLIC_KEY="<<Add Your Public Key File's content here>>"
+  DEFAULT_WAREHOUSE='COMPUTE_WH'
+  DEFAULT_ROLE=REPORTER
+  DEFAULT_NAMESPACE='AIRBNB.DEV'
+ COMMENT='Preset user for creating reports';
+
+GRANT ROLE REPORTER TO USER PRESET;
+GRANT ROLE REPORTER TO ROLE ACCOUNTADMIN;
+GRANT ALL ON WAREHOUSE COMPUTE_WH TO ROLE REPORTER;
+GRANT USAGE ON DATABASE AIRBNB TO ROLE REPORTER;
+GRANT USAGE ON ALL SCHEMAS IN DATABASE AIRBNB to ROLE REPORTER;
+GRANT USAGE ON FUTURE SCHEMAS IN DATABASE AIRBNB to ROLE REPORTER;
+GRANT SELECT ON ALL TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
+GRANT SELECT ON FUTURE TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
+
 ```
 
 # Python and Virtualenv setup, and dbt installation - Windows
 
 ## Python
-This is the Python installer you want to use: 
+You want to use Python 3.12 as this is the most recent version that is compatible with every database adapter, Snowflake included.
 
-[https://www.python.org/ftp/python/3.10.7/python-3.10.7-amd64.exe ](https://www.python.org/downloads/release/python-3113/)
+[https://www.python.org/downloads/release/python-31211/](https://www.python.org/downloads/release/python-31211/)
 
-Please make sure that you work with Python 3.11 as newer versions of python might not be compatible with some of the dbt packages.
+Please make sure that you work with Python 3.12 as newer versions of python might not be compatible with some of the dbt packages.
 
 ## Virtualenv setup
 Here are the commands we executed in this lesson:
@@ -130,28 +164,25 @@ cd Desktop
 mkdir course
 cd course
 
-virtualenv venv
+python -m venv venv
+# Windows:
 venv\Scripts\activate
+# Mac:
+source venv/bin/activate
 ```
 
 # Virtualenv setup and dbt installation - Mac
 
 ## iTerm2
-We suggest you to use _iTerm2_ instead of the built-in Terminal application.
+We suggest you use _iTerm2_ instead of the built-in Terminal application.
 
 https://iterm2.com/
-
-## Homebrew
-Homebrew is a widely popular application manager for the Mac. This is what we use in the class for installing a virtualenv.
-
-https://brew.sh/
 
 ## dbt installation
 
 Supported Python Versions: https://docs.getdbt.com/faqs/Core/install-python-compatibility
 
 Here are the commands we execute in this lesson:
-
 
 ```sh
 mkdir course
@@ -163,20 +194,9 @@ pip install dbt-snowflake==1.10.2
 dbt --version
 ```
 
-## dbt setup
-Initialize the dbt profiles folder on Mac/Linux:
-```sh
-mkdir ~/.dbt
-```
-
-Initialize the dbt profiles folder on Windows:
-```sh
-mkdir %userprofile%\.dbt
-```
-
 Create a dbt project (all platforms):
 ```sh
-dbt init dbtlearn
+dbt init --skip-profile-setup airbnb
 ```
 
 ## Adding a dbt Core compatibility flag to our project
@@ -439,13 +459,13 @@ DROP VIEW AIRBNB.DEV.SRC_REVIEWS;
 
 ## Full Moon Dates CSV
 Download the CSV from the lesson's _Resources_ section, or download it from the following S3 location:
-https://dbtlearn.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv
+https://dbt-datasets.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv
 
 Then place it to the `seeds` folder
 
-If you download from S3 on a Mac/Linux, can you import the csv straight to your seed folder by executing this command:
+If you download from S3 on a Mac/Linux, you can import the CSV straight to your seed folder by executing this command:
 ```sh
-curl https://dbtlearn.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv -o seeds/seed_full_moon_dates.csv
+curl https://dbt-datasets.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv -o seeds/seed_full_moon_dates.csv
 ```
 
 ## Contents of models/sources.yml
@@ -581,8 +601,8 @@ models:
                       'Hotel room']
 ```
 
-### Generic test for minimum nights check
-The contents of `tests/dim_listings_minumum_nights.sql`:
+### Singular test for minimum nights check
+The contents of `tests/dim_listings_minimum_nights.sql`:
 
 ```sql
 SELECT
@@ -611,7 +631,7 @@ INNER JOIN {{ ref('fct_reviews') }} r
 USING (listing_id)
 WHERE l.created_at >= r.review_date
 ```
-# Marcos, Custom Tests and Packages 
+# Macros, Custom Tests and Packages
 ## Macros
 
 The contents of `macros/no_nulls_in_columns.sql`:
@@ -762,39 +782,12 @@ The contents of `models/overview.md`:
 Hey, welcome to our Airbnb pipeline documentation!
 
 Here is the schema of our input data:
-![input schema](https://dbtlearn.s3.us-east-2.amazonaws.com/input_schema.png)
+![input schema](https://dbt-datasets.s3.us-east-2.amazonaws.com/input_schema.png)
 
 {% enddocs %}
 ```
 
 # Analyses, Hooks and Exposures
-
-## Create the REPORTER role and PRESET user in Snowflake
-```sql
-USE ROLE ACCOUNTADMIN;
-CREATE ROLE IF NOT EXISTS REPORTER;
-CREATE USER IF NOT EXISTS PRESET
- PASSWORD='presetPassword123'
- LOGIN_NAME='preset'
- MUST_CHANGE_PASSWORD=FALSE
- DEFAULT_WAREHOUSE='COMPUTE_WH'
- DEFAULT_ROLE=REPORTER
- DEFAULT_NAMESPACE='AIRBNB.DEV'
- COMMENT='Preset user for creating reports';
-
-GRANT ROLE REPORTER TO USER PRESET;
-GRANT ROLE REPORTER TO ROLE ACCOUNTADMIN;
-GRANT ALL ON WAREHOUSE COMPUTE_WH TO ROLE REPORTER;
-GRANT USAGE ON DATABASE AIRBNB TO ROLE REPORTER;
-GRANT USAGE ON SCHEMA AIRBNB.DEV TO ROLE REPORTER;
-
--- We don't want to grant select rights here; we'll do this through hooks:
--- GRANT SELECT ON ALL TABLES IN SCHEMA AIRBNB.DEV TO ROLE REPORTER;
--- GRANT SELECT ON ALL VIEWS IN SCHEMA AIRBNB.DEV TO ROLE REPORTER;
--- GRANT SELECT ON FUTURE TABLES IN SCHEMA AIRBNB.DEV TO ROLE REPORTER;
--- GRANT SELECT ON FUTURE VIEWS IN SCHEMA AIRBNB.DEV TO ROLE REPORTER;
-
-```
 
 ## Analyses
 The contents of `analyses/full_moon_no_sleep.sql`:
@@ -815,6 +808,33 @@ ORDER BY
     is_full_moon,
     review_sentiment
 ```
+
+## Hooks
+Changes made to `dbt_project.yml`:
+
+```
+on-run-start:
+  - "CREATE TABLE IF NOT EXISTS {{ target.schema }}.audit_log (
+      model_name STRING,
+      run_timestamp TIMESTAMP
+    )"
+
+models:
+  airbnb:
+    ...
+    +post-hook:
+      - "INSERT INTO {{ target.schema }}.audit_log VALUES ('{{ this }}', CURRENT_TIMESTAMP)"
+```
+
+## Grants
+Add `grants` to `dbt_project.yml`:
+```
+models:
+  airbnb:
+    grants:
+      select: ["transform", "reporter"]
+```
+
 ## Creating a Dashboard in Preset
 
 Getting the Snowflake credentials up to the screen:
@@ -845,14 +865,6 @@ exposures:
       email: dbtstudent@gmail.com
 ```
 
-## Post-hook
-Add this to your `dbt_project.yml`:
-
-```
-+post-hook:
-      - "GRANT SELECT ON {{ this }} TO ROLE REPORTER"
-```
-
 # Debugging Tests and Testing with dbt-expectations
 
 * The original Great Expectations project on GitHub: https://github.com/great-expectations/great_expectations
@@ -879,7 +891,7 @@ dbt test --select source:airbnb.listings
 dbt --debug test --select dim_listings_w_hosts
 ```
 
-Keep in mind that in the lecture we didn't use the _--debug_ flag after all as taking a look at the compiled sql file is the better way of debugging tests.
+Keep in mind that in the lecture we didn't use the _--debug_ flag after all, as taking a look at the compiled SQL file is the better way of debugging tests.
 
 ### Logging
 
@@ -887,9 +899,9 @@ The contents of `macros/logging.sql`:
 ```
 {% macro learn_logging() %}
     {{ log("Call your mom!") }}
-    {{ log("Call your dad!", info=True) }} --> Logs to the screen, too
---  {{ log("Call your dad!", info=True) }} --> This will be put to the screen
-    {# log("Call your dad!", info=True) #} --> This won't be executed
+    {{ log("Call your dad!", info=True) }} {# Logs to the screen, too #}
+--  {{ log("Call your dad!", info=True) }} {# This will be logged to the screen #}
+    {# log("Call your dad!", info=True) #} {# This won't be executed #}
 {% endmacro %}
 ```
 
@@ -899,7 +911,7 @@ dbt run-operation learn_logging
 ```
 
 ## Variables
-The contents of `marcos/variables.sql`:
+The contents of `macros/variables.sql`:
 ```
 {% macro learn_variables() %}
 
@@ -954,7 +966,7 @@ pip install -r requirements.txt
 #### Create a dagster project
 Dagster has a command for creating a dagster project from an existing dbt project: 
 ```
-dagster-dbt project scaffold --project-name my_dbt_dagster_project --dbt-project-dir=dbtlearn
+dagster-dbt project scaffold --project-name my_dbt_dagster_project --dbt-project-dir=airbnb
 ```
 
 _At this point in the course, open [schedules.py](dbt_dagster_project/dbt_dagster_project/schedules.py) and uncomment the schedule logic._
