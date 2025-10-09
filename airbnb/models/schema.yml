@@ -74,6 +74,7 @@ models:
                 severity: warn
               arguments:
                 max_value: 5000
+  
   - name: fct_reviews
     columns:
       - name: listing_id
@@ -82,10 +83,11 @@ models:
               arguments:
                 to: ref('dim_listings_cleansed')
                 field: listing_id
+      - name: date
       - name: reviewer_name
         tests:
           - not_null
-
+      - name: review_text
       - name: review_sentiment
         tests:
           - accepted_values:
