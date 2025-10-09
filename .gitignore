@@ -14,6 +14,8 @@ venv/
 *.pyc
 tmp*/
 
+/my_dbt_dagster_project
+
 .claude
 .user.yml
 .DS_Store

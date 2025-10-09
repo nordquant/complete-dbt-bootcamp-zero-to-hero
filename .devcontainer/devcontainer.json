@@ -3,13 +3,7 @@
 {
 	"name": "Python 3",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/python:1-3.11-bullseye",
-	"features": {
-		"ghcr.io/devcontainers/features/python:1": {
-			"installTools": true,
-			"version": "3.11"
-		}
-	},
+	"image": "mcr.microsoft.com/devcontainers/python:1-3.13-bullseye",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -22,7 +16,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"innoverio.vscode-dbt-power-user"
+				"dbtlabsinc.dbt"
 			]
 		}
 	}
