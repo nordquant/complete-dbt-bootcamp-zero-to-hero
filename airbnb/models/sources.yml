@@ -20,7 +20,8 @@ sources:
 
       - name: reviews
         identifier: raw_reviews
-        loaded_at_field: date
-        freshness:
-          warn_after: {count: 1, period: hour}
-          error_after: {count: 24, period: hour}
+        config:
+          loaded_at_field: date
+          freshness:
+            warn_after: {count: 1, period: hour}
+            # error_after: {count: 24, period: hour}

@@ -484,10 +484,25 @@ sources:
 
       - name: reviews
         identifier: raw_reviews
-        loaded_at_field: date
-        freshness:
-          warn_after: {count: 1, period: hour}
-          error_after: {count: 24, period: hour}
+        config:
+          loaded_at_field: date
+          freshness:
+            warn_after: {count: 1, period: hour}
+            error_after: {count: 24, period: hour}
+```
+
+## Source Freshness
+Getting the exit code of the most recent process
+```
+# Mac/Linux:
+echo $?
+
+# Windows - Command Prompt (cmd)
+dir C:\nonexistent
+echo %ERRORLEVEL%
+
+# Windows - PowerShell
+$LASTEXITCODE
 ```
 
 ## Contents of models/mart/full_moon_reviews.sql
