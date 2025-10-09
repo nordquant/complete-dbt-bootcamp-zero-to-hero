@@ -1,16 +1,16 @@
 # Introduction and Environment Setup
 
 ## How to figure out my Snowflake Account URL?
-The easiest is to take a look at your Snowflake Registration email and copy the string before `.snowflakecomputing.com`. In my case this is `frgcsyo-ie17820`. Keep in mind that sometimes urls include the `.aws` tag, too, such as `frgcsyo-ie17820.aws`. This isn't simple, I know. Even _dbt Labs_ [has it's own section](https://docs.getdbt.com/docs/cloud/connect-data-platform/connect-snowflake) on how to figure it out.
+The easiest way is to take a look at your Snowflake Registration email and copy the string before `.snowflakecomputing.com`. In my case, this is `frgcsyo-ie17820`. Keep in mind that sometimes URLs include the `.aws` tag, too, such as `frgcsyo-ie17820.aws`. This isn't simple, I know. Even _dbt Labs_ [has its own section](https://docs.getdbt.com/docs/cloud/connect-data-platform/connect-snowflake) on how to figure it out.
 
 <img width="980" alt="Screenshot 2024-10-21 at 10 36 03" src="https://github.com/user-attachments/assets/54faccde-5b57-413d-8e7c-2d5bbea5585a">
 
-## Automized Snowflake Setup
-I encourage you to go through the automized Snowflake Setup as importing the data and setting the permissions from scratch might take quite some time.
-Follow the instructions here https://bit.ly/dbt-course-setup to we set up your Snowflake database with a click of a button!
+## Automated Snowflake Setup
+I encourage you to go through the automated Snowflake Setup as importing the data and setting the permissions from scratch might take quite some time.
+Follow the instructions here https://bit.ly/dbt-course-setup to set up your Snowflake database with a click of a button!
 
 ## Snowflake data import (manual)
-_Only execute these commands if you decided to skip the Automized Snowflake Setup._
+_Only execute these commands if you decided to skip the Automated Snowflake Setup._
 
 Resources presented:
 * [Snowflake Key-Pair Authentication page](https://docs.snowflake.com/en/user-guide/key-pair-auth)
@@ -84,7 +84,7 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
 ```
 
 ## Snowflake user creation
-_Only execute these commands if you decided to skip the Automized Snowflake Setup._
+_Only execute these commands if you decided to skip the Automated Snowflake Setup._
 
 Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
 
@@ -174,7 +174,7 @@ source venv/bin/activate
 # Virtualenv setup and dbt installation - Mac
 
 ## iTerm2
-We suggest you to use _iTerm2_ instead of the built-in Terminal application.
+We suggest you use _iTerm2_ instead of the built-in Terminal application.
 
 https://iterm2.com/
 
@@ -463,7 +463,7 @@ https://dbt-datasets.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv
 
 Then place it to the `seeds` folder
 
-If you download from S3 on a Mac/Linux, can you import the csv straight to your seed folder by executing this command:
+If you download from S3 on a Mac/Linux, you can import the CSV straight to your seed folder by executing this command:
 ```sh
 curl https://dbt-datasets.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv -o seeds/seed_full_moon_dates.csv
 ```
@@ -601,8 +601,8 @@ models:
                       'Hotel room']
 ```
 
-### Generic test for minimum nights check
-The contents of `tests/dim_listings_minumum_nights.sql`:
+### Singular test for minimum nights check
+The contents of `tests/dim_listings_minimum_nights.sql`:
 
 ```sql
 SELECT
@@ -631,7 +631,7 @@ INNER JOIN {{ ref('fct_reviews') }} r
 USING (listing_id)
 WHERE l.created_at >= r.review_date
 ```
-# Marcos, Custom Tests and Packages 
+# Macros, Custom Tests and Packages
 ## Macros
 
 The contents of `macros/no_nulls_in_columns.sql`:
@@ -891,7 +891,7 @@ dbt test --select source:airbnb.listings
 dbt --debug test --select dim_listings_w_hosts
 ```
 
-Keep in mind that in the lecture we didn't use the _--debug_ flag after all as taking a look at the compiled sql file is the better way of debugging tests.
+Keep in mind that in the lecture we didn't use the _--debug_ flag after all, as taking a look at the compiled SQL file is the better way of debugging tests.
 
 ### Logging
 
@@ -899,9 +899,9 @@ The contents of `macros/logging.sql`:
 ```
 {% macro learn_logging() %}
     {{ log("Call your mom!") }}
-    {{ log("Call your dad!", info=True) }} --> Logs to the screen, too
---  {{ log("Call your dad!", info=True) }} --> This will be put to the screen
-    {# log("Call your dad!", info=True) #} --> This won't be executed
+    {{ log("Call your dad!", info=True) }} {# Logs to the screen, too #}
+--  {{ log("Call your dad!", info=True) }} {# This will be logged to the screen #}
+    {# log("Call your dad!", info=True) #} {# This won't be executed #}
 {% endmacro %}
 ```
 
@@ -911,7 +911,7 @@ dbt run-operation learn_logging
 ```
 
 ## Variables
-The contents of `marcos/variables.sql`:
+The contents of `macros/variables.sql`:
 ```
 {% macro learn_variables() %}
 
