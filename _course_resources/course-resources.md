@@ -503,7 +503,7 @@ echo %ERRORLEVEL%
 $LASTEXITCODE
 ```
 
-## Contents of models/mart/full_moon_reviews.sql
+## Contents of models/mart/mart_full_moon_reviews.sql
 ```sql
 {{ config(
   materialized = 'table',
