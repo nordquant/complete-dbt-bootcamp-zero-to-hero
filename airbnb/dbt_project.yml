@@ -1,10 +1,8 @@
-
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
 name: 'airbnb'
 version: '1.0.0'
-config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
 profile: 'airbnb'
@@ -20,13 +18,9 @@ macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 asset-paths: ["assets"]
 
-target-path: "target"  # directory which will store compiled SQL files
 clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
-
-flags:
-  require_generic_test_arguments_property: false
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
@@ -35,10 +29,7 @@ flags:
 # as tables. These settings can be overridden in the individual model files
 # using the `{{ config(...) }}` macro.
 on-run-start:
-  - "CREATE TABLE IF NOT EXISTS {{ target.schema }}.audit_log (
-      model_name STRING,
-      run_timestamp TIMESTAMP
-    )"
+  - "CREATE TABLE IF NOT EXISTS {{ target.schema }}.audit_log ( model_name STRING, run_timestamp TIMESTAMP )"
 
 models:
   airbnb:
@@ -51,3 +42,7 @@ models:
       +materialized: table
     src:
       +materialized: ephemeral
+
+data_tests:
+  +store_failures: true
+  +schema: _test_failures
