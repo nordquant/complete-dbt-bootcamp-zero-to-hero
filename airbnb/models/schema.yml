@@ -9,13 +9,13 @@ models:
     columns:
       - name: listing_id
         description: Primary key for the listing
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: host_id
         description: The hosts's id. References the host table.
-        tests:
+        data_tests:
           - not_null
           - relationships:
               arguments:
@@ -24,7 +24,7 @@ models:
 
       - name: room_type
         description: Type of the apartment / room
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['Entire home/apt',
@@ -34,13 +34,10 @@ models:
 
       - name: minimum_nights
         description: '{{ doc("dim_listing_cleansed__minimum_nights") }}'
-        tests:
+        data_tests:
           - positive_values
 
   - name: dim_hosts_cleansed
-    config:
-      contract:
-        enforced: true
     description: Cleansed table for the Airbnb hosts
     config:
       contract:
@@ -49,20 +46,20 @@ models:
       - name: host_id
         description: The id of the host. This is the primary key.
         data_type: integer
-        tests:
+        data_tests:
           - not_null
           - unique
       
       - name: host_name
         description: The name of the host
         data_type: string
-        tests:
+        data_tests:
           - not_null
       
       - name: is_superhost
         description: Defines whether the hosts is a superhost.
         data_type: string
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['t', 'f']
@@ -76,36 +73,40 @@ models:
   - name: dim_listings_w_hosts
     tests:
       - dbt_expectations.expect_table_row_count_to_equal_other_table:
-          compare_model: source('airbnb', 'listings')
+          arguments:
+            compare_model: source('airbnb', 'listings')
     columns:
       - name: price
-        tests:
+        data_tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
+              arguments:
+                column_type: number
           - dbt_expectations.expect_column_quantile_values_to_be_between:
-              quantile: .99
-              min_value: 50
-              max_value: 500
+              arguments:
+                quantile: .99
+                min_value: 50
+                max_value: 500
           - dbt_expectations.expect_column_max_to_be_between:
-              max_value: 5000
+              arguments:
+                max_value: 5000
               config:
                 severity: warn
 
   - name: fct_reviews
     columns:
       - name: listing_id
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_listings_cleansed')
                 field: listing_id
 
       - name: reviewer_name
-        tests:
+        data_tests:
           - not_null
       
       - name: review_sentiment
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['positive', 'neutral', 'negative']

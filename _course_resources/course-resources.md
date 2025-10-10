@@ -199,13 +199,11 @@ Create a dbt project (all platforms):
 dbt init --skip-profile-setup airbnb
 ```
 
-## Adding a dbt Core compatibility flag to our project
-Add this to your `dbt_project.yml`:
-
-```
-flags:
-  require_generic_test_arguments_property: false
-```
+## dbt 1.10 Compatibility Notes
+In dbt 1.10 and later:
+- Use `data_tests:` instead of `tests:` for column tests
+- Test parameters must be wrapped under the `arguments:` property
+- The `require_generic_test_arguments_property` flag is no longer needed
 
 # Models
 ## Code used in the lesson
@@ -592,12 +590,12 @@ models:
     columns:
 
      - name: listing_id
-       tests:
+       data_tests:
          - unique
          - not_null
 
      - name: host_id
-       tests:
+       data_tests:
          - not_null
          - relationships:
              arguments:
@@ -605,7 +603,7 @@ models:
                field: host_id
 
      - name: room_type
-       tests:
+       data_tests:
          - accepted_values:
              arguments:
                values: ['Entire home/apt',
@@ -807,13 +805,13 @@ models:
 
       - name: listing_id
         description: Primary key for the listing
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: host_id
         description: The host's id. References the host table.
-        tests:
+        data_tests:
           - not_null
           - relationships:
               arguments:
@@ -822,29 +820,29 @@ models:
 
       - name: room_type
         description: Type of the apartment / room
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']
 
       - name: minimum_nights
         description: '{{ doc("dim_listing_cleansed__minimum_nights") }}'
-        tests:
+        data_tests:
           - positive_values
 
   - name: dim_hosts_cleansed
     columns:
       - name: host_id
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: host_name
-        tests:
+        data_tests:
           - not_null
 
       - name: is_superhost
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['t', 'f']
@@ -852,18 +850,18 @@ models:
   - name: fct_reviews
     columns:
       - name: listing_id
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_listings_cleansed')
                 field: listing_id
 
       - name: reviewer_name
-        tests:
+        data_tests:
           - not_null
 
       - name: review_sentiment
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['positive', 'neutral', 'negative']
