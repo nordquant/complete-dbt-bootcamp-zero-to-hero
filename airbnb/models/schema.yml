@@ -5,7 +5,8 @@ models:
       - minimum_row_count:
           arguments:
             min_row_count: 1000
-          severity: error
+          config:
+            severity: error
     columns:
       - name: listing_id
         description: Primary key for the listing
@@ -71,7 +72,7 @@ models:
         data_type: timestamp
 
   - name: dim_listings_w_hosts
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_equal_other_table:
           arguments:
             compare_model: source('airbnb', 'listings')

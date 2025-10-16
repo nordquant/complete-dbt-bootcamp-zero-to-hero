@@ -709,25 +709,53 @@ SELECT * FROM {{ model }} WHERE {{ column_name }} <= 0
 {% endtest %}
 ```
 
-# Macros, Custom Tests and Packages
+# Jinja, Macros and Packages
+## Jinja
+
+Execute Jinja in dbt:
+```sh
+dbt compile --inline '{# This is a comment #}{% set my_name = "Zoltan" %}{{ my_name }}'
+```
+
 ## Macros
 
-The contents of `macros/no_nulls_in_columns.sql`:
+Our first macro. Add this to `macros/select_positive_values.sql`
 ```sql
-{% macro no_nulls_in_columns(model) %}
-    SELECT * FROM {{ model }} WHERE
-    {% for col in adapter.get_columns_in_relation(model) -%}
-        {{ col.column }} IS NULL OR
-    {% endfor %}
-    FALSE
+{% macro select_positive_values(model, column_name) %}
+    SELECT *
+    FROM {{ model }}
+    WHERE {{ column_name }} > 0
 {% endmacro %}
 ```
 
-The contents of `tests/no_nulls_in_dim_listings.sql`
-```sql
-{{ no_nulls_in_columns(ref('dim_listings_cleansed')) }}
+Compile and execute it:
+```sh
+dbt compile --inline '{{ select_positive_values("dim_listings_cleansed", "price") }}' 
+dbt show --inline '{{ select_positive_values("dim_listings_cleansed", "price") }}' 
 ```
 
+### Advanced Macros
+Add this to `macros/no_empty_strings.sql`:
+
+_This version doesn't have whitespace removal added as it's an assignment. Take a look at the reference solutions to find a version that removes whitespaces._
+```
+{# Here is my solution after removing most of the white spaces #}
+
+{% macro no_empty_strings(model) %}
+    {% for col in adapter.get_columns_in_relation(model) %}
+        {% if col.is_string() %}
+            {{ col.name }} IS NOT NULL AND {{ col.name }} <> '' AND
+        {% endif %}
+    {% endfor %}
+    TRUE
+{% endmacro %}
+```
+
+Compile and execute the macro:
+```
+dbt compile --inline 'SELECT * FROM {{ ref("dim_listings_cleansed") }} WHERE {{ no_empty_strings(ref("dim_listings_cleansed")) }}'
+dbt show --inline 'SELECT * FROM {{ ref("dim_listings_cleansed") }} WHERE {{ no_empty_strings(ref("dim_listings_cleansed")) }}'
+```
 ## Custom Generic Tests
 The contents of `tests/generic/positive_values.sql`
 ```sql
