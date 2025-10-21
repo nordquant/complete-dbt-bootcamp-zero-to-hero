@@ -74,5 +74,5 @@ jobs:
       if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
       run: |
         cd airbnb
-        dbtf build
+        /home/runner/.local/bin/dbt build
 
