@@ -66,4 +66,13 @@ jobs:
       run: |
         cd airbnb
         dbt docs generate
+    - name: Install dbt fusion
+      if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
+      run: |
+        curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
+    - name: dbtf build (Fusion) 
+      if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
+      run: |
+        cd airbnb
+        /home/runner/.local/bin/dbt build
 

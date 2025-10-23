@@ -7,7 +7,7 @@ The easiest way is to take a look at your Snowflake Registration email and copy 
 
 ## Automated Snowflake Setup
 I encourage you to go through the automated Snowflake Setup as importing the data and setting the permissions from scratch might take quite some time.
-Follow the instructions here https://bit.ly/dbt-course-setup to set up your Snowflake database with a click of a button!
+Follow the instructions here https://bit.ly/dbt-course-setup to set up your Snowflake database with a click of a button! ( If you encounter any issues with the link below, here is a backup server of the same application: https://dbt-course-setup.onrender.com/ )
 
 ## Snowflake data import (manual)
 _Only execute these commands if you decided to skip the Automated Snowflake Setup._
@@ -24,7 +24,10 @@ Copy these SQL statements into a Snowflake Worksheet, fill in the public key, se
 CREATE WAREHOUSE IF NOT EXISTS COMPUTE_WH;
 USE WAREHOUSE COMPUTE_WH;
 
-CREATE DATABASE IF NOT EXISTS AIRBNB;
+DROP DATABASE IF EXISTS AIRBNB CASCADE;
+
+CREATE DATABASE AIRBNB;
+
 CREATE SCHEMA IF NOT EXISTS AIRBNB.RAW;
 CREATE SCHEMA IF NOT EXISTS AIRBNB.DEV;
 
@@ -531,24 +534,16 @@ FROM
 # Snapshots
 
 ## Snapshots for listing
-The contents of `snapshots/scd_raw_listings.sql`:
-
-```sql
-{% snapshot scd_raw_listings %}
-
-{{
-   config(
-       target_schema='DEV',
-       unique_key='id',
-       strategy='timestamp',
-       updated_at='updated_at',
-       invalidate_hard_deletes=True
-   )
-}}
-
-select * FROM {{ source('airbnb', 'listings') }}
-
-{% endsnapshot %}
+The contents of `snapshots/raw_listins_snapshot.yml`:
+```yaml
+snapshots:
+  - name: scd_raw_listings
+    relation: source('airbnb', 'listings')
+    config:
+      unique_key: id
+      strategy: timestamp
+      updated_at: updated_at
+      hard_deletes: invalidate
 ```
 
 ### Updating the table
@@ -559,24 +554,17 @@ UPDATE AIRBNB.RAW.RAW_LISTINGS SET MINIMUM_NIGHTS=30,
 SELECT * FROM AIRBNB.DEV.SCD_RAW_LISTINGS WHERE ID=3176;
 ```
 
-## Snapshots for hosts
-The contents of `snapshots/scd_raw_hosts.sql`:
-```sql
-{% snapshot scd_raw_hosts %}
-
-{{
-   config(
-       target_schema='dev',
-       unique_key='id',
-       strategy='timestamp',
-       updated_at='updated_at',
-       invalidate_hard_deletes=True
-   )
-}}
-
-select * FROM {{ source('airbnb', 'hosts') }}
-
-{% endsnapshot %}
+## Assignment: Snapshots for raw_hosts
+The contents of `snapshots/raw_hosts_snapshot.yml`:
+```yaml
+snapshots:
+  - name: scd_raw_hosts
+    relation: source('airbnb', 'hosts')
+    config:
+      unique_key: id
+      strategy: timestamp
+      updated_at: updated_at
+      hard_deletes: invalidate
 ```
 
 # Tests
