@@ -702,7 +702,7 @@ SELECT * FROM {{ model }} WHERE {{ column_name }} <= 0
 
 Execute Jinja in dbt:
 ```sh
-dbt compile --inline '{# This is a comment #}{% set my_name = "Zoltan" %}{{ my_name }}'
+dbt compile --inline "{# This is a comment #}{% set my_name = 'Zoltan' %}{{ my_name }}"
 ```
 
 ## Macros
@@ -718,8 +718,8 @@ Our first macro. Add this to `macros/select_positive_values.sql`
 
 Compile and execute it:
 ```sh
-dbt compile --inline '{{ select_positive_values("dim_listings_cleansed", "price") }}' 
-dbt show --inline '{{ select_positive_values("dim_listings_cleansed", "price") }}' 
+dbt compile --inline "{{ select_positive_values('dim_listings_cleansed', 'price') }}"
+dbt show --inline "{{ select_positive_values('dim_listings_cleansed', 'price') }}"
 ```
 
 ### Advanced Macros
@@ -741,8 +741,8 @@ _This version doesn't have whitespace removal added as it's an assignment. Take 
 
 Compile and execute the macro:
 ```
-dbt compile --inline 'SELECT * FROM {{ ref("dim_listings_cleansed") }} WHERE {{ no_empty_strings(ref("dim_listings_cleansed")) }}'
-dbt show --inline 'SELECT * FROM {{ ref("dim_listings_cleansed") }} WHERE {{ no_empty_strings(ref("dim_listings_cleansed")) }}'
+dbt compile --inline "SELECT * FROM {{ ref('dim_listings_cleansed') }} WHERE {{ no_empty_strings(ref('dim_listings_cleansed')) }}"
+dbt show --inline "SELECT * FROM {{ ref('dim_listings_cleansed') }} WHERE {{ no_empty_strings(ref('dim_listings_cleansed')) }}"
 ```
 ## Custom Generic Tests
 The contents of `tests/generic/positive_values.sql`
