@@ -7,7 +7,7 @@ The easiest way is to take a look at your Snowflake Registration email and copy 
 
 ## Automated Snowflake Setup
 I encourage you to go through the automated Snowflake Setup as importing the data and setting the permissions from scratch might take quite some time.
-Follow the instructions here https://dbt-course-setup.onrender.com/ to set up your Snowflake database with a click of a button! ( If you encounter any issues with the link below, here is a backup server of the same application: https://bit.ly/dbt-course-setup )
+Follow the instructions here https://dbtsetup.nordquant.com/ to set up your Snowflake database with a click of a button! ( If you encounter any issues with the link below, here is a backup server of the same application: https://udemy-dbt-setup.streamlit.app/ )
 
 ## Snowflake data import (manual)
 _Only execute these commands if you decided to skip the Automated Snowflake Setup._
