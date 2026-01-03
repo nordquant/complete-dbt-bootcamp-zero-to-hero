@@ -18,30 +18,24 @@ permissions:
 jobs:
   build:
     if: github.repository == 'nordquant/complete-dbt-bootcamp-zero-to-hero'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
-        python-version: ["3.12", "3.11", "3.10", "3.9"]
+        python-version: ["3.12", "3.11", "3.10"]
         runs-on: [ubuntu-latest, ubuntu-latest-arm64]
     env:
       full_test_python: "3.12"
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+        cache-dependency-glob: "pyproject.toml"
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Cache pip dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+      run: uv python install ${{ matrix.python-version }}
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      run: uv sync
     - name: Create dbt profile
       env:
         PROFILES_YML: ${{ secrets.PROFILES_YML }}
@@ -51,26 +45,26 @@ jobs:
     - name: Execute dbt debug
       run: |
         cd airbnb
-        dbt debug
+        uv run dbt debug
     - name: Install packages
       run: |
         cd airbnb
-        dbt deps
+        uv run dbt deps
     - name: dbt build
       if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
       run: |
         cd airbnb
-        dbt build
+        uv run dbt build
     - name: dbt docs generate
       if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
       run: |
         cd airbnb
-        dbt docs generate
+        uv run dbt docs generate
     - name: Install dbt fusion
       if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
       run: |
         curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
-    - name: dbtf build (Fusion) 
+    - name: dbtf build (Fusion)
       if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
       run: |
         cd airbnb
