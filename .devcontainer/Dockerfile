@@ -1,5 +1,5 @@
-# Base image: Microsoft Dev Containers Python 3.13 (used by GitHub Codespaces)
-FROM mcr.microsoft.com/devcontainers/python:3.13-bullseye
+# Base image: Microsoft Dev Containers Python 3.12 (used by GitHub Codespaces)
+FROM mcr.microsoft.com/devcontainers/python:3.12-bullseye
 
 # Switch to vscode user for UV installation
 USER vscode
