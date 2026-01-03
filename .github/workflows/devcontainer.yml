@@ -11,4 +11,5 @@ jobs:
       - name: Build and test devcontainer
         uses: devcontainers/ci@v0.3
         with:
-          runCmd: echo "Container started successfully"
+          push: never
+          runCmd: .venv/bin/dbt --version
