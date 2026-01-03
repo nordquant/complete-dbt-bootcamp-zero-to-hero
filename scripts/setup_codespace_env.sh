@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -x
+set -e 
 
-ln -sf $(readlink -f profiles.yml) dbtlearn/profiles.yml
-pip3 install --user -r requirements.txt
+uv sync
+echo 'if [ -f .venv/bin/activate ]; then source .venv/bin/activate; fi' >> ~/.bashrc \
+  && echo 'if [ -f .venv/bin/activate ]; then source .venv/bin/activate; fi' >> ~/.zshrc
