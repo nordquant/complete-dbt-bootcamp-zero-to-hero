@@ -31,14 +31,14 @@ jobs:
       - name: Clone or init course repo
         run: |
           export GIT_SSH_COMMAND="ssh -i ~/.ssh/course_deploy_key"
-          if git clone git@github.com:nordquant/course.git course 2>/dev/null; then
+          if git clone git@github.com:nordquant/dbt-student-repo.git course 2>/dev/null; then
             echo "Cloned existing repo"
           else
             echo "Empty repo - initializing"
             mkdir -p course
             cd course
             git init
-            git remote add origin git@github.com:nordquant/course.git
+            git remote add origin git@github.com:nordquant/dbt-student-repo.git
           fi
 
       - name: Sync files
