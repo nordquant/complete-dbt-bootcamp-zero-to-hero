@@ -1,0 +1,81 @@
+name: Sync to Course Repository
+
+on:
+  push:
+    branches: [main, uv]  # TODO: Remove 'uv' after testing
+    paths:
+      - '_course_resources/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - '.python-version'
+      - '.devcontainer/**'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  sync:
+    if: github.repository == 'nordquant/complete-dbt-bootcamp-zero-to-hero'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dev-repo
+        uses: actions/checkout@v4
+        with:
+          path: dev-repo
+
+      - name: Setup SSH for course repo
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.COURSE_REPO_DEPLOY_KEY }}" > ~/.ssh/course_deploy_key
+          chmod 600 ~/.ssh/course_deploy_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Clone or init course repo
+        run: |
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/course_deploy_key"
+          if git clone git@github.com:nordquant/course.git course 2>/dev/null; then
+            echo "Cloned existing repo"
+          else
+            echo "Empty repo - initializing"
+            mkdir -p course
+            cd course
+            git init
+            git remote add origin git@github.com:nordquant/course.git
+          fi
+
+      - name: Sync files
+        run: |
+          # Sync _course_resources
+          rm -rf course/_course_resources
+          cp -r dev-repo/_course_resources course/
+
+          # Sync UV files
+          cp dev-repo/pyproject.toml course/
+          cp dev-repo/uv.lock course/
+
+          # Sync .python-version if it exists
+          if [ -f dev-repo/.python-version ]; then
+            cp dev-repo/.python-version course/
+          fi
+
+          # Sync .devcontainer
+          rm -rf course/.devcontainer
+          cp -r dev-repo/.devcontainer course/
+
+      - name: Commit and push
+        run: |
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/course_deploy_key"
+          cd course
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to sync"
+          else
+            git commit -m "Sync from dev-repo
+
+          Source commit: ${{ github.sha }}
+          Triggered by: ${{ github.actor }}"
+            git push -u origin main
+          fi
