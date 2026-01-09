@@ -15,33 +15,45 @@ on:
 permissions:
   contents: read
 
+# Full test configuration
+# Default: Python 3.13 on ubuntu-latest
+# For local act testing: act push ... --env run_full_tests=true
+env:
+  full_test_python: "3.13"
+  full_test_runs_on: "ubuntu-latest"
+
 jobs:
   build:
     if: github.repository == 'nordquant/complete-dbt-bootcamp-zero-to-hero'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
-        python-version: ["3.12", "3.11", "3.10", "3.9"]
+        python-version: ["3.13", "3.12", "3.11", "3.10"]
         runs-on: [ubuntu-latest, ubuntu-latest-arm64]
     env:
-      full_test_python: "3.12"
+      UV_PYTHON: ${{ matrix.python-version }}
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Cache pip dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-    - name: Install dependencies
+    - name: Determine if full tests should run
+      id: check_full_tests
       run: |
-        python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        # run_full_tests can be overridden via act --env run_full_tests=true
+        if [ -n "${run_full_tests:-}" ]; then
+          echo "run_full_tests=$run_full_tests" >> $GITHUB_OUTPUT
+        elif [ "${{ matrix.python-version }}" == "${{ env.full_test_python }}" ] && [ "${{ matrix.runs-on }}" == "${{ env.full_test_runs_on }}" ]; then
+          echo "run_full_tests=true" >> $GITHUB_OUTPUT
+        else
+          echo "run_full_tests=false" >> $GITHUB_OUTPUT
+        fi
+    - uses: actions/checkout@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+        cache-dependency-glob: "pyproject.toml"
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: uv sync
     - name: Create dbt profile
       env:
         PROFILES_YML: ${{ secrets.PROFILES_YML }}
@@ -51,28 +63,39 @@ jobs:
     - name: Execute dbt debug
       run: |
         cd airbnb
-        dbt debug
+        uv run dbt debug
     - name: Install packages
       run: |
         cd airbnb
-        dbt deps
+        uv run dbt deps
     - name: dbt build
-      if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
+      if: steps.check_full_tests.outputs.run_full_tests == 'true'
       run: |
         cd airbnb
-        dbt build
+        uv run dbt build
+    - name: Test dbt inline commands
+      if: steps.check_full_tests.outputs.run_full_tests == 'true'
+      run: |
+        cd airbnb
+        uv run bash ../.github/scripts/test_commands.sh core
     - name: dbt docs generate
-      if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
+      if: steps.check_full_tests.outputs.run_full_tests == 'true'
       run: |
         cd airbnb
-        dbt docs generate
+        uv run dbt docs generate
     - name: Install dbt fusion
-      if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
+      if: steps.check_full_tests.outputs.run_full_tests == 'true'
+      env:
+        SHELL: /bin/bash
       run: |
         curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
-    - name: dbtf build (Fusion) 
-      if: matrix.python-version == env.full_test_python && matrix.runs-on == 'ubuntu-latest'
+    - name: dbtf build (Fusion)
+      if: steps.check_full_tests.outputs.run_full_tests == 'true'
       run: |
         cd airbnb
-        /home/runner/.local/bin/dbt build
-
+        ~/.local/bin/dbt build
+    - name: Test dbt inline commands (Fusion)
+      if: steps.check_full_tests.outputs.run_full_tests == 'true'
+      run: |
+        cd airbnb
+        PATH="$HOME/.local/bin:$PATH" bash ../.github/scripts/test_commands.sh fusion

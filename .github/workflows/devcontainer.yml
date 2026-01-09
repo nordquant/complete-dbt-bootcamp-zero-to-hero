@@ -1,0 +1,15 @@
+name: Validate devcontainer
+
+on: [push, pull_request]
+
+jobs:
+  devcontainer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and test devcontainer
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: .venv/bin/dbt --version
