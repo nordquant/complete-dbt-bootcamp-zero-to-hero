@@ -1,0 +1,20 @@
+# Virtual environments
+.venv/
+__pycache__/
+
+# Git
+.git/
+
+# GitHub workflows (not needed in container)
+.github/
+
+# Course resources (not needed in container)
+_course_resources/
+
+# dbt artifacts
+airbnb/target/
+airbnb/dbt_packages/
+airbnb/logs/
+
+# Documentation
+*.md

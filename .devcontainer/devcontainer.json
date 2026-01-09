@@ -1,17 +1,6 @@
 {
 	"name": "dbt Zero to Hero",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"context": ".."
-	},
+	"image": "ghcr.io/nordquant/complete-dbt-bootcamp-zero-to-hero/devcontainer:latest",
 	"forwardPorts": [5000],
-	"postCreateCommand": "bash scripts/setup_codespace_env.sh",
-	// "customizations": {
-	// 	"vscode": {
-	// 		"extensions": [
-	// 			"innoverio.vscode-dbt-power-user",
-	// 			"-dbtlabsinc.dbt"
-	// 		]
-	// 	}
-	// }
+	"postCreateCommand": "bash scripts/setup_codespace_env.sh"
 }

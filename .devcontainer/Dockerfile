@@ -1,5 +1,9 @@
-# Base image: Microsoft Dev Containers Python 3.12 (used by GitHub Codespaces)
-FROM mcr.microsoft.com/devcontainers/python:3.12-bullseye
+# Base image: Microsoft Dev Containers Python 3.13 (used by GitHub Codespaces)
+FROM mcr.microsoft.com/devcontainers/python:3.13-bullseye
+
+# OCI labels for GitHub Container Registry
+LABEL org.opencontainers.image.source=https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero
+LABEL org.opencontainers.image.description="dbt Zero to Hero Development Container"
 
 # Switch to vscode user for UV installation
 USER vscode
