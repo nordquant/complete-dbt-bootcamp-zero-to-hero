@@ -5,7 +5,10 @@
 	"postCreateCommand": "uv sync",
 	"customizations": {
 		"vscode": {
-			"extensions": ["ms-python.python"],
+			"extensions": [
+				"innoverio.vscode-dbt-power-user",
+				"ms-python.python"
+			],
 			"settings": {
 				"python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
 				"python.terminal.activateEnvironment": true
