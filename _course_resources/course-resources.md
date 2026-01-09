@@ -151,62 +151,27 @@ GRANT SELECT ON FUTURE TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
 
 ```
 
-# Python and Virtualenv setup, and dbt installation - Windows
+## dbt installation
 
-## Python
-You want to use Python 3.12 as this is the most recent version that is compatible with every database adapter, Snowflake included.
+* Supported Python Versions: https://docs.getdbt.com/faqs/Core/install-python-compatibility
+* Student Repo: https://github.com/nordquant/dbt-student-repo
+* uv Installation guide: https://docs.astral.sh/uv/getting-started/installation/
 
-[https://www.python.org/downloads/release/python-31211/](https://www.python.org/downloads/release/python-31211/)
-
-Please make sure that you work with Python 3.12 as newer versions of python might not be compatible with some of the dbt packages.
-
-## Virtualenv setup
-Here are the commands we executed in this lesson:
+### uv Environment Setup
 ```
-cd Desktop
-mkdir course
-cd course
-
-python -m venv venv
-# Windows:
+uv sync
+# Activate virtualenv on Windows (PowerShell):
 venv\Scripts\activate
-# Mac:
+# Activate virtualenv on Mac:
 source venv/bin/activate
 ```
 
-# Virtualenv setup and dbt installation - Mac
-
-## iTerm2
-We suggest you use _iTerm2_ instead of the built-in Terminal application.
-
-https://iterm2.com/
-
-## dbt installation
-
-Supported Python Versions: https://docs.getdbt.com/faqs/Core/install-python-compatibility
-
-Here are the commands we execute in this lesson:
-
-```sh
-mkdir course
-cd course
-virtualenv venv
-. venv/bin/activate
-python --version
-pip install dbt-snowflake==1.10.2
-dbt --version
-```
-
+## dbt Project Setup
 Create a dbt project (all platforms):
 ```sh
 dbt init --skip-profile-setup airbnb
 ```
-
-## dbt 1.10 Compatibility Notes
-In dbt 1.10 and later:
-- Use `data_tests:` instead of `tests:` for column tests
-- Test parameters must be wrapped under the `arguments:` property
-- The `require_generic_test_arguments_property` flag is no longer needed
+Once done, drag and drop the `profiles.yml` file you downloaded to the `airbnb` folder.
 
 # Models
 ## Code used in the lesson
