@@ -6,12 +6,12 @@
 	},
 	"forwardPorts": [5000],
 	"postCreateCommand": "bash scripts/setup_codespace_env.sh",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"innoverio.vscode-dbt-power-user",
-				"-dbtlabsinc.dbt"
-			]
-		}
-	}
+	// "customizations": {
+	// 	"vscode": {
+	// 		"extensions": [
+	// 			"innoverio.vscode-dbt-power-user",
+	// 			"-dbtlabsinc.dbt"
+	// 		]
+	// 	}
+	// }
 }
