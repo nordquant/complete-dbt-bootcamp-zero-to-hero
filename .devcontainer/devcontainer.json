@@ -2,5 +2,14 @@
 	"name": "dbt Zero to Hero",
 	"image": "ghcr.io/nordquant/complete-dbt-bootcamp-zero-to-hero/dbt-bootcamp-devcontainer:latest",
 	"forwardPorts": [5000],
-	"postCreateCommand": "bash scripts/setup_codespace_env.sh"
+	"postCreateCommand": "uv sync",
+	"customizations": {
+		"vscode": {
+			"extensions": ["ms-python.python"],
+			"settings": {
+				"python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+				"python.terminal.activateEnvironment": true
+			}
+		}
+	}
 }
