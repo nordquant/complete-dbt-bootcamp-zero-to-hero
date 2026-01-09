@@ -12,7 +12,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/devcontainer
+  IMAGE_NAME: ${{ github.repository }}/dbt-bootcamp-devcontainer
 
 jobs:
   build-and-push:
