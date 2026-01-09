@@ -1,6 +1,6 @@
 version = 1
-revision = 3
-requires-python = ">=3.10, <=3.13"
+revision = 2
+requires-python = ">=3.10, <3.14"
 resolution-markers = [
     "python_full_version >= '3.12'",
     "python_full_version == '3.11.*'",
@@ -60,16 +60,16 @@ wheels = [
 
 [[package]]
 name = "anyio"
-version = "4.12.0"
+version = "4.12.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "exceptiongroup", marker = "python_full_version < '3.11'" },
     { name = "idna" },
     { name = "typing-extensions", marker = "python_full_version < '3.13'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/16/ce/8a777047513153587e5434fd752e89334ac33e379aa3497db860eeb60377/anyio-4.12.0.tar.gz", hash = "sha256:73c693b567b0c55130c104d0b43a9baf3aa6a31fc6110116509f27bf75e21ec0", size = 228266, upload-time = "2025-11-28T23:37:38.911Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/f0/5eb65b2bb0d09ac6776f2eb54adee6abe8228ea05b20a5ad0e4945de8aac/anyio-4.12.1.tar.gz", hash = "sha256:41cfcc3a4c85d3f05c932da7c26d0201ac36f72abd4435ba90d0464a3ffed703", size = 228685, upload-time = "2026-01-06T11:45:21.246Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7f/9c/36c5c37947ebfb8c7f22e0eb6e4d188ee2d53aa3880f3f2744fb894f0cb1/anyio-4.12.0-py3-none-any.whl", hash = "sha256:dad2376a628f98eeca4881fc56cd06affd18f659b17a747d3ff0307ced94b1bb", size = 113362, upload-time = "2025-11-28T23:36:57.897Z" },
+    { url = "https://files.pythonhosted.org/packages/38/0e/27be9fdef66e72d64c0cdc3cc2823101b80585f8119b5c112c2e8f5f7dab/anyio-4.12.1-py3-none-any.whl", hash = "sha256:d405828884fc140aa80a3c667b8beed277f1dfedec42ba031bd6ac3db606ab6c", size = 113592, upload-time = "2026-01-06T11:45:19.497Z" },
 ]
 
 [[package]]
@@ -119,30 +119,30 @@ wheels = [
 
 [[package]]
 name = "boto3"
-version = "1.42.21"
+version = "1.42.24"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "botocore" },
     { name = "jmespath" },
     { name = "s3transfer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/27/36/999f23a821567334ecdfaec31fad556f5569383006543be63fdd1e17193f/boto3-1.42.21.tar.gz", hash = "sha256:9b92943d253bc837323079fe88460e741cb2eb80abaebcb558b2446bdb4049d6", size = 112775, upload-time = "2026-01-03T00:59:03.241Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/21/8be0e3685c3a4868be48d8d2f6e5b4641727e1d8a5d396b8b401d2b5f06e/boto3-1.42.24.tar.gz", hash = "sha256:c47a2f40df933e3861fc66fd8d6b87ee36d4361663a7e7ba39a87f5a78b2eae1", size = 112788, upload-time = "2026-01-07T20:30:51.019Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/55/96/5df07f4f63ab9e72db86192590d7cef70cb911c6e725c1639d56d054f5cc/boto3-1.42.21-py3-none-any.whl", hash = "sha256:1885f252d715a5810bb4e0c5bbebfa8e9018b025febf5be3d58540626e7b43d2", size = 140573, upload-time = "2026-01-03T00:59:01.483Z" },
+    { url = "https://files.pythonhosted.org/packages/a7/75/bbfccb268f9faa4f59030888e859dca9797a980b77d6a074113af73bd4bf/boto3-1.42.24-py3-none-any.whl", hash = "sha256:8ed6ad670a5a2d7f66c1b0d3362791b48392c7a08f78479f5d8ab319a4d9118f", size = 140572, upload-time = "2026-01-07T20:30:49.431Z" },
 ]
 
 [[package]]
 name = "botocore"
-version = "1.42.21"
+version = "1.42.24"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jmespath" },
     { name = "python-dateutil" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4c/df/dfd07d75fda643ba07af75e33cfd72472a12bb13901812ca34e47f081507/botocore-1.42.21.tar.gz", hash = "sha256:db8f99d186156da42feb4fd2098017383d9b155097290cc53da7258f6e652c39", size = 14877471, upload-time = "2026-01-03T00:58:51.84Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/12/d7/bb4a4e839b238ffb67b002d7326b328ebe5eb23ed5180f2ca10399a802de/botocore-1.42.24.tar.gz", hash = "sha256:be8d1bea64fb91eea08254a1e5fea057e4428d08e61f4e11083a02cafc1f8cc6", size = 14878455, upload-time = "2026-01-07T20:30:40.379Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6e/a1/78c50c437fdf17369adeae275445f40f51029888911923ace37523db4c02/botocore-1.42.21-py3-none-any.whl", hash = "sha256:6b59973a3ba8c3cfd5123f2656fef2339beee9f6483b8bc12bb00c5453ea2c6d", size = 14550712, upload-time = "2026-01-03T00:58:48.653Z" },
+    { url = "https://files.pythonhosted.org/packages/ff/d4/f2655d777eed8b069ecab3761454cb83f830f8be8b5b0d292e4b3a980d00/botocore-1.42.24-py3-none-any.whl", hash = "sha256:8fca9781d7c84f7ad070fceffaff7179c4aa7a5ffb27b43df9d1d957801e0a8d", size = 14551806, upload-time = "2026-01-07T20:30:38.103Z" },
 ]
 
 [[package]]
@@ -289,14 +289,14 @@ wheels = [
 
 [[package]]
 name = "click"
-version = "8.1.8"
+version = "8.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b9/2e/0090cbf739cee7d23781ad4b89a9894a41538e4fcf4c31dcdd705b78eb8b/click-8.1.8.tar.gz", hash = "sha256:ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a", size = 226593, upload-time = "2024-12-21T18:38:44.339Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3d/fa/656b739db8587d7b5dfa22e22ed02566950fbfbcdc20311993483657a5c0/click-8.3.1.tar.gz", hash = "sha256:12ff4785d337a1bb490bb7e9c2b1ee5da3112e94a8622f26a6c77f5d2fc6842a", size = 295065, upload-time = "2025-11-15T20:45:42.706Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7e/d4/7ebdbd03970677812aac39c869717059dbb71a4cfc033ca6e5221787892c/click-8.1.8-py3-none-any.whl", hash = "sha256:63c132bbbed01578a06712a2d1f497bb62d9c1c0d329b7903a866228027263b2", size = 98188, upload-time = "2024-12-21T18:38:41.666Z" },
+    { url = "https://files.pythonhosted.org/packages/98/78/01c019cdb5d6498122777c1a43056ebb3ebfeef2076d9d026bfe15583b2b/click-8.3.1-py3-none-any.whl", hash = "sha256:981153a64e25f12d547d3426c367a4857371575ee7ad18df2a6183ab0545b2a6", size = 108274, upload-time = "2025-11-15T20:45:41.139Z" },
 ]
 
 [[package]]
@@ -381,7 +381,7 @@ wheels = [
 
 [[package]]
 name = "dagster"
-version = "1.12.8"
+version = "1.12.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "alembic" },
@@ -414,14 +414,14 @@ dependencies = [
     { name = "universal-pathlib" },
     { name = "watchdog" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/65/03/a5108fe3b882fe40baa1d34da6f2fe292ac5a75db9a8c7254de8b51a4e5a/dagster-1.12.8.tar.gz", hash = "sha256:38551907f2f261d63f290a364df9fea5abbf3e38cf64f837a8ef2afdd80f9d34", size = 1566204, upload-time = "2025-12-29T19:10:21.207Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/21/7b/5e6d18201c797d4208ed8e16c4535de0a8ea9c896e8745477e462579cbec/dagster-1.12.9.tar.gz", hash = "sha256:36be5a11696e7e662c9b30094ce09198cb36d7878f256a260553664e17a405dd", size = 1567381, upload-time = "2026-01-08T19:54:38.054Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a7/50/44e8fb3c2f67b252bbab83f4048a1f6f668c1e73eb8ca5fe19233b271786/dagster-1.12.8-py3-none-any.whl", hash = "sha256:102eb110762fb9c2db7443a7d5df2863f32054eb764db575074421ff16706813", size = 1950472, upload-time = "2025-12-29T19:10:18.876Z" },
+    { url = "https://files.pythonhosted.org/packages/87/da/3aa9488375fd71da44e8c66597c4a4e18b1015a9590f42e9375728351b2c/dagster-1.12.9-py3-none-any.whl", hash = "sha256:cdecd403064d82c797954560a28f17b151f3fb548adeeabd9608f70d629d5128", size = 1953143, upload-time = "2026-01-08T19:54:35.681Z" },
 ]
 
 [[package]]
 name = "dagster-dbt"
-version = "0.28.8"
+version = "0.28.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dagster" },
@@ -437,14 +437,14 @@ dependencies = [
     { name = "sqlglot", extra = ["rs"] },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/23/06/7d0926c21b1281c2721613683a4664189556c3df4061623184a7317a1825/dagster_dbt-0.28.8.tar.gz", hash = "sha256:5030084a29490e3e9f56bd002b35e2d21f9674a4326d95fd9cfee23ac3d0dc21", size = 100005, upload-time = "2025-12-29T19:19:15.888Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/22/08/8ef1b77e5c625a4635fd729d998938d7f376b0ddf168b2a6d358a4efc4c1/dagster_dbt-0.28.9.tar.gz", hash = "sha256:973732963bd64837789e72396e2eb315a772dc927f27d82f43aa1d291d8080cc", size = 100008, upload-time = "2026-01-08T19:59:06.335Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/13/e0/a7cbb578d4ca67c3aed4288fb46d7001c9df980fab787e5c541e293362d9/dagster_dbt-0.28.8-py3-none-any.whl", hash = "sha256:77b5e01fd5e74a22ba9cda31b8e798cdf88d93d9e4651db00213bbe4c9f4f3a7", size = 120237, upload-time = "2025-12-29T19:19:14.273Z" },
+    { url = "https://files.pythonhosted.org/packages/ac/59/6a39411f1f8307444a0b6c020e647030ea2c1d6421d421158ca9b287ffde/dagster_dbt-0.28.9-py3-none-any.whl", hash = "sha256:ca9656d3c241ae33b1b8e13afe00d7464f9aa50eaf48c998830b02280c39bc3a", size = 120268, upload-time = "2026-01-08T19:59:04.547Z" },
 ]
 
 [[package]]
 name = "dagster-graphql"
-version = "1.12.8"
+version = "1.12.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dagster" },
@@ -453,23 +453,23 @@ dependencies = [
     { name = "requests" },
     { name = "starlette" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c3/0e/515c2966532410a1d3b7427c00cc6fc3bc6061ef64327a25a437e20b070a/dagster_graphql-1.12.8.tar.gz", hash = "sha256:b732bcdc91fc4874b5aa2e3572f16b169764ddbf10498aabf14593f185b40473", size = 158881, upload-time = "2025-12-29T19:10:37.456Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e7/8c/5e91aa8be9475abd0ce6395b4c70f98b35bc28cea9769174e3711cd2446d/dagster_graphql-1.12.9.tar.gz", hash = "sha256:ebaf3c26607976da501e854f94d70fb6ef59b5c9f7aa17eaec785224a1cf292c", size = 158930, upload-time = "2026-01-08T19:54:48.099Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f1/7b/81fe0eed6f88cd3084e25b8bc9090881e53a2eddd2de676c39a04c71d019/dagster_graphql-1.12.8-py3-none-any.whl", hash = "sha256:5ae8ea80d5bb94ef70ab6e87d3c8f55e1570fa8402ffffb1e85fa28c34502b7c", size = 206012, upload-time = "2025-12-29T19:10:36.294Z" },
+    { url = "https://files.pythonhosted.org/packages/85/65/13235171d31ad602f0b62bd2c639fb25297e069db0d334dc3f36f50b3d2b/dagster_graphql-1.12.9-py3-none-any.whl", hash = "sha256:5b0b882cb325cfb497d544b9ffcf4c0827112861ce5c4bcc076beb8503ded4e9", size = 206090, upload-time = "2026-01-08T19:54:46.765Z" },
 ]
 
 [[package]]
 name = "dagster-pipes"
-version = "1.12.8"
+version = "1.12.9"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/1f/63/2eb5eb7a18683d9feebb023140ed10935570d3c23f6b62aa50616fbb0bb0/dagster_pipes-1.12.8.tar.gz", hash = "sha256:0c590e3e42e2f94eaa013af7f8f049bca58962e4d013758f84d8608e4bc668a1", size = 21091, upload-time = "2025-12-29T19:10:32.306Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1b/09/52fba2332c6aa1e704ba687800b6403f0a348a865b10aed6ba010e98a25e/dagster_pipes-1.12.9.tar.gz", hash = "sha256:6453240b07c871ac9edeb8758e2f2f1203cffbeda24af7d6e532b24e6b856b7e", size = 21061, upload-time = "2026-01-08T19:54:44.735Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7b/82/6fd7fede962812656f6f279e43e45b62f42c1e9c8f0d6b745ab3bb43ee87/dagster_pipes-1.12.8-py3-none-any.whl", hash = "sha256:12fa5049c5719b2b83c8702031779833cc5f34e8da270cf8483958378ba104c1", size = 20839, upload-time = "2025-12-29T19:10:31.051Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/1f/335f9ef8f09bcb65e0769c177ff7725cfb94d048f103fc996080dc37c0ef/dagster_pipes-1.12.9-py3-none-any.whl", hash = "sha256:9f0b1e8c3efb35308c60a012da68c20ec850878d198ca88d21fce1a2b18da77e", size = 20837, upload-time = "2026-01-08T19:54:43.489Z" },
 ]
 
 [[package]]
 name = "dagster-shared"
-version = "1.12.8"
+version = "1.12.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "packaging" },
@@ -479,14 +479,14 @@ dependencies = [
     { name = "tomlkit" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/78/5c/7f5463895c357117bf9285452e5525c54f4aca02ac331b20817d08cdd938/dagster_shared-1.12.8.tar.gz", hash = "sha256:b22beeb43dd0a6da8744a2409fd1c56f0864da81fb7a59b7b97db2d520b0eff8", size = 78154, upload-time = "2025-12-29T19:20:42.532Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7c/3c/c1b94994dc650d63c3451157202b92dad525a7f0b9bd57b708907692d4f9/dagster_shared-1.12.9.tar.gz", hash = "sha256:f2eed4ee90966ff9accbfc5d604935d5dd8a6615ba58817f470b5f84cd456e7c", size = 78220, upload-time = "2026-01-08T19:59:11.443Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/54/55/15b8aa49fd4b9cf0eccd13b19a63b024a782fea1890667c0db9045f84793/dagster_shared-1.12.8-py3-none-any.whl", hash = "sha256:1522a8da2f821014e9307bd03f5e9d9d9dbe657d74de3742501f3538b8d36572", size = 91408, upload-time = "2025-12-29T19:20:41.609Z" },
+    { url = "https://files.pythonhosted.org/packages/85/62/beda9891026dd26c62f48bfc3809eff2c8b6034b19efd00f2c2e609bfade/dagster_shared-1.12.9-py3-none-any.whl", hash = "sha256:a32f9a72a0123a9e22a32811e093f2c870dd490c10e86bda011d95e3246de9ef", size = 91445, upload-time = "2026-01-08T19:59:10.541Z" },
 ]
 
 [[package]]
 name = "dagster-webserver"
-version = "1.12.8"
+version = "1.12.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -495,14 +495,14 @@ dependencies = [
     { name = "starlette" },
     { name = "uvicorn", extra = ["standard"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/60/3d/f96da5c164b337b763b75e0c084bd52be95eaa2a60d021261e90d9d06b10/dagster_webserver-1.12.8.tar.gz", hash = "sha256:c12ed724cc6258f948cd0e3800cf9ff01e986e73b9eca6e923cf75a2f98aa5de", size = 12241193, upload-time = "2025-12-29T19:18:24.8Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/12/61/547d5f037f876a4d6f7e22b6daf80c6b6e7b715f72025992eff926d98c52/dagster_webserver-1.12.9.tar.gz", hash = "sha256:be6af0342c4d3da70c9897798124b4826283a90c1dcf96adcd3aafa452b39133", size = 12046120, upload-time = "2026-01-08T19:57:29.385Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/94/1ba8d099c25e2a14a0d3923c137ea971827f8dd3fae475310b6f77917c21/dagster_webserver-1.12.8-py3-none-any.whl", hash = "sha256:49a64df19d420c398593ff7582e1dd8cf0dbf02a9752e52aed6e758490364de2", size = 12582830, upload-time = "2025-12-29T19:18:22.46Z" },
+    { url = "https://files.pythonhosted.org/packages/eb/11/ba1086d63540390b697d08033718f890cf1a1c1611a85eab4c4dce48a5d1/dagster_webserver-1.12.9-py3-none-any.whl", hash = "sha256:6609acf44fd96f170714b54e53420281b778483d66a865322d744d87d0501c70", size = 12379151, upload-time = "2026-01-08T19:57:27.259Z" },
 ]
 
 [[package]]
 name = "dbt-adapters"
-version = "1.22.2"
+version = "1.22.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "agate" },
@@ -513,18 +513,20 @@ dependencies = [
     { name = "pytz" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/85/af/c24e3275da3aa4ee6900ee62dda2929eb0b13c8f31297ffb367c682ddfd2/dbt_adapters-1.22.2.tar.gz", hash = "sha256:05bb99c30bd7ca0153976595d46c59354302ab076051f004e92a841f117e71be", size = 136045, upload-time = "2025-12-19T16:43:23.831Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b0/09/eb7bbc3bb8809e839b0a3756193625a2ed8bb271effbc8ea367cc9760012/dbt_adapters-1.22.4.tar.gz", hash = "sha256:d0cbfa3f1570b9e62d2e205f9b4bbe83d2a791f4b29ddf773823b56e52eefdb6", size = 136149, upload-time = "2026-01-08T05:28:49.1Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ab/59/5bb8271dd5548c2083bc28ced52cedad1ec57873f2a9af563d4bd1edece6/dbt_adapters-1.22.2-py3-none-any.whl", hash = "sha256:87767bdf33689c468bab2dc063930236c7d2cf2c69e07152d8e9df382cd75e1a", size = 172509, upload-time = "2025-12-19T16:43:22.358Z" },
+    { url = "https://files.pythonhosted.org/packages/56/62/38519942eff0a9755cd94327fd4abbf0c3a06665daf3198748224a046fe1/dbt_adapters-1.22.4-py3-none-any.whl", hash = "sha256:e3f624e8880d7f905598345a4f99184c1406ed7243951e3e0ae07cb92ba74148", size = 172524, upload-time = "2026-01-08T05:28:47.146Z" },
 ]
 
 [[package]]
 name = "dbt-autofix"
-version = "0.12.10"
+version = "0.18.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
     { name = "dbt-common" },
+    { name = "dbt-extractor" },
+    { name = "dbt-fusion-package-tools" },
     { name = "httpx" },
     { name = "pyyaml" },
     { name = "rich" },
@@ -532,9 +534,30 @@ dependencies = [
     { name = "typer" },
     { name = "yamllint" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a4/af/0743a8b33d8296857fa93f63994085bd49c2bb30fdbdc94b6649a67cae67/dbt_autofix-0.12.10.tar.gz", hash = "sha256:c0a06c66e4ee383b63f41c548480014528fd17c44c3e86b2568b152d26f2b762", size = 55178, upload-time = "2025-09-25T15:16:29.404Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/77/da/e7c7a43d9caa636f796d927129af05cbf8c084306db329adc46f29e46079/dbt_autofix-0.18.4.tar.gz", hash = "sha256:bbf7b4429411bdba3c55912c0c5d8e48048a549c2c6b49e080f39509ec22dd9a", size = 186297, upload-time = "2026-01-07T23:37:16.491Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ff/31/a3ee654cb8794b7b9813366d441cf0d7c1b0f9beafb9886574c1709b916b/dbt_autofix-0.12.10-py3-none-any.whl", hash = "sha256:ff3be0478a5e2f0cd8a9dbfad8b0787a53a4619bc491a8ad1b5d1c1445369f66", size = 35570, upload-time = "2025-09-25T15:16:28.305Z" },
+    { url = "https://files.pythonhosted.org/packages/65/3b/0337d700867fdb0bf139072b75e87c486947a7767e1203ad02ae1546abbf/dbt_autofix-0.18.4-py3-none-any.whl", hash = "sha256:ff120d637a56515fae7350713532b6b273c93ea93ea2b3f2cff5944d63647d0a", size = 138385, upload-time = "2026-01-07T23:37:13.603Z" },
+]
+
+[[package]]
+name = "dbt-bootcamp"
+version = "1.11.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "dagster-dbt" },
+    { name = "dagster-webserver" },
+    { name = "dbt-autofix" },
+    { name = "dbt-core" },
+    { name = "dbt-snowflake" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "dagster-dbt", specifier = "~=0.28.0" },
+    { name = "dagster-webserver", specifier = "~=1.12.0" },
+    { name = "dbt-autofix", specifier = "~=0.18.0" },
+    { name = "dbt-core", specifier = "~=1.11.0" },
+    { name = "dbt-snowflake", specifier = "~=1.11.0" },
 ]
 
 [[package]]
@@ -563,7 +586,7 @@ wheels = [
 
 [[package]]
 name = "dbt-core"
-version = "1.10.17"
+version = "1.11.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "agate" },
@@ -590,9 +613,9 @@ dependencies = [
     { name = "sqlparse" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f0/2c/a614f4c41af9b63cafb88e182c3a30aa36faf7eb4cad9b99b927709a7f0d/dbt_core-1.10.17.tar.gz", hash = "sha256:b3b7a9d9ff839405840659034e6f92d07fb27c4714476dc8cfdc5359a7b864c2", size = 900268, upload-time = "2025-12-20T01:32:13.059Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/89/82/662621bd430fc6d8ee8e0e917bc551efba1b08b82372b3c0f37fd3ef4746/dbt_core-1.11.2.tar.gz", hash = "sha256:3306fee149b9f4e648071f2c9a46c0551100e1c829f13ad7ce026eb7226ad454", size = 914480, upload-time = "2025-12-22T19:14:04.488Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/47/f1/d68b24831e8855d0b4ecc54f8341cf8d3e0a60046af08a65817954f3f4ab/dbt_core-1.10.17-py3-none-any.whl", hash = "sha256:a4a807dc37ecd88899616689c68a6446b46231c11d7e3776f4f1a06e7becce76", size = 986991, upload-time = "2025-12-20T01:32:11.079Z" },
+    { url = "https://files.pythonhosted.org/packages/02/57/dad11af27a21840252234b05d682d73ca8eb721fc79d1b4aa9502bb1b6f5/dbt_core-1.11.2-py3-none-any.whl", hash = "sha256:ac332fd61a4494494f48e1bbdc0696e309e79036b94eb0a929233bb71f4b3898", size = 1004018, upload-time = "2025-12-22T19:14:03.213Z" },
 ]
 
 [[package]]
@@ -616,6 +639,23 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/3b/02/b111856273e414ac80ef58d2103c9b7c6a5b29b1ec248999d3d5873ada00/dbt_extractor-0.6.0-cp39-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:caeaba8d8c813f8e32d586c12615c0c7d6b99bee4f1be845312e80ef731de164", size = 613017, upload-time = "2025-04-07T16:46:25.913Z" },
     { url = "https://files.pythonhosted.org/packages/c4/de/d1492ab6beaf0a18aee17c7a9562592ac2981e962b4058262f5eb6dabfc5/dbt_extractor-0.6.0-cp39-abi3-win32.whl", hash = "sha256:369dcc3499f160256756585783f1308868076d5a65d0a051348d22da8b90e67d", size = 252721, upload-time = "2025-04-07T16:46:27.295Z" },
     { url = "https://files.pythonhosted.org/packages/60/36/f5b1c4159fa911607f3a49fcbc535e4783870fd887bc0a1b3ad42587cb73/dbt_extractor-0.6.0-cp39-abi3-win_amd64.whl", hash = "sha256:a79a570fdcb672505ac2bdc12360a2a7aec622ef604d8c607225854ff862518c", size = 277146, upload-time = "2025-04-07T16:46:28.991Z" },
+]
+
+[[package]]
+name = "dbt-fusion-package-tools"
+version = "0.18.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dbt-protos" },
+    { name = "gitpython" },
+    { name = "mashumaro" },
+    { name = "pyyaml" },
+    { name = "requests" },
+    { name = "rich" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cc/58/412cbfb13927a8fb1ca1eca44a2b579f150f6c9d71d4dd0ef5e2bad21ae7/dbt_fusion_package_tools-0.18.4.tar.gz", hash = "sha256:910d96355ae29e1e7dfb0a4e44eaf2863530404722104dcd9ea2e07dcc0b9fd8", size = 42840, upload-time = "2026-01-07T23:37:17.918Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2a/2b/4272fe79fbf329bc8304d5d5ccf11deedd7f7e64eee5f14be153c98b26c1/dbt_fusion_package_tools-0.18.4-py3-none-any.whl", hash = "sha256:7e8740ca04e6e741e1a545706c165f2be5d8672cfe3e5fbe6b2f1dcf8cabed68", size = 52087, upload-time = "2026-01-07T23:37:15.105Z" },
 ]
 
 [[package]]
@@ -652,7 +692,7 @@ wheels = [
 
 [[package]]
 name = "dbt-snowflake"
-version = "1.10.6"
+version = "1.11.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "agate" },
@@ -662,30 +702,9 @@ dependencies = [
     { name = "dbt-core" },
     { name = "snowflake-connector-python", extra = ["secure-local-storage"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c8/d8/8993ac4bd2899445f26a1c081f0a7d47982412ef30556366f9f1216c12be/dbt_snowflake-1.10.6.tar.gz", hash = "sha256:00aa69dd6a3d9fb8204c14cbcc8d54fc90ff8b357cbe2f5a5e5812b4de99b61a", size = 119052, upload-time = "2025-12-19T19:15:41.68Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/94/bc8a405b364036c6e0918dc190c88cdbfbe7982472086b8d4a1bb4facd71/dbt_snowflake-1.11.1.tar.gz", hash = "sha256:0b6b92d77bf037d02e6745e0add44732cba7bb34b0a0cd3a1c6166278e41b340", size = 130456, upload-time = "2026-01-08T18:23:50.58Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/36/ac/cd17cc8bcda23354fece9bb5cb5e12276bd156c01c589a9c32e97f8fc02e/dbt_snowflake-1.10.6-py3-none-any.whl", hash = "sha256:3a66a592692401eb1bc78031e0dd2b2932689b1c39d58699a8febc28172770c9", size = 70260, upload-time = "2025-12-19T19:15:40.249Z" },
-]
-
-[[package]]
-name = "dbt-zero-to-hero"
-version = "1.10.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "dagster-dbt" },
-    { name = "dagster-webserver" },
-    { name = "dbt-autofix" },
-    { name = "dbt-core" },
-    { name = "dbt-snowflake" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "dagster-dbt", specifier = "~=0.28.0" },
-    { name = "dagster-webserver", specifier = "~=1.12.0" },
-    { name = "dbt-autofix", specifier = "~=0.12.10" },
-    { name = "dbt-core", specifier = "~=1.10.0" },
-    { name = "dbt-snowflake", specifier = "~=1.10.0" },
+    { url = "https://files.pythonhosted.org/packages/ef/51/9e8a1e3f148d2f85dfc6632b32d36c1498973bfc4fce91049f76646c8283/dbt_snowflake-1.11.1-py3-none-any.whl", hash = "sha256:3fc20653bd5202cfb445867b6631fb1c810114762387f19cc0f30e2d6dc976ab", size = 75700, upload-time = "2026-01-08T18:23:49.075Z" },
 ]
 
 [[package]]
@@ -1107,7 +1126,7 @@ wheels = [
 
 [[package]]
 name = "jsonschema"
-version = "4.25.1"
+version = "4.26.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -1115,9 +1134,9 @@ dependencies = [
     { name = "referencing" },
     { name = "rpds-py" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/74/69/f7185de793a29082a9f3c7728268ffb31cb5095131a9c139a74078e27336/jsonschema-4.25.1.tar.gz", hash = "sha256:e4a9655ce0da0c0b67a085847e00a3a51449e1157f4f75e9fb5aa545e122eb85", size = 357342, upload-time = "2025-08-18T17:03:50.038Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b3/fc/e067678238fa451312d4c62bf6e6cf5ec56375422aee02f9cb5f909b3047/jsonschema-4.26.0.tar.gz", hash = "sha256:0c26707e2efad8aa1bfc5b7ce170f3fccc2e4918ff85989ba9ffa9facb2be326", size = 366583, upload-time = "2026-01-07T13:41:07.246Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bf/9c/8c95d856233c1f82500c2450b8c68576b4cf1c871db3afac5c34ff84e6fd/jsonschema-4.25.1-py3-none-any.whl", hash = "sha256:3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63", size = 90040, upload-time = "2025-08-18T17:03:48.373Z" },
+    { url = "https://files.pythonhosted.org/packages/69/90/f63fb5873511e014207a475e2bb4e8b2e570d655b00ac19a9a0ca0a385ee/jsonschema-4.26.0-py3-none-any.whl", hash = "sha256:d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce", size = 90630, upload-time = "2026-01-07T13:41:05.306Z" },
 ]
 
 [[package]]
@@ -2231,7 +2250,7 @@ wheels = [
 
 [[package]]
 name = "snowflake-connector-python"
-version = "4.1.1"
+version = "4.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asn1crypto" },
@@ -2252,28 +2271,28 @@ dependencies = [
     { name = "tomlkit" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d7/14/ce016b3db27bdaa2a539fee8bd4597f4a940b259dbd7ead4d4a9f7265f0b/snowflake_connector_python-4.1.1.tar.gz", hash = "sha256:63fe4ba6dc4b93b293e93d92d4d6eadbf74a665a9b8d19bab5cc104fdc30f52b", size = 823057, upload-time = "2025-12-02T15:41:25.637Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/13/d2/4ae9fc7a0df36ad0ac06bc959757dfbfc58f160f58e1d62e7cebe9901fc7/snowflake_connector_python-4.2.0.tar.gz", hash = "sha256:74b1028caee3af4550a366ef89b33de80940bbf856844dd4d788a6b7a6511aff", size = 915327, upload-time = "2026-01-07T16:44:32.541Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5b/63/f2402dc978fc7240eaed1ebb1178b81a43bfb52f8448a0f2b68e2926db00/snowflake_connector_python-4.1.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:38d981a4e1cdddd732cb4c7633a3a68e4f4ac681bb896ac124600182cf4fc623", size = 1037104, upload-time = "2025-12-02T15:41:27.424Z" },
-    { url = "https://files.pythonhosted.org/packages/30/df/f13a95779c24dd32416c1431816b0becede95d2b6c56264d97d283a4c327/snowflake_connector_python-4.1.1-cp310-cp310-macosx_11_0_x86_64.whl", hash = "sha256:e0047dea82ebe34e5a7939d08ce0fac6c2e46e877ad1a5d8618f3563422c3561", size = 1049763, upload-time = "2025-12-02T15:41:29.089Z" },
-    { url = "https://files.pythonhosted.org/packages/98/d0/bc94c85a469df4b1f64ddb8df351c196c18b00f45ae23a3222db55b21019/snowflake_connector_python-4.1.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:76fe03232b6b0731df3b0e44a9e9af9553f9510d6baa3632f455d6fbb1464e2b", size = 2672128, upload-time = "2025-12-02T15:41:07.227Z" },
-    { url = "https://files.pythonhosted.org/packages/79/97/0bf18504ed7399d57be355fd96d19b08f0a8e4b9aa1857a298c176b4c904/snowflake_connector_python-4.1.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:edcce4b7dfa3dad3c67eeccee0f927a02b0c639e9c5a6be57540e47685afca07", size = 2700968, upload-time = "2025-12-02T15:41:09.028Z" },
-    { url = "https://files.pythonhosted.org/packages/6b/1e/06f011cb3e549362de1261c06a32fe9cb1cb88920eead5467bd27dca5587/snowflake_connector_python-4.1.1-cp310-cp310-win_amd64.whl", hash = "sha256:f39ad69c38c631d2e766a43e7c8bbf52e41857da75f2ce28e7ec11ae318c33b2", size = 1186453, upload-time = "2025-12-02T15:41:45.231Z" },
-    { url = "https://files.pythonhosted.org/packages/3a/bc/dd55a8439128c1a9c564968442b1a0e17981e106f98046c101336377f862/snowflake_connector_python-4.1.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:bd618b097f4e6ef168f02dccce5d43c1327014786c70206676da79e32a3629d9", size = 1037039, upload-time = "2025-12-02T15:41:30.812Z" },
-    { url = "https://files.pythonhosted.org/packages/3f/84/80b1af05ea9c5d8ca09f1f2429fe61371ac9f0804a9d895772fec9264275/snowflake_connector_python-4.1.1-cp311-cp311-macosx_11_0_x86_64.whl", hash = "sha256:60e0c37864b487baf86a1aac4745bc8e11c9b771094879d2d5dcdadb0e6cab87", size = 1049231, upload-time = "2025-12-02T15:41:32.11Z" },
-    { url = "https://files.pythonhosted.org/packages/48/23/411937e93e5e37673d687778fc181d2a31f3f1850e8d87d3acc738052db7/snowflake_connector_python-4.1.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ec10f37aa99ec0d4e7683b0743d10650987e115c31be2de2e5bd8ea365606934", size = 2683146, upload-time = "2025-12-02T15:41:10.957Z" },
-    { url = "https://files.pythonhosted.org/packages/33/0c/a2a28b0f2b6521acdbc17235a7327063b15a240a2ce4663a5b018a9992fd/snowflake_connector_python-4.1.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:eb90cd1daba798da622d02d95b519371f22abb6bc5713c4255208cb85b8da05e", size = 2714293, upload-time = "2025-12-02T15:41:12.779Z" },
-    { url = "https://files.pythonhosted.org/packages/cc/61/f08ba20fa1568dce9b585616899663fa555f0f348dd5701850d4a8bb12e6/snowflake_connector_python-4.1.1-cp311-cp311-win_amd64.whl", hash = "sha256:1e885cee3e68674cfd52e8b912d11d76b31fae907aa30a5cca0f129ea53d8650", size = 1186480, upload-time = "2025-12-02T15:41:46.929Z" },
-    { url = "https://files.pythonhosted.org/packages/3c/99/63d8db9185d30cf79259f19c5a08658f34b7cc4ab48f5ab1b3d58e57db72/snowflake_connector_python-4.1.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:0d7ab4c9103d0fd36281c6012c5d6e3bd266319c36c7870025d4b08715124f11", size = 1035943, upload-time = "2025-12-02T15:41:33.342Z" },
-    { url = "https://files.pythonhosted.org/packages/f7/32/834c349843f9ce93f94ae62fdfe21f53615c1337b023386d024095c392a0/snowflake_connector_python-4.1.1-cp312-cp312-macosx_11_0_x86_64.whl", hash = "sha256:9ebd97def4f9613f76635f13570c1381c3896ce0aa99fb43eb6229e3971ab5bb", size = 1047570, upload-time = "2025-12-02T15:41:34.839Z" },
-    { url = "https://files.pythonhosted.org/packages/cf/d0/40dac901ffc7492f01830dbda0dc9dec60613c60d4a9f78efd5fdc617af4/snowflake_connector_python-4.1.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2cd8bc41145e28365196fce51a960084458d807749f723a828487c20742129b6", size = 2739830, upload-time = "2025-12-02T15:41:14.567Z" },
-    { url = "https://files.pythonhosted.org/packages/53/53/5d8654c4533e1dab7610080a8d216b543eeb6a353276c9735abad27ab9c0/snowflake_connector_python-4.1.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ed349014a842295ab31542cdde1371271fb3cbe54fff597b46d43b02cfc414a0", size = 2774356, upload-time = "2025-12-02T15:41:16.042Z" },
-    { url = "https://files.pythonhosted.org/packages/89/f3/da4d3a645fd107aed5091e48f7c886bbfd42cc28b3d16475d565875c926c/snowflake_connector_python-4.1.1-cp312-cp312-win_amd64.whl", hash = "sha256:eb79abfaef1c97d4c3f0754a9449aa5eedd033b5bd58c9526ff6500d4c111889", size = 1185528, upload-time = "2025-12-02T15:41:48.338Z" },
-    { url = "https://files.pythonhosted.org/packages/c5/b5/44cf63ca67dd67f6a5cf272f78a272a8674d9adae7402e9e0cb4db4861cb/snowflake_connector_python-4.1.1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:19da9fa6c50ab7b9ea1751f32388949f7cbe291b676fdffcd38cd1b1a83876a3", size = 1036794, upload-time = "2025-12-02T15:41:36.446Z" },
-    { url = "https://files.pythonhosted.org/packages/d7/3d/68e231f565e07b1955b06a0237f4ef447957db83966a331b24fde157e646/snowflake_connector_python-4.1.1-cp313-cp313-macosx_11_0_x86_64.whl", hash = "sha256:beab9851f8328712fa3682f2b46edbb9bfa6ec1487eea4f7b146a78ba62bb97c", size = 1048578, upload-time = "2025-12-02T15:41:38.889Z" },
-    { url = "https://files.pythonhosted.org/packages/d8/e9/b929c9a994b1871e71227acce6ff700957ae8d419d364d02b584e6818243/snowflake_connector_python-4.1.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3c1e6c67fc8907992995c81bd4c7e5661e1871dbd83cd45766505d6ac65cf5f1", size = 2706370, upload-time = "2025-12-02T15:41:17.326Z" },
-    { url = "https://files.pythonhosted.org/packages/9a/17/32ca1bea0eda8b0fd23b5b281ff3c5bf95a4417bcb22897d75f52b8d5781/snowflake_connector_python-4.1.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:65ca9eac3ff90888cb8d20edcbc3c42a5fb1c93782249e7766259ea7db9c9cfc", size = 2740811, upload-time = "2025-12-02T15:41:20.02Z" },
-    { url = "https://files.pythonhosted.org/packages/64/9e/98b433d41ffbec9ed123ec9132a04a109b184d060f18ceefd4f718021141/snowflake_connector_python-4.1.1-cp313-cp313-win_amd64.whl", hash = "sha256:5d5c0ea78d90bd241c05e3998066fc42de1f2813e20c6a75b85e90ef562335bc", size = 1185525, upload-time = "2025-12-02T15:41:49.7Z" },
+    { url = "https://files.pythonhosted.org/packages/a4/34/2c5c059b12db84113bb01761bd3fdab3e0c0d8d4ccc0c9631be5479960c2/snowflake_connector_python-4.2.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:2e1c60e578ddcdf99b46d7c329706aa87ea98c1c877cbe50560e034cc904231e", size = 11908869, upload-time = "2026-01-07T16:44:35.243Z" },
+    { url = "https://files.pythonhosted.org/packages/c9/27/07ab3485f43d92c139fefb30b68a60498b508f2e941d9191f1ec3ac42a20/snowflake_connector_python-4.2.0-cp310-cp310-macosx_11_0_x86_64.whl", hash = "sha256:cf1805be7e124aa12bdcbb6c7f7f7bd11277aa4fe4d616cfee7633617bba9651", size = 11921560, upload-time = "2026-01-07T16:44:37.995Z" },
+    { url = "https://files.pythonhosted.org/packages/d5/12/ba6bb6cd26bc584637aa63f3e579cb929b9c3637fa830e43b77c2b2e8901/snowflake_connector_python-4.2.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0b877cf5fc086818d86e289fc88453bc354df87a664e57f9b75d8dd7550d2df3", size = 2786595, upload-time = "2026-01-07T16:44:14.314Z" },
+    { url = "https://files.pythonhosted.org/packages/9f/80/bf900ac5ddd5b60a72f0c3f7c276c9b0f29b375997c294f28bd746e9f721/snowflake_connector_python-4.2.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3654c3923b7ce88aab3be459bad3dba39fe4f989a4871421925a8a48f9a553ca", size = 2814560, upload-time = "2026-01-07T16:44:15.988Z" },
+    { url = "https://files.pythonhosted.org/packages/8e/04/e070116ff779fcd16c5e25ef8b045afb8cc53b12b3494663457718a7d877/snowflake_connector_python-4.2.0-cp310-cp310-win_amd64.whl", hash = "sha256:cdaf91edf94d801fef6cb15c90ba321826b8342826a82375799319d509e6787a", size = 12059955, upload-time = "2026-01-07T16:45:05.556Z" },
+    { url = "https://files.pythonhosted.org/packages/24/5f/2e3ac52d4b433e850c83f91b801b7c4e9935a4d1c4f2ea4fd0c3782c5a3d/snowflake_connector_python-4.2.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:e2971212e2bf38b19ed3d71d433102b09cda09ddca02fe4c813cb73f504a31e8", size = 11908767, upload-time = "2026-01-07T16:44:39.982Z" },
+    { url = "https://files.pythonhosted.org/packages/31/f6/74d75623ed75244c4aad1722b83923c806a67f601b41314e8a6b30e160c0/snowflake_connector_python-4.2.0-cp311-cp311-macosx_11_0_x86_64.whl", hash = "sha256:786d9ad591439996ff5a6014c3730441bcfdc8c6d60f05d98f6576cb2cfa0f05", size = 11921016, upload-time = "2026-01-07T16:44:41.917Z" },
+    { url = "https://files.pythonhosted.org/packages/31/53/ab0d2eed42f1309de2e7656651fdab6ae454032bcc485089ce5e0697b5c2/snowflake_connector_python-4.2.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:74d3d2bcce62bbb7a8fb3adaae37dc2aaeb4e93549509db2f957fb704ce4aa18", size = 2797881, upload-time = "2026-01-07T16:44:17.319Z" },
+    { url = "https://files.pythonhosted.org/packages/2a/6f/2aa88f57107fdf0daabd113b479ba50e22d566ae36e860d4dbe68bcb6437/snowflake_connector_python-4.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2cbdffcf5b12199f3060297353e69c5a4c1fc4dfacd0062acbe9a1ace7e50882", size = 2827340, upload-time = "2026-01-07T16:44:19.434Z" },
+    { url = "https://files.pythonhosted.org/packages/f4/5b/d03f1d8dfeab8c81bd1f65cad93385932789971a640db1c6369b5850cc5b/snowflake_connector_python-4.2.0-cp311-cp311-win_amd64.whl", hash = "sha256:939e687ec4667d903b3bca3644b22946606361a2201158e137e448a6cd44605d", size = 12059905, upload-time = "2026-01-07T16:45:07.679Z" },
+    { url = "https://files.pythonhosted.org/packages/3c/90/90df1e0bbc8ba22534af48518e71eb669a3bb6243989a93d59f9db9d8897/snowflake_connector_python-4.2.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:b6e5dde4794fb190add6baee616f0f9a9b5c31502089b680a5be4441926b5173", size = 11907736, upload-time = "2026-01-07T16:44:44.598Z" },
+    { url = "https://files.pythonhosted.org/packages/8e/d1/4e9015d37a869022729a146f4c7f312f089938e1f51ac7620f6961f7ce66/snowflake_connector_python-4.2.0-cp312-cp312-macosx_11_0_x86_64.whl", hash = "sha256:f80f180092d218b578f05da145dd2640edb3c8807264d69169bc4dfb88b8b86c", size = 11919401, upload-time = "2026-01-07T16:44:47.524Z" },
+    { url = "https://files.pythonhosted.org/packages/c3/5a/c65134dedd438f9d8d6eaeb7f573cb95abe4141385a4353cfe88d8c96fb1/snowflake_connector_python-4.2.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:94a59566d3096a662b09423770aede8f99f1d06807d7b884dba8d9f767f0b2cd", size = 2854461, upload-time = "2026-01-07T16:44:21.305Z" },
+    { url = "https://files.pythonhosted.org/packages/94/6d/dd526a07042ca33ce05b8c642ef3da4a72e2cbe09e305170cb866021acd6/snowflake_connector_python-4.2.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:11241089efc6e8d69ea1aa58bb17abe85298e66d278fed4d13381fc362f02564", size = 2887953, upload-time = "2026-01-07T16:44:23.221Z" },
+    { url = "https://files.pythonhosted.org/packages/3f/e0/d2db617da5791ec03d17bfd96db6f4c867a3498c4b4d480befc6a1854522/snowflake_connector_python-4.2.0-cp312-cp312-win_amd64.whl", hash = "sha256:823ca257d9639b5468f53a816dc5acaea7c56991f518633c9c5f0fcf0d324721", size = 12058975, upload-time = "2026-01-07T16:45:10.293Z" },
+    { url = "https://files.pythonhosted.org/packages/7a/34/cb523e85f9da46e22ee3c07a4f66a090ab935a1c6e59e4e9638cf8e7bc36/snowflake_connector_python-4.2.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:2d103ab3d9175251c1e391c4a155d99faaadd6a1e3c1c36429a711862f7ab021", size = 11908616, upload-time = "2026-01-07T16:44:49.512Z" },
+    { url = "https://files.pythonhosted.org/packages/5b/eb/7a5c2a4dc275048e0b0b67b6b542b4cfdf60da158af8a315e5dd1021f443/snowflake_connector_python-4.2.0-cp313-cp313-macosx_11_0_x86_64.whl", hash = "sha256:2db02486bf72b2d4da6338bad59c58e18d0be4026b33d62b894db8cb04de403e", size = 11920460, upload-time = "2026-01-07T16:44:51.845Z" },
+    { url = "https://files.pythonhosted.org/packages/37/a2/7f85a01fc13982391166c5458f4fd1078546e6f19f9e0bb184dbf6ec5f53/snowflake_connector_python-4.2.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b93b0195746c7734ab66889430a418ac7fd66441c11addb683bc15e364bb77c8", size = 2820920, upload-time = "2026-01-07T16:44:24.728Z" },
+    { url = "https://files.pythonhosted.org/packages/aa/80/322dafc03f77f28f1ede160e4989ae758dd27dc94529e424348865bba501/snowflake_connector_python-4.2.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4773949e33c2503f369c20ac8fd59697e493670fed653fea7349d465ea5a0171", size = 2854097, upload-time = "2026-01-07T16:44:26.817Z" },
+    { url = "https://files.pythonhosted.org/packages/06/05/64d3de8c98f783a3065e60107519b701d1ab7ef15efefa279d338f3fba64/snowflake_connector_python-4.2.0-cp313-cp313-win_amd64.whl", hash = "sha256:3665eae47a6ccaf00ca567936cb16d5cbdd5b9f8ab3ee3a3f072bf3c4b76986c", size = 12058956, upload-time = "2026-01-07T16:45:13.063Z" },
 ]
 
 [package.optional-dependencies]
@@ -2523,7 +2542,7 @@ wheels = [
 
 [[package]]
 name = "typer"
-version = "0.21.0"
+version = "0.21.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -2531,9 +2550,9 @@ dependencies = [
     { name = "shellingham" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/85/30/ff9ede605e3bd086b4dd842499814e128500621f7951ca1e5ce84bbf61b1/typer-0.21.0.tar.gz", hash = "sha256:c87c0d2b6eee3b49c5c64649ec92425492c14488096dfbc8a0c2799b2f6f9c53", size = 106781, upload-time = "2025-12-25T09:54:53.651Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/36/bf/8825b5929afd84d0dabd606c67cd57b8388cb3ec385f7ef19c5cc2202069/typer-0.21.1.tar.gz", hash = "sha256:ea835607cd752343b6b2b7ce676893e5a0324082268b48f27aa058bdb7d2145d", size = 110371, upload-time = "2026-01-06T11:21:10.989Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e1/e4/5ebc1899d31d2b1601b32d21cfb4bba022ae6fce323d365f0448031b1660/typer-0.21.0-py3-none-any.whl", hash = "sha256:c79c01ca6b30af9fd48284058a7056ba0d3bf5cf10d0ff3d0c5b11b68c258ac6", size = 47109, upload-time = "2025-12-25T09:54:51.918Z" },
+    { url = "https://files.pythonhosted.org/packages/a0/1d/d9257dd49ff2ca23ea5f132edf1281a0c4f9de8a762b9ae399b670a59235/typer-0.21.1-py3-none-any.whl", hash = "sha256:7985e89081c636b88d172c2ee0cfe33c253160994d47bdfdc302defd7d1f1d01", size = 47381, upload-time = "2026-01-06T11:21:09.824Z" },
 ]
 
 [[package]]
@@ -2581,11 +2600,11 @@ wheels = [
 
 [[package]]
 name = "urllib3"
-version = "2.6.2"
+version = "2.6.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/1e/24/a2a2ed9addd907787d7aa0355ba36a6cadf1768b934c652ea78acbd59dcd/urllib3-2.6.2.tar.gz", hash = "sha256:016f9c98bb7e98085cb2b4b17b87d2c702975664e4f060c6532e64d1c1a5e797", size = 432930, upload-time = "2025-12-11T15:56:40.252Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3/urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed", size = 435556, upload-time = "2026-01-07T16:24:43.925Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6d/b9/4095b668ea3678bf6a0af005527f39de12fb026516fb3df17495a733b7f8/urllib3-2.6.2-py3-none-any.whl", hash = "sha256:ec21cddfe7724fc7cb4ba4bea7aa8e2ef36f607a4bab81aa6ce42a13dc3f03dd", size = 131182, upload-time = "2025-12-11T15:56:38.584Z" },
+    { url = "https://files.pythonhosted.org/packages/39/08/aaaad47bc4e9dc8c725e68f9d04865dbcb2052843ff09c97b08904852d84/urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4", size = 131584, upload-time = "2026-01-07T16:24:42.685Z" },
 ]
 
 [[package]]
