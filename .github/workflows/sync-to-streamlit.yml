@@ -1,0 +1,51 @@
+name: Sync to Streamlit Repository
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  sync:
+    if: github.repository == 'nordquant/complete-dbt-bootcamp-zero-to-hero'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout dev-repo
+        uses: actions/checkout@v4
+        with:
+          path: dev-repo
+
+      - name: Setup SSH for streamlit repo
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STREAMLIT_REPO_DEPLOY_KEY }}" > ~/.ssh/streamlit_deploy_key
+          chmod 600 ~/.ssh/streamlit_deploy_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Clone streamlit repo
+        run: |
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/streamlit_deploy_key"
+          git clone git@github.com:nordquant/dbtlearn-snowflake-importer.git streamlit-repo
+
+      - name: Sync course-resources.md
+        run: |
+          cp dev-repo/_course_resources/course-resources.md streamlit-repo/course-resources.md
+
+      - name: Commit and push
+        run: |
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/streamlit_deploy_key"
+          cd streamlit-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to sync"
+          else
+            git commit -m "Sync course-resources.md from dev-repo
+
+          Source commit: ${{ github.sha }}
+          Triggered by: ${{ github.actor }}"
+            git push origin main
+          fi
