@@ -651,7 +651,7 @@ Create a singular test in `tests/consistent_created_at.sql` that checks that the
 SELECT * FROM {{ ref('dim_listings_cleansed') }} l
 INNER JOIN {{ ref('fct_reviews') }} r
 USING (listing_id)
-WHERE l.created_at >= r.review_date
+WHERE l.created_at > r.review_date
 ```
 
 ## Custom Generic Tests
