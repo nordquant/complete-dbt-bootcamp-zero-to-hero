@@ -628,6 +628,11 @@ unit_tests:
 dbt test -s mart_fullmoon_reviews
 ```
 
+### Executing only unit tests
+```sh
+dbt test -s "test_type:unit"
+```
+
 ## Contracts
 Add this to `models/schema.yml`:
 ```
