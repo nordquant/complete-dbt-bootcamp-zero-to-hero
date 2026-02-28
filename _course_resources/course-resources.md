@@ -166,6 +166,11 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
+_Note:_ In some edge cases you might receive a _Permission Error_ message from PowerShell. In this case, students found executing this message solve the error:
+```
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
 ## dbt Project Setup
 Create a dbt project (all platforms):
 ```sh
