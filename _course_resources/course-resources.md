@@ -12,6 +12,8 @@ Follow the instructions here https://dbtsetup.nordquant.com/ to set up your Snow
 ## Snowflake data import (manual)
 _Only execute these commands if you decided to skip the Automated Snowflake Setup._
 
+It you want to generate key pairs on Windows, PuttyGen is quite intuitive. If you want more guidance of these, [please refer to this walkthrough](https://www.ssh.com/academy/ssh/putty/windows/puttygen).
+
 Resources presented:
 * [Snowflake Key-Pair Authentication page](https://docs.snowflake.com/en/user-guide/key-pair-auth)
 * [PuttyGen for Windows](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
