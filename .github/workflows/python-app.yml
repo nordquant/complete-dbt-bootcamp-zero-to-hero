@@ -25,6 +25,7 @@ env:
 jobs:
   build:
     if: github.repository == 'nordquant/complete-dbt-bootcamp-zero-to-hero'
+    name: ${{ matrix.python-version == '3.13' && 'dbt full build' || format('dbt debug ({0})', matrix.python-version) }}
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
@@ -45,9 +46,9 @@ jobs:
         else
           echo "run_full_tests=false" >> $GITHUB_OUTPUT
         fi
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Install uv
-      uses: astral-sh/setup-uv@v5
+      uses: astral-sh/setup-uv@v7
       with:
         enable-cache: true
         cache-dependency-glob: "pyproject.toml"
