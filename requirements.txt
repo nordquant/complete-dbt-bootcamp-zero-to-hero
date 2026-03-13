@@ -1,0 +1,5 @@
+dbt-core==1.11.0
+dbt-snowflake==1.11.0
+dbt-autofix==0.18.0
+dagster-dbt==0.28.0
+dagster-webserver==1.12.0
