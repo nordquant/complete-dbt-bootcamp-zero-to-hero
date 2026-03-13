@@ -49,8 +49,9 @@ jobs:
     - name: Set dbt build options
       id: dbt_options
       run: |
-        BRANCH="${{ github.head_ref || github.ref_name }}"
-        if [ "$BRANCH" == "poweruser" ]; then
+        HEAD="${{ github.head_ref || github.ref_name }}"
+        BASE="${{ github.base_ref }}"
+        if [ "$HEAD" == "poweruser" ] || [ "$BASE" == "poweruser" ]; then
           echo "exclude=--exclude legacy_int_host_performance test_mart_listing_performance" >> $GITHUB_OUTPUT
         else
           echo "exclude=" >> $GITHUB_OUTPUT
