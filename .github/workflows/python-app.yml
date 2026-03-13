@@ -25,7 +25,7 @@ env:
 jobs:
   build:
     if: github.repository == 'nordquant/complete-dbt-bootcamp-zero-to-hero'
-    name: ${{ matrix.python-version == '3.13' && 'dbt full build' || format('dbt debug ({0})', matrix.python-version) }}
+    name: ${{ matrix.python-version == '3.13' && format('dbt full build ({0})', matrix.python-version) || format('dbt debug ({0})', matrix.python-version) }}
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
@@ -45,6 +45,15 @@ jobs:
           echo "run_full_tests=true" >> $GITHUB_OUTPUT
         else
           echo "run_full_tests=false" >> $GITHUB_OUTPUT
+        fi
+    - name: Set dbt build options
+      id: dbt_options
+      run: |
+        BRANCH="${{ github.head_ref || github.ref_name }}"
+        if [ "$BRANCH" == "poweruser" ]; then
+          echo "exclude=--exclude legacy_int_host_performance test_mart_listing_performance" >> $GITHUB_OUTPUT
+        else
+          echo "exclude=" >> $GITHUB_OUTPUT
         fi
     - uses: actions/checkout@v6
     - name: Install uv
@@ -74,7 +83,7 @@ jobs:
       if: steps.check_full_tests.outputs.run_full_tests == 'true'
       run: |
         cd airbnb
-        uv run dbt build
+        uv run dbt build ${{ steps.dbt_options.outputs.exclude }}
     - name: Test dbt inline commands
       if: steps.check_full_tests.outputs.run_full_tests == 'true'
       run: |
@@ -95,9 +104,18 @@ jobs:
       if: steps.check_full_tests.outputs.run_full_tests == 'true'
       run: |
         cd airbnb
-        ~/.local/bin/dbt build
+        ~/.local/bin/dbt build ${{ steps.dbt_options.outputs.exclude }}
     - name: Test dbt inline commands (Fusion)
       if: steps.check_full_tests.outputs.run_full_tests == 'true'
       run: |
         cd airbnb
         PATH="$HOME/.local/bin:$PATH" bash ../.github/scripts/test_commands.sh fusion
+
+  block-poweruser-to-main:
+    if: github.event_name == 'pull_request' && github.head_ref == 'poweruser' && github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Block merge
+      run: |
+        echo "::error::PRs from poweruser to main are not allowed. Only main → poweruser merges are permitted."
+        exit 1
