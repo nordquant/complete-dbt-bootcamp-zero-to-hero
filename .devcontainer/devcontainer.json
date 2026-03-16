@@ -9,7 +9,8 @@
 				"python.defaultInterpreterPath": "/usr/local/bin/python3",
 				"extensions.ignoreRecommendations": true,
 				"settingsSync.enabled": false,
-			"terminal.integrated.cwd": "${containerWorkspaceFolder}/airbnb"
+				"terminal.integrated.cwd": "${containerWorkspaceFolder}/airbnb",
+				"python.terminal.useEnvFile": false
 			}
 		}
 	}
