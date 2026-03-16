@@ -11,8 +11,7 @@ DATE_TAG=$(date +%Y.%m.%d)
 SHA_TAG="sha-$(git -C "$REPO_ROOT" rev-parse --short HEAD)"
 
 if [ -z "${NQ_GITHUB_TOKEN:-}" ]; then
-  echo "ERROR: NQ_GITHUB_TOKEN is not set. Export it before running this script." >&2
-  exit 1
+  onepass
 fi
 
 echo "==> Logging in to GitHub Container Registry"

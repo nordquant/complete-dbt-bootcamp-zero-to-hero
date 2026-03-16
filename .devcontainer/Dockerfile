@@ -5,20 +5,21 @@ FROM mcr.microsoft.com/devcontainers/python:3.13-bullseye
 LABEL org.opencontainers.image.source=https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero
 LABEL org.opencontainers.image.description="dbt Zero to Hero Development Container"
 
-# Install UV package manager (as root, then make it available globally)
+# Install UV as root into /usr/local/bin
+ENV UV_INSTALL_DIR="/usr/local/bin"
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
-    && ln -sf /root/.local/bin/uv /usr/local/bin/uv \
-    && ln -sf /root/.local/bin/uvx /usr/local/bin/uvx
+    && chmod a+rx /usr/local/bin/uv /usr/local/bin/uvx
 
-# Tell UV to install into system Python (no virtualenv)
+# Tell UV to use system Python (no virtualenv)
 ENV UV_SYSTEM_PYTHON=1
 
-# Copy project files for dependency installation
+# Copy project files and install dependencies as root
 COPY pyproject.toml uv.lock /workspaces/dev-repo/
-
-# Install dependencies into system site-packages
 WORKDIR /workspaces/dev-repo
 RUN uv pip install -r pyproject.toml
+
+# Grant vscode user write access to site-packages (for postCreateCommand)
+RUN chown -R vscode:vscode /usr/local/lib/python3.13/site-packages/
 
 # Switch to vscode user for runtime
 USER vscode

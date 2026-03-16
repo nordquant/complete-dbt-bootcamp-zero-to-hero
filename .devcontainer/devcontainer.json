@@ -5,7 +5,12 @@
 	"postCreateCommand": "uv pip install -r pyproject.toml",
 	"customizations": {
 		"vscode": {
-			"extensions": ["ms-python.python"]
+			"settings": {
+				"python.defaultInterpreterPath": "/usr/local/bin/python3",
+				"extensions.ignoreRecommendations": true,
+				"settingsSync.enabled": false,
+			"terminal.integrated.cwd": "${containerWorkspaceFolder}/airbnb"
+			}
 		}
 	}
 }
