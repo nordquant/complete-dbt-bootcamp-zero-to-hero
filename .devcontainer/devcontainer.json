@@ -2,11 +2,12 @@
 	"name": "dbt Zero to Hero",
 	"image": "ghcr.io/nordquant/complete-dbt-bootcamp-zero-to-hero/dbt-bootcamp-devcontainer:latest",
 	"forwardPorts": [5000],
+	"onCreateCommand": ".devcontainer/install-dbt-fusion.sh",
 	"postCreateCommand": "uv pip install -r pyproject.toml",
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"innoverio.vscode-dbt-power-user"
+				"dbtLabsInc.dbt"
 			],
 			"settings": {
 				"python.defaultInterpreterPath": "/usr/local/bin/python3",
@@ -14,12 +15,6 @@
 				"settingsSync.enabled": false,
 				"python.terminal.useEnvFile": false,
 				"terminal.integrated.cwd": "${containerWorkspaceFolder}/airbnb",
-				"files.associations": {
-					"*.yaml": "jinja-yaml",
-					"*.yml": "jinja-yaml",
-					"*.sql": "jinja-sql",
-					"*.md": "jinja-md"
-				}
 			}
 		}
 	}
