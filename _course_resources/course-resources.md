@@ -12,11 +12,11 @@ Follow the instructions here https://dbtsetup.nordquant.com/ to set up your Snow
 ## Snowflake data import (manual)
 _Only execute these commands if you decided to skip the Automated Snowflake Setup._
 
-It you want to generate key pairs on Windows, PuttyGen is quite intuitive. If you want more guidance of these, [please refer to this walkthrough](https://www.ssh.com/academy/ssh/putty/windows/puttygen).
+It you want to generate key pairs on Windows, PuttyGen is quite intuitive. If you want more guidance of these, [please refer to this walkthrough](https://puttygen.com/).
 
 Resources presented:
 * [Snowflake Key-Pair Authentication page](https://docs.snowflake.com/en/user-guide/key-pair-auth)
-* [PuttyGen for Windows](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+* [PuttyGen for Windows](https://puttygen.com/)
 * [AirBnb Source data locations](https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero/blob/main/_course_resources/source-data-locations.md)
 
 Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
@@ -1112,3 +1112,36 @@ dbt run --select fct_reviews  --vars '{start_date: "2024-02-15 00:00:00", end_da
 ```
 
 Reference - Working with incremental strategies: https://docs.getdbt.com/docs/build/incremental-models#about-incremental_strategy
+
+# dbt Power User
+
+## Working with Legacy Code
+
+Please copy [these two files](https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero/tree/poweruser/airbnb/models/intermediate) into the repo so that you have the same `intermediate` files Steven uses.
+
+## Building Models with AI
+
+Here is the prompt Steven uses in the _Building Models with AI_ section:
+```
+Create an intermediate model called int_host_performance that calculates host-level performance metrics.
+
+Use the following upstream models:
+dim_hosts_cleansed for host data
+dim_listings_cleaned for listing data
+
+Calculate these metrics per host:
+- total_listings: count of listings
+- avg_listing_price: average price across listings
+- min_listing_price: minimum price
+- max_listing_price: maximum price
+- room type distribution (entire_home_count, private_room_count, shared_room_count, hotel_room_count)
+- avg_minimum_nights: average minimum night
+
+Add these classifications:
+- portfolio_size: based on listing count (inactive = 0, single_listing = 1, small_portfolio = 2-5, medium_portfolio = 6-15, large_portfolio = 16+)
+- host_status: 'superhost' if is_superhost = 't', else 'standard'
+- host_tenure: based on created_at (new_host <1 year, experienced_host 1-3 years, veteran_host 3+ years)
+- dominant_room_type: the room type with most listing
+
+save to models/intermediate/int_host_performance.sql
+```
