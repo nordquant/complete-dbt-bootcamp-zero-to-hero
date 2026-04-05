@@ -4,7 +4,17 @@ sources:
     tables:
       - name: listings
         identifier: raw_listings
-
+        columns:
+          - name: room_type
+            data_tests:
+              - dbt_expectations.expect_column_distinct_count_to_equal:
+                  arguments:
+                    value: 4
+          - name: price
+            data_tests:
+              - dbt_expectations.expect_column_values_to_match_regex:
+                  arguments:
+                    regex: ^\\$[0-9][0-9\\.]+$
       - name: hosts
         identifier: raw_hosts
 

@@ -7,12 +7,29 @@ Create a snowflake account and a database.
 * Password: somthing you want
 * Startup tutorial: click `Skip for now`
 * Convert your public key into snowflake format: `ssh-keygen -f ~/.ssh/id_rsa.pub -e -m PKCS8 | awk 'NR>1 && !/END PUBLIC KEY/' | tr -d '\n'`
-* Follow the file [Course Resources](/_course_resources/course-resources.md), replace the public key in the SQL scripts. 
+* Follow the file [Course Resources](/_course_resources/course-resources.md), replace the public key in the SQL scripts (note already replaced):
+  * `ssh-keygen -e -m PKCS8 -f ~/.ssh/id_rsa.pub | grep -v "^---" | tr -d '\n'`
+
 
 Go to location `course/airbnb`
-* `cp -rf ../../profiles.yml.sample ./profiles.yml`: copy the profiles.yml file, update the private key.
+* `cp -rf ../../profiles.yml.sample ./profiles.yml`:
+  * copy the profiles.yml file,
+  * update the private key.
+  * update account
 
 # Install dbt and dagster
+Install dbt fusion, the latest command should be available from their website:
+`curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update`.
+
+A few useful commands:
+* `dbtf system`: dbt installation configuration.
+* `dbtf system update`: update dbt fusion.
+
+Install dbt-autofix: `pip install dbt-autofix`.
+It is a utility that helps during dbt core to dbt fusion migration.
+Run commands like:
+* `dbt-autofix deprecations`: fix deprecations in the dbt project.
+
 ## Install dbt and dagster by `uv`
 In a directory where you have `pyproject.toml` (root project directory):
 * first install uv
