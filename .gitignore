@@ -20,4 +20,5 @@ tmp*/
 .claude
 .idea/
 .user.yml
+.vscode/
 .DS_Store

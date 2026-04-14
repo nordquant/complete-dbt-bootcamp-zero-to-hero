@@ -10,8 +10,7 @@ Create a snowflake account and a database.
 * Follow the file [Course Resources](/_course_resources/course-resources.md), replace the public key in the SQL scripts (note already replaced):
   * `ssh-keygen -e -m PKCS8 -f ~/.ssh/id_rsa.pub | grep -v "^---" | tr -d '\n'`
 
-
-Go to location `course/airbnb`
+Go to location `course/airbnb`.
 * `cp -rf ../../profiles.yml.sample ./profiles.yml`:
   * copy the profiles.yml file,
   * update the private key.
@@ -61,6 +60,7 @@ In a directory where you have `pyproject.toml` (root project directory):
 * `dbt run --debug`: shows every SQL that is executed against the data warehouse, also grant SQLs.
 * `dbt run --full-refresh`: to rebuild the whole model.
 * `dbt run --help`
+* `dbt run-operation`: execute a macro in itself, not as part of a test.
 * `dbt ls --resource-type model`
 * `dbt compile`: check if all models are connected correctly
 * `dbt compile --inline '{# This is a comment #}{% set my_name = "Lei" %}{{ my_name }}'`: ompile the whole project, but also this Jinja code and put result to the screen.

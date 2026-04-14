@@ -22,7 +22,6 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
-
 on-run-start:
   - "create table if not exists {{ target.schema }}.audit_log ( model_name string, run_timestamp timestamp )"
 models:
@@ -45,4 +44,4 @@ data_tests:
   # overwrite the default schema used to store test failures, final name is prefixed with dev_, i.e. dev_test_failures_leiw
   +schema: test_failures_leiw
 flags:
-  require_generic_test_arguments_property: true
+  # require_generic_test_arguments_property: true
