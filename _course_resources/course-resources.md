@@ -88,7 +88,7 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
 ```
 
-## Snowflake user creation
+### Snowflake user creation
 _Only execute these commands if you decided to skip the Automated Snowflake Setup._
 
 Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
@@ -152,6 +152,12 @@ GRANT SELECT ON ALL TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
 GRANT SELECT ON FUTURE TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
 
 ```
+
+### Airstats tables - Capstone Setup
+_Only execute these commands if you decided to skip the Automated Snowflake Setup._
+
+Copy these SQL statements into a Snowflake Worksheet:
+https://github.com/nordquant/dbtlearn-snowflake-importer/blob/main/capstone-resources.md
 
 ## dbt installation
 
