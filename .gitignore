@@ -20,11 +20,9 @@ tmp*/
 
 .claude
 .vscode
+
 CLAUDE.md
 PROD.md
 .user.yml
 .DS_Store
-.vscode/
-CLAUDE.md
-PROD.md
 .env
