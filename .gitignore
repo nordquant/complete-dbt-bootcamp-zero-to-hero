@@ -17,5 +17,9 @@ tmp*/
 /my_dbt_dagster_project
 
 .claude
+.vscode
+CLAUDE.md
+PROD.md
 .user.yml
 .DS_Store
+

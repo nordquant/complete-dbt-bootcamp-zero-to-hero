@@ -1,5 +1,6 @@
 {{ config(
   materialized = 'table',
+  schema='mart'
 ) }}
 
 WITH fct_reviews AS (
