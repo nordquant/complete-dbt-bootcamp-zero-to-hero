@@ -7,14 +7,12 @@
     {# No custom schema: always use target schema as-is (uppercased above) #}
     {{ target_schema_cleansed }}
   {%- else -%}
-
     {%- if target.name == 'prod' -%}
         {# Prod: use clean custom schema name only #}
         {{ custom_schema_name_cleansed }}
     {%- else -%}
-      {# Staing / Dev / feature branches: prefix with personal/branch schema. #}
+      {# Staging / Dev / feature branches: prefix with personal/branch schema. #}
       {{ target_schema_cleansed }}_{{ custom_schema_name_cleansed }}
     {%- endif -%}
   {%- endif -%}
-
 {%- endmacro %}
