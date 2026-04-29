@@ -1,5 +1,5 @@
 macros:
-  - name: minimum_row_count
+  - name: test_minimum_row_count
     description: "Test that a model has at least a minimum number of rows."
     arguments:
       - name: model
