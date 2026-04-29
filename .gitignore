@@ -19,3 +19,6 @@ tmp*/
 .claude
 .user.yml
 .DS_Store
+.vscode/
+CLAUDE.md
+PROD.md
