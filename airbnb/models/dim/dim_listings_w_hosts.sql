@@ -7,7 +7,7 @@ l AS (
 ),
 h AS (
     SELECT * 
-    FROM {{ ref('dim_hosts_cleansed') }}
+    FROM {{ ref('dim_hosts_cleansed', v=1) }}
 )
 
 SELECT 

@@ -16,8 +16,8 @@ SELECT
         'Anonymous'
     ) AS host_name,
     CASE is_superhost
-        WHEN TRUE THEN 'Superhost'
-        ELSE FALSE THEN 'Regular'
+        WHEN 't' THEN 'Superhost'
+        ELSE 'Regular'
     END AS host_type,
     created_at,
     updated_at
