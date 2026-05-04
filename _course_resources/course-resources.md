@@ -680,6 +680,45 @@ SELECT * FROM {{ model }} WHERE {{ column_name }} <= 0
 {% endtest %}
 ```
 
+## Constraints
+
+* [The constraints documentation](https://docs.getdbt.com/reference/resource-properties/constraints)
+
+1) We've changed the materialization of `models/dim/dim_hosts_cleansed.sql` to `table`
+2) Here is the final code for the constraint-specific part of `models/schema.yml`:
+```
+
+  - name: dim_hosts_cleansed
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: host_id
+        data_type: integer
+        constraints:
+          - type: not_null
+        data_tests:
+          - unique
+      
+      - name: host_name
+        data_type: string
+        constraints:
+          - type: not_null
+      
+      - name: is_superhost
+        data_type: string
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['t', 'f']
+
+      - name: updated_at
+        data_type: timestamp
+
+      - name: created_at
+        data_type: timestamp
+```
+
 # Jinja, Macros and Packages
 ## Jinja
 
@@ -794,7 +833,7 @@ WHERE review_text is not null
 
 ## Documentation
 
-The `models/schema.yml` after adding the documentation:
+The documentation-specific pieces of `models/schema.yml` after adding the documentation:
 ```yaml
 
 models:
@@ -995,6 +1034,24 @@ dbt --debug test --select dim_listings_w_hosts
 
 Keep in mind that in the lecture we didn't use the _--debug_ flag after all, as taking a look at the compiled SQL file is the better way of debugging tests.
 
+
+## Logging
+
+The contents of `macros/logging.sql`:
+```
+{% macro learn_logging() %}
+    {{ log("Call your mom!") }}
+    {{ log("Call your dad!", info=True) }} {# Logs to the screen, too #}
+--  {{ log("Call your dad!", info=True) }} {# This will be logged to the screen #}
+    {# log("Call your dad!", info=True) #} {# This won't be executed #}
+{% endmacro %}
+```
+
+Executing the macro:
+```
+dbt run-operation learn_logging
+```
+
 ## Debugging YAML, SQL, models and general dbt bugs
 
 ### Using `--empty` and `--sample`
@@ -1047,21 +1104,80 @@ _Watch out, the resulting table will be empty as we don't have data in `dim_list
 
 You can check the SQL that's been executed in `target/run/airbnb/models/dim/dim_listings_w_hosts.sql`
 
-## Logging
+## Tags and Selectors
 
-The contents of `macros/logging.sql`:
+We are adding tags to `dbt_project.yml`:
 ```
-{% macro learn_logging() %}
-    {{ log("Call your mom!") }}
-    {{ log("Call your dad!", info=True) }} {# Logs to the screen, too #}
---  {{ log("Call your dad!", info=True) }} {# This will be logged to the screen #}
-    {# log("Call your dad!", info=True) #} {# This won't be executed #}
-{% endmacro %}
+    fct:
+      +tags: ['fact']
 ```
 
-Executing the macro:
+And then also for the `models/mart/mart_fullmoon_reviews.sql`:
 ```
-dbt run-operation learn_logging
+{{ config(
+  materialized = 'table',
+  tags = ['fact']
+) }}
+```
+
+### Executing selectors
+Our `selector.yml` file:
+```
+selectors:
+  - name: dim_except_listings_w_hosts
+    description: Selects all dim models, excluding dim_listings_w_hosts.
+    definition:
+      union:
+        - method: path
+          value: models/dim
+        - exclude:
+            - method: fqn
+              value: dim_listings_w_hosts
+
+```
+
+And the selector commands:
+```
+# Before dbt v1.12:
+dbt run --selector dim_except_listings_w_hosts
+
+# Starting from dbt v1.12
+dbt run -s selector:dim_except_listings_w_hosts
+```
+
+## Python Models
+The contents of `models/dim/dim_long_term_listings.py`:
+```python
+def model(dbt, session):
+    listings = dbt.ref("dim_listings_cleansed")
+
+    return (listings.filter(listings["MINIMUM_NIGHTS"] >= 30)
+                   .select("LISTING_ID", "LISTING_NAME", "PRICE"))
+```
+
+The contents of `models/dim/dim_fullmoon.py`:
+```python
+import holidays
+
+def is_holiday(date_col):
+    german_holidays = holidays.Germany()
+    is_holiday = (date_col in german_holidays)
+    return is_holiday
+
+def model(dbt, session):
+    dbt.config(
+        materialized = "table",
+        packages = ["holidays"]
+    )
+
+    orders_df = dbt.ref("seed_full_moon_dates")
+
+    df = orders_df.to_pandas()
+
+    df["IS_HOLIDAY"] = df["FULL_MOON_DATE"].apply(is_holiday)
+
+    # return final dataset (Pandas DataFrame)
+    return df
 ```
 
 ## Variables
