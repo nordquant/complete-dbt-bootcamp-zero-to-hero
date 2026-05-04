@@ -12,11 +12,11 @@ Follow the instructions here https://dbtsetup.nordquant.com/ to set up your Snow
 ## Snowflake data import (manual)
 _Only execute these commands if you decided to skip the Automated Snowflake Setup._
 
-It you want to generate key pairs on Windows, PuttyGen is quite intuitive. If you want more guidance of these, [please refer to this walkthrough](https://www.ssh.com/academy/ssh/putty/windows/puttygen).
+It you want to generate key pairs on Windows, PuttyGen is quite intuitive. If you want more guidance of these, [please refer to this walkthrough](https://puttygen.com/).
 
 Resources presented:
 * [Snowflake Key-Pair Authentication page](https://docs.snowflake.com/en/user-guide/key-pair-auth)
-* [PuttyGen for Windows](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+* [PuttyGen for Windows](https://puttygen.com/)
 * [AirBnb Source data locations](https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero/blob/main/_course_resources/source-data-locations.md)
 
 Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
@@ -88,7 +88,7 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
 ```
 
-## Snowflake user creation
+### Snowflake user creation
 _Only execute these commands if you decided to skip the Automated Snowflake Setup._
 
 Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
@@ -152,6 +152,12 @@ GRANT SELECT ON ALL TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
 GRANT SELECT ON FUTURE TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
 
 ```
+
+### Airstats tables - Capstone Setup
+_Only execute these commands if you decided to skip the Automated Snowflake Setup._
+
+Copy these SQL statements into a Snowflake Worksheet:
+https://github.com/nordquant/dbtlearn-snowflake-importer/blob/main/capstone-resources.md
 
 ## dbt installation
 
@@ -981,7 +987,7 @@ Testing individual sources:
 dbt test --select source:airbnb.listings
 ```
 
-## Debugging dbt
+### The `--debug` parameter
 
 ```
 dbt --debug test --select dim_listings_w_hosts
@@ -989,7 +995,59 @@ dbt --debug test --select dim_listings_w_hosts
 
 Keep in mind that in the lecture we didn't use the _--debug_ flag after all, as taking a look at the compiled SQL file is the better way of debugging tests.
 
-### Logging
+## Debugging YAML, SQL, models and general dbt bugs
+
+### Using `--empty` and `--sample`
+
+#### `--empty`
+```
+dbt run --empty
+# Check SQL: SELECT COUNT(*) FROM AIRBNB.DEV.DIM_LISTINGS_W_HOSTS;
+```
+
+#### `--sample`
+We've added the `event_time` config to `models/dim/dim_listings_cleansed.sql`:
+```
+{{
+  config(
+    materialized = 'view',
+    event_time='created_at'
+  )
+}} 
+WITH src_listings AS (
+    SELECT * FROM {{ ref('src_listings') }}
+)
+SELECT 
+  listing_id,
+  listing_name,
+  room_type,
+  CASE
+    WHEN minimum_nights = 0 THEN 1
+    ELSE minimum_nights
+  END AS minimum_nights,
+  host_id,
+  REPLACE(
+    price_str,
+    '$'
+  ) :: NUMBER(
+    10,
+    2
+  ) AS price,
+  created_at,
+  updated_at
+FROM
+  src_listings
+```
+
+Then we executed the sample:
+```
+dbt run -s dim_listings_w_hosts --sample "3 days"
+```
+_Watch out, the resulting table will be empty as we don't have data in `dim_listings_cleansed` for the past 3 days._
+
+You can check the SQL that's been executed in `target/run/airbnb/models/dim/dim_listings_w_hosts.sql`
+
+## Logging
 
 The contents of `macros/logging.sql`:
 ```
@@ -1112,3 +1170,36 @@ dbt run --select fct_reviews  --vars '{start_date: "2024-02-15 00:00:00", end_da
 ```
 
 Reference - Working with incremental strategies: https://docs.getdbt.com/docs/build/incremental-models#about-incremental_strategy
+
+# dbt Power User
+
+## Working with Legacy Code
+
+Please copy [these two files](https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero/tree/poweruser/airbnb/models/intermediate) into the repo so that you have the same `intermediate` files Steven uses.
+
+## Building Models with AI
+
+Here is the prompt Steven uses in the _Building Models with AI_ section:
+```
+Create an intermediate model called int_host_performance that calculates host-level performance metrics.
+
+Use the following upstream models:
+dim_hosts_cleansed for host data
+dim_listings_cleaned for listing data
+
+Calculate these metrics per host:
+- total_listings: count of listings
+- avg_listing_price: average price across listings
+- min_listing_price: minimum price
+- max_listing_price: maximum price
+- room type distribution (entire_home_count, private_room_count, shared_room_count, hotel_room_count)
+- avg_minimum_nights: average minimum night
+
+Add these classifications:
+- portfolio_size: based on listing count (inactive = 0, single_listing = 1, small_portfolio = 2-5, medium_portfolio = 6-15, large_portfolio = 16+)
+- host_status: 'superhost' if is_superhost = 't', else 'standard'
+- host_tenure: based on created_at (new_host <1 year, experienced_host 1-3 years, veteran_host 3+ years)
+- dominant_room_type: the room type with most listing
+
+save to models/intermediate/int_host_performance.sql
+```
