@@ -43,5 +43,7 @@ data_tests:
   +store_failures: true
   # overwrite the default schema used to store test failures, final name is prefixed with dev_, i.e. dev_test_failures_leiw
   +schema: test_failures_leiw
-flags:
-  # require_generic_test_arguments_property: true
+#flags:
+  #require_generic_test_arguments_property: true
+vars:
+  user_name: default_user_name_for_this_project

@@ -1,6 +1,3 @@
-"""
-To add a daily schedule that materializes your dbt assets, uncomment the following lines.
-"""
 from dagster_dbt import build_schedule_from_dbt_selection
 
 from .assets import airbnb_dbt_assets

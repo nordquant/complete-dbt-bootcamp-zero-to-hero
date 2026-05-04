@@ -13,5 +13,12 @@ select
 from src_reviews
 where REVIEW_TEXT is not null
 {% if is_incremental() %}
-  and REVIEW_DATE >= (select max(REVIEW_DATE) from {{ this }})
+  {% if var("start_date", False) and var("end_date", False) %}
+    {{ log('Loading ' ~ this ~ ' incrementally (start_date: ' ~ var("start_date") ~ ', end_date: ' ~ var("end_date") ~ ')', info=True) }}
+    and review_date >= '{{ var("start_date") }}'
+    and review_date < '{{ var("end_date") }}'
+  {% else %}
+    and REVIEW_DATE >= (select max(REVIEW_DATE) from {{ this }})
+    {{ log('Loading ' ~ this ~ ' incrementally (all missing dates)', info=True) }}
+  {% endif %}
 {% endif %}

@@ -60,7 +60,8 @@ In a directory where you have `pyproject.toml` (root project directory):
 * `dbt run --debug`: shows every SQL that is executed against the data warehouse, also grant SQLs.
 * `dbt run --full-refresh`: to rebuild the whole model.
 * `dbt run --help`
-* `dbt run-operation`: execute a macro in itself, not as part of a test.
+* `dbt run-operation --help`: execute a macro in itself, not as part of a test.
+* `dbt run-operation learn_variables --vars '{user_name: wlei07}'`
 * `dbt ls --resource-type model`
 * `dbt compile`: check if all models are connected correctly
 * `dbt compile --inline '{# This is a comment #}{% set my_name = "Lei" %}{{ my_name }}'`: ompile the whole project, but also this Jinja code and put result to the screen.
