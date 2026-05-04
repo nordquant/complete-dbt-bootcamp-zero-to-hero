@@ -88,7 +88,7 @@ COPY INTO raw_hosts (id, name, is_superhost, created_at, updated_at)
                     FIELD_OPTIONALLY_ENCLOSED_BY = '"');
 ```
 
-## Snowflake user creation
+### Snowflake user creation
 _Only execute these commands if you decided to skip the Automated Snowflake Setup._
 
 Copy these SQL statements into a Snowflake Worksheet, fill in the public key, select all and execute them (i.e. pressing the play button).
@@ -152,6 +152,12 @@ GRANT SELECT ON ALL TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
 GRANT SELECT ON FUTURE TABLES IN SCHEMA AIRBNB.DEV to ROLE REPORTER;
 
 ```
+
+### Airstats tables - Capstone Setup
+_Only execute these commands if you decided to skip the Automated Snowflake Setup._
+
+Copy these SQL statements into a Snowflake Worksheet:
+https://github.com/nordquant/dbtlearn-snowflake-importer/blob/main/capstone-resources.md
 
 ## dbt installation
 
@@ -981,7 +987,7 @@ Testing individual sources:
 dbt test --select source:airbnb.listings
 ```
 
-## Debugging dbt
+### The `--debug` parameter
 
 ```
 dbt --debug test --select dim_listings_w_hosts
@@ -989,7 +995,59 @@ dbt --debug test --select dim_listings_w_hosts
 
 Keep in mind that in the lecture we didn't use the _--debug_ flag after all, as taking a look at the compiled SQL file is the better way of debugging tests.
 
-### Logging
+## Debugging YAML, SQL, models and general dbt bugs
+
+### Using `--empty` and `--sample`
+
+#### `--empty`
+```
+dbt run --empty
+# Check SQL: SELECT COUNT(*) FROM AIRBNB.DEV.DIM_LISTINGS_W_HOSTS;
+```
+
+#### `--sample`
+We've added the `event_time` config to `models/dim/dim_listings_cleansed.sql`:
+```
+{{
+  config(
+    materialized = 'view',
+    event_time='created_at'
+  )
+}} 
+WITH src_listings AS (
+    SELECT * FROM {{ ref('src_listings') }}
+)
+SELECT 
+  listing_id,
+  listing_name,
+  room_type,
+  CASE
+    WHEN minimum_nights = 0 THEN 1
+    ELSE minimum_nights
+  END AS minimum_nights,
+  host_id,
+  REPLACE(
+    price_str,
+    '$'
+  ) :: NUMBER(
+    10,
+    2
+  ) AS price,
+  created_at,
+  updated_at
+FROM
+  src_listings
+```
+
+Then we executed the sample:
+```
+dbt run -s dim_listings_w_hosts --sample "3 days"
+```
+_Watch out, the resulting table will be empty as we don't have data in `dim_listings_cleansed` for the past 3 days._
+
+You can check the SQL that's been executed in `target/run/airbnb/models/dim/dim_listings_w_hosts.sql`
+
+## Logging
 
 The contents of `macros/logging.sql`:
 ```

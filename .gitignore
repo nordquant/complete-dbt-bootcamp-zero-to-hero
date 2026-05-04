@@ -22,3 +22,6 @@ tmp*/
 .user.yml
 .vscode/
 .DS_Store
+.vscode/
+CLAUDE.md
+PROD.md
