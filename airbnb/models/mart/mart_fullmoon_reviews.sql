@@ -5,6 +5,7 @@
   begin='2009-06-20',
   batch_size='year',
   full_refresh=false
+  tags = ['fact']
 ) }}
 
 WITH fct_reviews AS (
