@@ -42,7 +42,8 @@ models:
       +materialized: table
     src:
       +materialized: ephemeral
-
+    fct:
+      +tags: ['fact']
 data_tests:
   +store_failures: true
   +schema: _test_failures
