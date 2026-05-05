@@ -1171,6 +1171,39 @@ dbt run --select fct_reviews  --vars '{start_date: "2024-02-15 00:00:00", end_da
 
 Reference - Working with incremental strategies: https://docs.getdbt.com/docs/build/incremental-models#about-incremental_strategy
 
+# dbt in Production
+
+## Microbatching
+_Don't forget to update `threads` to `4` in `profiles.yml`, otherwise microbatching might hang (a dbt bug since v1.9, unresolved as of v1.11)_
+
+Update the `models/mart/mart_fullmoon_reviews.sql` config:
+```
+{{ config(
+  materialized = 'incremental',
+  incremental_strategy='microbatch',
+  event_time='review_date',
+  begin='2009-06-20',
+  batch_size='year',
+  full_refresh=false
+) }}
+```
+
+Add an event_time config to `models/fct/fct_reviews.sql`:
+```
+{{
+  config(
+    materialized = 'incremental',
+    on_schema_change='fail',
+    event_time='review_date'
+    )
+}}
+```
+
+Use this command to force a full-refresh
+```
+dbt run -s mart_fullmoon_reviews --full-refresh --event-time-start "2020-01-01" --event-time-end "2030-01-01"
+```
+
 # dbt Power User
 
 ## Working with Legacy Code
