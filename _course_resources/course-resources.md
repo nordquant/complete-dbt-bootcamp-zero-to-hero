@@ -1325,6 +1325,59 @@ Use this command to force a full-refresh
 dbt run -s mart_fullmoon_reviews --full-refresh --event-time-start "2020-01-01" --event-time-end "2030-01-01"
 ```
 
+## Model Lifecycle - Versioning, Deprecating, Disabling Models
+The contents of `models/dim/dim_hosts_cleansed_v2.sql`:
+```sql
+{#
+  You might have `view` as the materialization as we only 
+  replace `materialized` with `table` when we implement constraints. 
+#}
+{{
+  config(
+    materialized = 'table' 
+    )
+}} 
+WITH src_hosts AS (
+    SELECT
+        *
+    FROM
+        {{ ref('src_hosts') }}
+)
+SELECT
+    host_id,
+    NVL(
+        host_name,
+        'N/A'
+    ) AS host_name,
+    is_superhost,
+    created_at,
+    updated_at
+FROM
+    src_hosts
+```
+
+The final versioning block in `models/schema.yml`:
+```yaml
+    versions:
+      - v: 1
+        defined_in: dim_hosts_cleansed
+        deprecation_date: 2030-01-01
+      - v: 2
+        columns:
+          - include: '*'
+            exclude: [host_name]
+          - name: host_name
+            description: The name of the host (N/A if not available)
+            data_type: string
+            constraints:
+              - type: not_null
+    latest_version: 2
+```
+
+The final pinning of `models/dim/dim_listings_w_hosts.sql`:
+```sql
+    FROM {{ ref('dim_hosts_cleansed', v=2) }}
+```
 # dbt Power User
 
 ## Working with Legacy Code

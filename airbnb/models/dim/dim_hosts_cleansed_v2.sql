@@ -1,6 +1,10 @@
+{#
+  You might have `view` as the materialization as we only 
+  replace `materialized` with `table` when we implement constraints. 
+#}
 {{
   config(
-    materialized = 'view'
+    materialized = 'table' 
     )
 }} 
 WITH src_hosts AS (
@@ -13,12 +17,9 @@ SELECT
     host_id,
     NVL(
         host_name,
-        'Anonymous'
+        'N/A'
     ) AS host_name,
-    CASE is_superhost
-        WHEN 't' THEN 'Superhost'
-        ELSE 'Regular'
-    END AS host_type,
+    is_superhost,
     created_at,
     updated_at
 FROM

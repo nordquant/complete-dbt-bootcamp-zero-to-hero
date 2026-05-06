@@ -8,7 +8,8 @@ def is_holiday(date_col):
 def model(dbt, session):
     dbt.config(
         materialized = "table",
-        packages = ["holidays"]
+        packages = ["holidays"],
+        enabled=False # We add this line in the Model Lifecycle / Disabling Models section
     )
 
     orders_df = dbt.ref("seed_full_moon_dates")
