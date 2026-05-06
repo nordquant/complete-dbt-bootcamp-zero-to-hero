@@ -22,3 +22,4 @@ tmp*/
 .vscode/
 CLAUDE.md
 PROD.md
+.env
