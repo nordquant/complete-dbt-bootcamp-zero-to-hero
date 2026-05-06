@@ -6,6 +6,8 @@ airbnb/dbt_internal_packages/
 archive
 dbt_dagster_project/tmp*
 airbnb/profiles.yml
+airbnb/.env
+.env
 
 logs/
 venv/
