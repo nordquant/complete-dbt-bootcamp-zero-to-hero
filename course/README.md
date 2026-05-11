@@ -40,12 +40,6 @@ In a directory where you have `pyproject.toml` (root project directory):
 * `which python`: verify the venv.
 * `deactivate`: exit by venv.
 * `pip install dbt-snowflake==1.11.0`: install dbt.
-* `dbt --version`: verify dbt.
-
-## post dbt install
-* `dbt deps`: install packages defined in the packages.yml.
-* `dbt seed`: copy seeds to snowflake, seeds are a CSV file in seeds folder defined in the dbt_project.yml
-* `dbt build --full-refresh`: whole package of `dbt seed` -> `dbt run` -> `dbt snapshot` -> tests
 
 ## Install Dagster manually
 * `pip install dagster-dbt`: it is dbt integration for dagster, as dependency, it will install dagster core.
@@ -54,16 +48,25 @@ In a directory where you have `pyproject.toml` (root project directory):
 * `dagster dev --port=3002`
 
 # Useful dbt commands
+* `dbt deps`: install packages defined in the packages.yml.
+* `dbt seed`: copy seeds to snowflake, seeds are a CSV file in seeds folder defined in the dbt_project.yml
+* `dbt build --full-refresh`: whole package of `dbt seed` -> `dbt run` -> `dbt snapshot` -> tests
+* `dbt --version`: dbt command available?
+* `dbt debug`: verify dbt configurations, specifically the data warehouse connection.
+* `dbt clean`: Clear target folder
+* `dbt ls --resource-type model`: what models can dbt see
+* `dbt ls -s tag:fact`: select models with tag 'fact'
 * `dbt init --skip-profile-setup airbnb`: create project.
-* `dbt debug`: verify dbt configurations, specifically the snowflake connections with the server
-* `dbt run`: to go through models and tests, etc.
+* `dbt run`: materialize the models
 * `dbt run --debug`: shows every SQL that is executed against the data warehouse, also grant SQLs.
 * `dbt run --full-refresh`: to rebuild the whole model.
+* `dbt run -s dim_listings_w_hosts --sample "3 days"`: materialize with a limit condition to include data of the last 3 days.
+* `dbt run -s tag:fact` materialize all models with tag 'fact'
 * `dbt run --help`
 * `dbt run-operation --help`: execute a macro in itself, not as part of a test.
 * `dbt run-operation learn_variables --vars '{user_name: wlei07}'`
-* `dbt ls --resource-type model`
-* `dbt compile`: check if all models are connected correctly
+* `dbt parse`: validate yaml, write manifest.json
+* `dbt compile`: check if all models are connected correctly. It renders from Jinja -> SQL. For DBT Fusion, it also checks SQL syntax.
 * `dbt compile --inline '{# This is a comment #}{% set my_name = "Lei" %}{{ my_name }}'`: ompile the whole project, but also this Jinja code and put result to the screen.
 * `dbt compile --inline '{{ select_positive_values("dim_listings_cleansed", "minimum_nights") }}'`: another example of the above
 * `dbt show --inline '{{ select_positive_values("dim_listings_cleansed", "minimum_nights") }}'`: execute the query
@@ -73,6 +76,7 @@ In a directory where you have `pyproject.toml` (root project directory):
 * `dbt test`
 * `dbt test -x`: stop test execution after the first failure so it fails earlier.
 * `dbt test -s dim_listings_minimum_nights`: select a single test by name
+
 ## dbt documentation
 * `dbt docs generate`: generate documentation, taking input form the *.yml files in the models folder.
 * `dbt docs serve`: start an HTTP server for the generated documentation.

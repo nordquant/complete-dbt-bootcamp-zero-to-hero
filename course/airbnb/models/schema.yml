@@ -43,14 +43,24 @@ models:
     config:
       contract:
         enforced: true
+    # The constraint type primary_key is not enforced by snowflake.
+    # constraints:
+    #  - type: primary_key
+    #    columns: [host_id]
     columns:
       - name: host_id
         data_type: integer
+        constraints:
+          - type: not_null
+          #  The constraint type unique is not enforced by snowflake.
+          # - type: unique
         data_tests:
           - not_null
           - unique
       - name: host_name
         data_type: string
+        constraints:
+          - type: not_null
         data_tests:
           - not_null
       - name: is_superhost

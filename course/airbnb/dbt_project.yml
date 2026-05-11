@@ -37,6 +37,8 @@ models:
       +materialized: table
     src:
       +materialized: ephemeral
+    fct:
+      +tags: ['fact']
 data_tests:
   # you will be able to see test failures, from logs:
   # select * from AIRBNB.DEV_dbt_test__audit.accepted_values_dim_listings_c_85259bd6121f69d13e3814c2538c188d
