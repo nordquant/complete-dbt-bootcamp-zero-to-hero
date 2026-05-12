@@ -26,3 +26,5 @@ PROD.md
 .user.yml
 .DS_Store
 .env
+set-env.sh
+/airbnb/target*/

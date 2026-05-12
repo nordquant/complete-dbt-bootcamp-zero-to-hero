@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   devcontainer:
+    if: github.repository == 'nordquant/complete-dbt-bootcamp-zero-to-hero'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
