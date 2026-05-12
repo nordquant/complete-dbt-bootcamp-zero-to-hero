@@ -10,10 +10,9 @@ airbnb:
       private_key_passphrase: "{{ env_var('PRIVATE_KEY_PASSPHRASE') }}"
 
       database: AIRBNB
-      schema: STAGING
+      schema: DEV
       threads: 4
       warehouse: COMPUTE_WH
-
     prod:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
@@ -24,10 +23,9 @@ airbnb:
       private_key_passphrase: "{{ env_var('PRIVATE_KEY_PASSPHRASE') }}"
 
       database: AIRBNB
-      schema: PROD
+      schema: DEV
       threads: 4
       warehouse: COMPUTE_WH
-
     dev:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
@@ -38,7 +36,8 @@ airbnb:
       private_key_passphrase: "{{ env_var('PRIVATE_KEY_PASSPHRASE') }}"
 
       database: AIRBNB
-      schema: "DBT_{{ env_var('DBT_ENV_NAME') }}"
+      schema: "DBT_{{ env_var('DBT_ENV_NAME') | upper | trim }}"
       threads: 4
       warehouse: COMPUTE_WH
+
   target: dev
