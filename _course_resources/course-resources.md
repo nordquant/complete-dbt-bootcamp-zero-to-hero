@@ -1378,6 +1378,77 @@ The final pinning of `models/dim/dim_listings_w_hosts.sql`:
 ```sql
     FROM {{ ref('dim_hosts_cleansed', v=2) }}
 ```
+
+## Working with Targets
+In `profiles.yml` now you have two sections:
+```yaml
+airbnb:
+  outputs:
+    dev:
+      type: snowflake
+      ...
+    prod:
+      type: snowflake
+      ...
+  target: dev
+```
+Running against the `prod` target:
+```
+dbt build --target prod
+```
+
+## Environment Variables
+
+We are using this profile. Save it to the `airbnb/_prod_profiles` folder): [`airbnb/_prod_profiles/profiles.yml`](../airbnb/_prod_profiles/profiles.yml)
+
+Download the set-env files (both Windows and Mac) from https://dbtsetup.nordquant.com.
+
+### Windows
+_Take a look at the top lines `set-env.sh` for the `Set-ExecutionPolicy` command that you might need to run if you run into permission issues._
+
+**Ensure you run a PowerShell shell and not `cmd`**
+
+Execute these commands:
+```
+. ..\set-env.ps1
+$env:DBT_ENV_NAME="MYDEV"
+```
+
+### Mac / Linux
+```
+. ../set-env.sh
+export DBT_ENV_NAME="MYDEV"
+```
+
+Test it out (both platforms):
+```
+dbt debug --profiles-dir _prod_profiles
+```
+
+## Working with Custom Schemas
+We've added the a `schema` config to `models/mart/mart_fullmoon_reviews.sql`:
+```
+{{ config(
+  materialized = 'incremental',
+  incremental_strategy='microbatch',
+  event_time='review_date',
+  begin='2009-06-20',
+  batch_size='year',
+  full_refresh=false,
+  tags = ['fact'],
+  schema='mart'
+) }}
+
+...
+```
+
+Building for `prod` with the new profile (custom schema materialization test):
+```
+dbt build --target prod --profiles-dir=_prod_profiles --empty
+```
+
+The custom schema behavior is defined in [`macros/generate_schema_name.sql`](../macros/generate_schema_name.sql).
+
 # dbt Power User
 
 ## Working with Legacy Code

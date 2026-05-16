@@ -10,7 +10,7 @@ airbnb:
       private_key_passphrase: "{{ env_var('PRIVATE_KEY_PASSPHRASE') }}"
 
       database: AIRBNB
-      schema: DEV
+      schema: STAGING
       threads: 4
       warehouse: COMPUTE_WH
     prod:
@@ -23,7 +23,7 @@ airbnb:
       private_key_passphrase: "{{ env_var('PRIVATE_KEY_PASSPHRASE') }}"
 
       database: AIRBNB
-      schema: DEV
+      schema: PROD
       threads: 4
       warehouse: COMPUTE_WH
     dev:
