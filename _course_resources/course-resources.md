@@ -1296,6 +1296,12 @@ SELECT min(review_date), max(review_date) FROM AIRBNB.DEV.FCT_REVIEWS
 ```
 
 _Don't forget to update `threads` to `4` in `profiles.yml`, otherwise microbatching might hang (a dbt bug since v1.9)_
+The Snowflake SQL we executed:
+```
+SELECT min(review_date), max(review_date) FROM AIRBNB.DEV.FCT_REVIEWS
+```
+
+_Don't forget to update `threads` to `4` in `profiles.yml`, otherwise microbatching might hang (a dbt bug since v1.9)_
 
 Update the `models/mart/mart_fullmoon_reviews.sql` config:
 ```
@@ -1378,6 +1384,123 @@ The final pinning of `models/dim/dim_listings_w_hosts.sql`:
 ```sql
     FROM {{ ref('dim_hosts_cleansed', v=2) }}
 ```
+
+## Working with Targets
+In `profiles.yml` now you have two sections:
+```yaml
+airbnb:
+  outputs:
+    dev:
+      type: snowflake
+      ...
+    prod:
+      type: snowflake
+      ...
+  target: dev
+```
+Running against the `prod` target:
+```
+dbt build --target prod
+```
+
+## Environment Variables
+
+We are using this profile. Save it to the `airbnb/_prod_profiles` folder): [`airbnb/_prod_profiles/profiles.yml`](../airbnb/_prod_profiles/profiles.yml)
+
+Download the set-env files (both Windows and Mac) from https://dbtsetup.nordquant.com.
+
+### Windows
+_Take a look at the top lines `set-env.sh` for the `Set-ExecutionPolicy` command that you might need to run if you run into permission issues._
+
+**Ensure you run a PowerShell shell and not `cmd`**
+
+Execute these commands:
+```
+. ..\set-env.ps1
+$env:DBT_ENV_NAME="MYDEV"
+```
+
+### Mac / Linux
+```
+. ../set-env.sh
+export DBT_ENV_NAME="MYDEV"
+```
+
+Test it out (both platforms):
+```
+dbt debug --profiles-dir _prod_profiles
+```
+
+## Working with Custom Schemas
+We've added the a `schema` config to `models/mart/mart_fullmoon_reviews.sql`:
+```
+{{ config(
+  materialized = 'incremental',
+  incremental_strategy='microbatch',
+  event_time='review_date',
+  begin='2009-06-20',
+  batch_size='year',
+  full_refresh=false,
+  tags = ['fact'],
+  schema='mart'
+) }}
+
+...
+```
+
+Building for `prod` with the new profile (custom schema materialization test):
+```
+dbt build --target prod --profiles-dir=_prod_profiles --empty
+```
+
+The custom schema behavior is defined in [`macros/generate_schema_name.sql`](../macros/generate_schema_name.sql).
+
+## Cleaning up Schemas
+
+The schema cleanup behavior is defined in [`macros/drop_dev_schemas.sql`](../macros/drop_dev_schemas.sql).
+
+Run this command to execute it:
+```
+dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
+```
+
+## Working with State
+
+### dbt Retry
+
+We introduced a syntax error in the `models/dim/dim_listings_cleansed.sql` model and then tried to build it with executing:
+```
+dbt build --profiles-dir _prod_profiles
+```
+
+Once the error has been fixed, we resume dbt by:
+```
+dbt retry --profiles-dir _prod_profiles
+```
+
+### Working with multiple states
+Compile state to production:
+```
+dbt compile --profiles-dir _prod_profiles --target prod --target-path target-prod            
+```
+
+See what we've changed:
+```
+dbt ls --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified
+```
+
+Then try to build the modified model:
+```
+dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
+dbt run --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified
+```
+
+### Deferring state
+```
+dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
+dbt run --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified --defer
+```
+
 # dbt Power User
 
 ## Working with Legacy Code

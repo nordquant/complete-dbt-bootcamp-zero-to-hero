@@ -1,4 +1,9 @@
 #!/bin/bash
+# ============================================================================
+# NOT COURSEWARE — COURSEWARE DEVELOPMENT INFRASTRUCTURE
+# This script is part of the courseware development/CI infrastructure and is
+# NOT part of the bootcamp course material. Students should ignore it.
+# ============================================================================
 
 # Usage: test_commands.sh [core|fusion]
 # Default: core

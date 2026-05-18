@@ -4,19 +4,16 @@
 # This script is part of the courseware development/CI infrastructure and is
 # NOT part of the bootcamp course material. Students should ignore it.
 # ============================================================================
+set -euo pipefail
 
-# Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PROFILES_FILE="$REPO_ROOT/airbnb/profiles.yml"
 
-cd "$REPO_ROOT"
+if [ ! -f "$PROFILES_FILE" ]; then
+    echo "Error: $PROFILES_FILE not found" >&2
+    exit 1
+fi
 
-# Note: devcontainer.yml is skipped because act bind-mounts .venv which causes path issues
-act push \
-    --matrix python-version:3.13 \
-    --matrix runs-on:ubuntu-latest-arm64 \
-    -P ubuntu-latest-arm64=catthehacker/ubuntu:act-latest \
-    -s PROFILES_YML="$(cat ./airbnb/profiles.yml)" \
-    --env run_full_tests=true \
-    --container-architecture linux/arm64 \
-    -W .github/workflows/python-app.yml
+gh secret set PROFILES_YML < "$PROFILES_FILE"
+echo "Uploaded $PROFILES_FILE as PROFILES_YML"
