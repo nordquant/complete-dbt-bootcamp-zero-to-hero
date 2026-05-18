@@ -23,9 +23,11 @@ tmp*/
 
 CLAUDE.md
 PROD.md
+<<<<<<< HEAD
 .user.yml
 .DS_Store
 .env
 set-env.sh
 set-env.ps1
 /airbnb/target*/
+.env

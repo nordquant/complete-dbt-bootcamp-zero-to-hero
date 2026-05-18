@@ -6,8 +6,8 @@ def get_sentiment(text):
 def model(dbt, session):
     dbt.config(
         materialized = "table",
-        packages = ["textblob"],
-        enabled= False
+        enabled= False, # We are disabling this Model later in the Model Lifecycle section
+        packages = ["textblob"]
     )
 
     reviews_df = dbt.ref("fct_reviews")

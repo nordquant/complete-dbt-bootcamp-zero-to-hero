@@ -1296,6 +1296,12 @@ SELECT min(review_date), max(review_date) FROM AIRBNB.DEV.FCT_REVIEWS
 ```
 
 _Don't forget to update `threads` to `4` in `profiles.yml`, otherwise microbatching might hang (a dbt bug since v1.9)_
+The Snowflake SQL we executed:
+```
+SELECT min(review_date), max(review_date) FROM AIRBNB.DEV.FCT_REVIEWS
+```
+
+_Don't forget to update `threads` to `4` in `profiles.yml`, otherwise microbatching might hang (a dbt bug since v1.9)_
 
 Update the `models/mart/mart_fullmoon_reviews.sql` config:
 ```
