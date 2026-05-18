@@ -1,3 +1,8 @@
+# ============================================================================
+# NOT COURSEWARE — COURSEWARE DEVELOPMENT INFRASTRUCTURE
+# This workflow is part of the courseware development/CI infrastructure and
+# is NOT part of the bootcamp course material. Students should ignore it.
+# ============================================================================
 name: Staging build (uploads target as artifact)
 
 on:

@@ -1,3 +1,10 @@
+# ============================================================================
+# NOT COURSEWARE — COURSEWARE DEVELOPMENT INFRASTRUCTURE
+# This workflow is part of the courseware development/CI infrastructure and
+# is NOT part of the bootcamp course material. Students should ignore it.
+# It is intentionally gated to skip when running on the public courseware
+# repository (nordquant/complete-dbt-bootcamp-zero-to-hero).
+# ============================================================================
 name: PR slim CI (defer to staging artifact)
 
 on:
@@ -11,6 +18,7 @@ permissions:
 jobs:
   slim-ci:
     name: dbt build --select state:modified+ --defer
+    if: github.repository != 'nordquant/complete-dbt-bootcamp-zero-to-hero'
     runs-on: ubuntu-latest
     env:
       SNOWFLAKE_ACCOUNT:      ${{ secrets.SNOWFLAKE_ACCOUNT }}

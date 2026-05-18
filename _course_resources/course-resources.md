@@ -1449,6 +1449,52 @@ dbt build --target prod --profiles-dir=_prod_profiles --empty
 
 The custom schema behavior is defined in [`macros/generate_schema_name.sql`](../macros/generate_schema_name.sql).
 
+## Cleaning up Schemas
+
+The schema cleanup behavior is defined in [`macros/drop_dev_schemas.sql`](../macros/drop_dev_schemas.sql).
+
+Run this command to execute it:
+```
+dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
+```
+
+## Working with State
+
+### dbt Retry
+
+We introduced a syntax error in the `models/dim/dim_listings_cleansed.sql` model and then tried to build it with executing:
+```
+dbt build --profiles-dir _prod_profiles
+```
+
+Once the error has been fixed, we resume dbt by:
+```
+dbt retry --profiles-dir _prod_profiles
+```
+
+### Working with multiple states
+Compile state to production:
+```
+dbt compile --profiles-dir _prod_profiles --target prod --target-path target-prod            
+```
+
+See what we've changed:
+```
+dbt ls --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified
+```
+
+Then try to build the modified model:
+```
+dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
+dbt run --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified
+```
+
+### Deferring state
+```
+dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
+dbt run --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified --defer
+```
+
 # dbt Power User
 
 ## Working with Legacy Code

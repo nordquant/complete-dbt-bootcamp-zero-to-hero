@@ -1,3 +1,8 @@
+# ============================================================================
+# NOT COURSEWARE — COURSEWARE DEVELOPMENT INFRASTRUCTURE
+# This workflow is part of the courseware development/CI infrastructure and
+# is NOT part of the bootcamp course material. Students should ignore it.
+# ============================================================================
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
