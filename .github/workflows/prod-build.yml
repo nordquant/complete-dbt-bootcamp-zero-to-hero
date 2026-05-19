@@ -34,12 +34,8 @@ jobs:
           cache-dependency-glob: "pyproject.toml"
       - run: uv python install 3.13
       - run: uv sync
-      - name: Install dbt profile
-        run: |
-          mkdir -p ~/.dbt
-          cp airbnb/_profiles/profiles.yml ~/.dbt/profiles.yml
-      - run: cd airbnb && uv run dbt deps
-      - run: cd airbnb && uv run dbt build --target prod
+      - run: cd airbnb && uv run dbt deps --profiles-dir _prod_profiles --target prod
+      - run: cd airbnb && uv run dbt build --profiles-dir _prod_profiles --target prod
       - name: Upload prod target as artifact
         uses: actions/upload-artifact@v4
         with:
