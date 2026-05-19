@@ -2,20 +2,22 @@
 # Please go to https://github.com/zoltanctoth/dbt-reference-production-repo
 # for a latest working example of this file
 
-name: PR slim CI (defer to prod artifact)
+name: PR cleanup (drop dev schema on merge)
 
 on:
   pull_request:
-    branches: [ "**" ]
+    types: [closed]
+    branches: [main]
 
 permissions:
   contents: read
-  actions: read
 
 jobs:
-  slim-ci:
-    name: Build modified with defer to prod artifact
-    if: github.repository != 'nordquant/complete-dbt-bootcamp-zero-to-hero'
+  drop-dev-schema:
+    name: Drop dev schemas for merged PR
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.repository != 'nordquant/complete-dbt-bootcamp-zero-to-hero'
     runs-on: ubuntu-latest
     env:
       SNOWFLAKE_ACCOUNT:      "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -32,23 +34,11 @@ jobs:
           cache-dependency-glob: "pyproject.toml"
       - run: uv python install 3.13
       - run: uv sync
-      - name: Set DBT_ENV_NAME from branch (uppercase, _ for / and -)
+      - name: Set DBT_ENV_NAME from merged branch (uppercase, _ for / and -)
         run: |
           NAME="${{ github.head_ref }}"
           SANITIZED=$(echo "$NAME" | tr '/' '_' | tr '-' '_' | tr '[:lower:]' '[:upper:]')
           echo "DBT_ENV_NAME=$SANITIZED" >> "$GITHUB_ENV"
-          echo "PR will build into schema: DBT_$SANITIZED"
+          echo "Will drop schemas matching prefix: DBT_$SANITIZED"
       - run: cd airbnb && uv run dbt deps --profiles-dir _prod_profiles --target dev
-      - name: Download latest prod-target artifact from main
-        uses: dawidd6/action-download-artifact@v21
-        with:
-          workflow: prod-build.yml
-          branch: main
-          name: prod-target
-          path: airbnb/prod-target
-          if_no_artifact_found: fail
-      - name: dbt build (slim CI if manifest available, else full)
-        run: |
-          cd airbnb
-          uv run dbt build --profiles-dir _prod_profiles --target dev \
-            --select state:modified+ --defer --state ./prod-target
+      - run: cd airbnb && uv run dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles --target dev

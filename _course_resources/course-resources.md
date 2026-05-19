@@ -1501,6 +1501,11 @@ dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
 dbt run --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified --defer
 ```
 
+## Impementing Clim CI and Production Pipelines
+Here is the reference repo we are building upon:
+
+https://github.com/zoltanctoth/dbt-reference-production-repo
+
 # dbt Power User
 
 ## Working with Legacy Code
