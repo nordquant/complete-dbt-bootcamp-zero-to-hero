@@ -1,10 +1,7 @@
-# ============================================================================
-# NOT COURSEWARE — COURSEWARE DEVELOPMENT INFRASTRUCTURE
-# This workflow is part of the courseware development/CI infrastructure and
-# is NOT part of the bootcamp course material. Students should ignore it.
-# It is intentionally gated to skip when running on the public courseware
-# repository (nordquant/complete-dbt-bootcamp-zero-to-hero).
-# ============================================================================
+# Reference only
+# Please go to https://github.com/zoltanctoth/dbt-reference-production-repo
+# for a latest working example of this file
+
 name: Prod deploy (on merge to main / manual)
 
 on:
