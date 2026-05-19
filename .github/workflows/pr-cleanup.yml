@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   drop-dev-schema:
-    name: dbt run-operation drop_dev_schemas
+    name: Drop dev schemas for merged PR
     if: >-
       github.event.pull_request.merged == true &&
       github.repository != 'nordquant/complete-dbt-bootcamp-zero-to-hero'
