@@ -1,0 +1,43 @@
+airbnb:
+  outputs:
+    staging:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('DBT_USER') }}"
+
+      role: TRANSFORM
+      private_key: "{{ env_var('PRIVATE_KEY') }}"
+      private_key_passphrase: "{{ env_var('PRIVATE_KEY_PASSPHRASE') }}"
+
+      database: AIRBNB
+      schema: STAGING
+      threads: 4
+      warehouse: COMPUTE_WH
+    prod:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('DBT_USER') }}"
+
+      role: TRANSFORM
+      private_key: "{{ env_var('PRIVATE_KEY') }}"
+      private_key_passphrase: "{{ env_var('PRIVATE_KEY_PASSPHRASE') }}"
+
+      database: AIRBNB
+      schema: PROD
+      threads: 4
+      warehouse: COMPUTE_WH
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('DBT_USER') }}"
+
+      role: TRANSFORM
+      private_key: "{{ env_var('PRIVATE_KEY') }}"
+      private_key_passphrase: "{{ env_var('PRIVATE_KEY_PASSPHRASE') }}"
+
+      database: AIRBNB
+      schema: "DBT_{{ env_var('DBT_ENV_NAME') | upper | trim }}"
+      threads: 4
+      warehouse: COMPUTE_WH
+
+  target: dev

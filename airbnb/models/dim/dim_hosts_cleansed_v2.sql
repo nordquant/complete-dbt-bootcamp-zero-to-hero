@@ -17,7 +17,7 @@ SELECT
     host_id,
     NVL(
         host_name,
-        'Anonymous'
+        'N/A'
     ) AS host_name,
     is_superhost,
     created_at,

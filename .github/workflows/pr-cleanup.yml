@@ -1,0 +1,44 @@
+# Reference only
+# Please go to https://github.com/zoltanctoth/dbt-reference-production-repo
+# for a latest working example of this file
+
+name: PR cleanup (drop dev schema on merge)
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  drop-dev-schema:
+    name: Drop dev schemas for merged PR
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.repository != 'nordquant/complete-dbt-bootcamp-zero-to-hero'
+    runs-on: ubuntu-latest
+    env:
+      SNOWFLAKE_ACCOUNT:      "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+      DBT_USER:               "${{ secrets.DBT_USER }}"
+      PRIVATE_KEY: |
+        ${{ secrets.PRIVATE_KEY }}
+      PRIVATE_KEY_PASSPHRASE: "${{ secrets.PRIVATE_KEY_PASSPHRASE }}"
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+      - run: uv python install 3.13
+      - run: uv sync
+      - name: Set DBT_ENV_NAME from merged branch (uppercase, _ for / and -)
+        run: |
+          NAME="${{ github.head_ref }}"
+          SANITIZED=$(echo "$NAME" | tr '/' '_' | tr '-' '_' | tr '[:lower:]' '[:upper:]')
+          echo "DBT_ENV_NAME=$SANITIZED" >> "$GITHUB_ENV"
+          echo "Will drop schemas matching prefix: DBT_$SANITIZED"
+      - run: cd airbnb && uv run dbt deps --profiles-dir _prod_profiles --target dev
+      - run: cd airbnb && uv run dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles --target dev

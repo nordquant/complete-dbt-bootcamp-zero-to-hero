@@ -6,6 +6,9 @@ airbnb/dbt_internal_packages/
 archive
 course/airbnb/profiles.yml
 dbt_dagster_project/tmp*
+airbnb/profiles.yml
+airbnb/.env
+.env
 
 logs/
 venv/
@@ -22,6 +25,14 @@ tmp*/
 .user.yml
 .vscode/
 .DS_Store
-.vscode/
+.vscode
+
 CLAUDE.md
 PROD.md
+.user.yml
+.DS_Store
+.env
+set-env.sh
+set-env.ps1
+/airbnb/target*/
+.env

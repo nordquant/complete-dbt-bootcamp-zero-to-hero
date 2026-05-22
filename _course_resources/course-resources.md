@@ -7,7 +7,7 @@ The easiest way is to take a look at your Snowflake Registration email and copy 
 
 ## Automated Snowflake Setup
 I encourage you to go through the automated Snowflake Setup as importing the data and setting the permissions from scratch might take quite some time.
-Follow the instructions here https://dbtsetup.nordquant.com/ to set up your Snowflake database with a click of a button! ( If you encounter any issues with the link below, here is a backup server of the same application: https://udemy-dbt-setup.streamlit.app/ )
+Follow the instructions here https://udemy-dbt-setup.streamlit.app/ to set up your Snowflake database with a click of a button! ( If you encounter any issues with the link below, here is a backup server of the same application: https://dbtsetup.nordquant.com/ )
 
 ## Snowflake data import (manual)
 _Only execute these commands if you decided to skip the Automated Snowflake Setup._
@@ -680,6 +680,45 @@ SELECT * FROM {{ model }} WHERE {{ column_name }} <= 0
 {% endtest %}
 ```
 
+## Constraints
+
+* [The constraints documentation](https://docs.getdbt.com/reference/resource-properties/constraints)
+
+1) We've changed the materialization of `models/dim/dim_hosts_cleansed.sql` to `table`
+2) Here is the final code for the constraint-specific part of `models/schema.yml`:
+```
+
+  - name: dim_hosts_cleansed
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: host_id
+        data_type: integer
+        constraints:
+          - type: not_null
+        data_tests:
+          - unique
+      
+      - name: host_name
+        data_type: string
+        constraints:
+          - type: not_null
+      
+      - name: is_superhost
+        data_type: string
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['t', 'f']
+
+      - name: updated_at
+        data_type: timestamp
+
+      - name: created_at
+        data_type: timestamp
+```
+
 # Jinja, Macros and Packages
 ## Jinja
 
@@ -794,7 +833,7 @@ WHERE review_text is not null
 
 ## Documentation
 
-The `models/schema.yml` after adding the documentation:
+The documentation-specific pieces of `models/schema.yml` after adding the documentation:
 ```yaml
 
 models:
@@ -995,6 +1034,24 @@ dbt --debug test --select dim_listings_w_hosts
 
 Keep in mind that in the lecture we didn't use the _--debug_ flag after all, as taking a look at the compiled SQL file is the better way of debugging tests.
 
+
+## Logging
+
+The contents of `macros/logging.sql`:
+```
+{% macro learn_logging() %}
+    {{ log("Call your mom!") }}
+    {{ log("Call your dad!", info=True) }} {# Logs to the screen, too #}
+--  {{ log("Call your dad!", info=True) }} {# This will be logged to the screen #}
+    {# log("Call your dad!", info=True) #} {# This won't be executed #}
+{% endmacro %}
+```
+
+Executing the macro:
+```
+dbt run-operation learn_logging
+```
+
 ## Debugging YAML, SQL, models and general dbt bugs
 
 ### Using `--empty` and `--sample`
@@ -1047,21 +1104,80 @@ _Watch out, the resulting table will be empty as we don't have data in `dim_list
 
 You can check the SQL that's been executed in `target/run/airbnb/models/dim/dim_listings_w_hosts.sql`
 
-## Logging
+## Tags and Selectors
 
-The contents of `macros/logging.sql`:
+We are adding tags to `dbt_project.yml`:
 ```
-{% macro learn_logging() %}
-    {{ log("Call your mom!") }}
-    {{ log("Call your dad!", info=True) }} {# Logs to the screen, too #}
---  {{ log("Call your dad!", info=True) }} {# This will be logged to the screen #}
-    {# log("Call your dad!", info=True) #} {# This won't be executed #}
-{% endmacro %}
+    fct:
+      +tags: ['fact']
 ```
 
-Executing the macro:
+And then also for the `models/mart/mart_fullmoon_reviews.sql`:
 ```
-dbt run-operation learn_logging
+{{ config(
+  materialized = 'table',
+  tags = ['fact']
+) }}
+```
+
+### Executing selectors
+Our `selector.yml` file:
+```
+selectors:
+  - name: dim_except_listings_w_hosts
+    description: Selects all dim models, excluding dim_listings_w_hosts.
+    definition:
+      union:
+        - method: path
+          value: models/dim
+        - exclude:
+            - method: fqn
+              value: dim_listings_w_hosts
+
+```
+
+And the selector commands:
+```
+# Before dbt v1.12:
+dbt run --selector dim_except_listings_w_hosts
+
+# Starting from dbt v1.12
+dbt run -s selector:dim_except_listings_w_hosts
+```
+
+## Python Models
+The contents of `models/dim/dim_long_term_listings.py`:
+```python
+def model(dbt, session):
+    listings = dbt.ref("dim_listings_cleansed")
+
+    return (listings.filter(listings["MINIMUM_NIGHTS"] >= 30)
+                   .select("LISTING_ID", "LISTING_NAME", "PRICE"))
+```
+
+The contents of `models/dim/dim_fullmoon.py`:
+```python
+import holidays
+
+def is_holiday(date_col):
+    german_holidays = holidays.Germany()
+    is_holiday = (date_col in german_holidays)
+    return is_holiday
+
+def model(dbt, session):
+    dbt.config(
+        materialized = "table",
+        packages = ["holidays"]
+    )
+
+    orders_df = dbt.ref("seed_full_moon_dates")
+
+    df = orders_df.to_pandas()
+
+    df["IS_HOLIDAY"] = df["FULL_MOON_DATE"].apply(is_holiday)
+
+    # return final dataset (Pandas DataFrame)
+    return df
 ```
 
 ## Variables
@@ -1170,6 +1286,225 @@ dbt run --select fct_reviews  --vars '{start_date: "2024-02-15 00:00:00", end_da
 ```
 
 Reference - Working with incremental strategies: https://docs.getdbt.com/docs/build/incremental-models#about-incremental_strategy
+
+# dbt in Production
+
+## Microbatching
+The Snowflake SQL we executed:
+```
+SELECT min(review_date), max(review_date) FROM AIRBNB.DEV.FCT_REVIEWS
+```
+
+_Don't forget to update `threads` to `4` in `profiles.yml`, otherwise microbatching might hang (a dbt bug since v1.9)_
+The Snowflake SQL we executed:
+```
+SELECT min(review_date), max(review_date) FROM AIRBNB.DEV.FCT_REVIEWS
+```
+
+_Don't forget to update `threads` to `4` in `profiles.yml`, otherwise microbatching might hang (a dbt bug since v1.9)_
+
+Update the `models/mart/mart_fullmoon_reviews.sql` config:
+```
+{{ config(
+  materialized = 'incremental',
+  incremental_strategy='microbatch',
+  event_time='review_date',
+  begin='2009-06-20',
+  batch_size='year',
+  full_refresh=false
+) }}
+```
+
+Add an event_time config to `models/fct/fct_reviews.sql`:
+```
+{{
+  config(
+    materialized = 'incremental',
+    on_schema_change='fail',
+    event_time='review_date'
+    )
+}}
+```
+
+Use this command to force a full-refresh
+```
+dbt run -s mart_fullmoon_reviews --full-refresh --event-time-start "2020-01-01" --event-time-end "2030-01-01"
+```
+
+## Model Lifecycle - Versioning, Deprecating, Disabling Models
+The contents of `models/dim/dim_hosts_cleansed_v2.sql`:
+```sql
+{#
+  You might have `view` as the materialization as we only 
+  replace `materialized` with `table` when we implement constraints. 
+#}
+{{
+  config(
+    materialized = 'table' 
+    )
+}} 
+WITH src_hosts AS (
+    SELECT
+        *
+    FROM
+        {{ ref('src_hosts') }}
+)
+SELECT
+    host_id,
+    NVL(
+        host_name,
+        'N/A'
+    ) AS host_name,
+    is_superhost,
+    created_at,
+    updated_at
+FROM
+    src_hosts
+```
+
+The final versioning block in `models/schema.yml`:
+```yaml
+    versions:
+      - v: 1
+        defined_in: dim_hosts_cleansed
+        deprecation_date: 2030-01-01
+      - v: 2
+        columns:
+          - include: '*'
+            exclude: [host_name]
+          - name: host_name
+            description: The name of the host (N/A if not available)
+            data_type: string
+            constraints:
+              - type: not_null
+    latest_version: 2
+```
+
+The final pinning of `models/dim/dim_listings_w_hosts.sql`:
+```sql
+    FROM {{ ref('dim_hosts_cleansed', v=2) }}
+```
+
+## Working with Targets
+In `profiles.yml` now you have two sections:
+```yaml
+airbnb:
+  outputs:
+    dev:
+      type: snowflake
+      ...
+    prod:
+      type: snowflake
+      ...
+  target: dev
+```
+Running against the `prod` target:
+```
+dbt build --target prod
+```
+
+## Environment Variables
+
+We are using this profile. Save it to the `airbnb/_prod_profiles` folder): [`airbnb/_prod_profiles/profiles.yml`](../airbnb/_prod_profiles/profiles.yml)
+
+Download the set-env files (both Windows and Mac) from https://dbtsetup.nordquant.com.
+
+### Windows
+_Take a look at the top lines `set-env.sh` for the `Set-ExecutionPolicy` command that you might need to run if you run into permission issues._
+
+**Ensure you run a PowerShell shell and not `cmd`**
+
+Execute these commands:
+```
+. ..\set-env.ps1
+$env:DBT_ENV_NAME="MYDEV"
+```
+
+### Mac / Linux
+```
+. ../set-env.sh
+export DBT_ENV_NAME="MYDEV"
+```
+
+Test it out (both platforms):
+```
+dbt debug --profiles-dir _prod_profiles
+```
+
+## Working with Custom Schemas
+We've added the a `schema` config to `models/mart/mart_fullmoon_reviews.sql`:
+```
+{{ config(
+  materialized = 'incremental',
+  incremental_strategy='microbatch',
+  event_time='review_date',
+  begin='2009-06-20',
+  batch_size='year',
+  full_refresh=false,
+  tags = ['fact'],
+  schema='mart'
+) }}
+
+...
+```
+
+Building for `prod` with the new profile (custom schema materialization test):
+```
+dbt build --target prod --profiles-dir=_prod_profiles --empty
+```
+
+The custom schema behavior is defined in [`macros/generate_schema_name.sql`](../macros/generate_schema_name.sql).
+
+## Cleaning up Schemas
+
+The schema cleanup behavior is defined in [`macros/drop_dev_schemas.sql`](../macros/drop_dev_schemas.sql).
+
+Run this command to execute it:
+```
+dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
+```
+
+## Working with State
+
+### dbt Retry
+
+We introduced a syntax error in the `models/dim/dim_listings_cleansed.sql` model and then tried to build it with executing:
+```
+dbt build --profiles-dir _prod_profiles
+```
+
+Once the error has been fixed, we resume dbt by:
+```
+dbt retry --profiles-dir _prod_profiles
+```
+
+### Working with multiple states
+Compile state to production:
+```
+dbt compile --profiles-dir _prod_profiles --target prod --target-path target-prod            
+```
+
+See what we've changed:
+```
+dbt ls --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified
+```
+
+Then try to build the modified model:
+```
+dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
+dbt run --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified
+```
+
+### Deferring state
+```
+dbt run-operation drop_dev_schemas --profiles-dir _prod_profiles
+dbt run --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified --defer
+```
+
+## Impementing Clim CI and Production Pipelines
+Here is the reference repo we are building upon:
+
+https://github.com/zoltanctoth/dbt-reference-production-repo
 
 # dbt Power User
 
