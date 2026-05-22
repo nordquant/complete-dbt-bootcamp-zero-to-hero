@@ -25,14 +25,9 @@ tmp*/
 .user.yml
 .vscode/
 .DS_Store
-.vscode
 
 CLAUDE.md
 PROD.md
-.user.yml
-.DS_Store
-.env
 set-env.sh
 set-env.ps1
 /airbnb/target*/
-.env
