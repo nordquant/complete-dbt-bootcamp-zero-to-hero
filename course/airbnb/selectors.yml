@@ -1,2 +1,15 @@
+# YAML selector, run it with
+# `dbt run --selector dim_except_listings_w_hosts`, or alternatively
+# `dbt run -s selector:dim_except_listings_w_hosts`.
+# I was told that this works for dbt-core >= 1.12.0, but I am not sure.
+# dbt-core 1.12.0 is still beta and I have not tested it yet.
 selectors:
   - name: dim_except_listings_w_hosts
+    description: Selects all dim models, excluding dim_listings_w_hosts.
+    definition:
+      union:
+        - method: path
+          value: models/dim
+        - exclude:
+            - method: fqn
+              value: dim_listings_w_hosts
