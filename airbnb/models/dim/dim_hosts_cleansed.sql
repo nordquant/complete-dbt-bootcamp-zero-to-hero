@@ -1,8 +1,13 @@
-WITH scr_hosts AS (
+{{
+    config(
+        materialized = 'view'
+    )
+}}
+WITH src_hosts AS (
     SELECT * FROM {{  ref('src_hosts') }}
 )
 SELECT
-    id,
+    host_id,
     NVL(
         host_name, 
         'Anonymous'
@@ -11,4 +16,4 @@ SELECT
     created_at,
     updated_at
 FROM
-    scr_hosts
+    src_hosts
