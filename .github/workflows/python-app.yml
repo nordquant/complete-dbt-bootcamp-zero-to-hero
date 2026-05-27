@@ -148,16 +148,39 @@ jobs:
       run: |
         mkdir -p ~/.dbt
         echo "$PROFILES_YML" > ~/.dbt/profiles.yml
-    - name: dbt debug
-      shell: ${{ matrix.shell }}
+    # NOTE: the step-level `shell:` key does NOT accept ${{ matrix.* }}
+    # expressions — the parser rejects matrix context there and refuses to
+    # load the whole workflow. We therefore duplicate each dbt step per
+    # shell and gate with `if: matrix.shell == '...'`, the same pattern
+    # used for the inline-quoting test steps below.
+    - name: dbt debug (pwsh)
+      if: matrix.shell == 'pwsh'
+      shell: pwsh
       working-directory: airbnb
       run: uv run dbt debug
-    - name: dbt deps
-      shell: ${{ matrix.shell }}
+    - name: dbt debug (powershell)
+      if: matrix.shell == 'powershell'
+      shell: powershell
+      working-directory: airbnb
+      run: uv run dbt debug
+    - name: dbt deps (pwsh)
+      if: matrix.shell == 'pwsh'
+      shell: pwsh
       working-directory: airbnb
       run: uv run dbt deps
-    - name: dbt build
-      shell: ${{ matrix.shell }}
+    - name: dbt deps (powershell)
+      if: matrix.shell == 'powershell'
+      shell: powershell
+      working-directory: airbnb
+      run: uv run dbt deps
+    - name: dbt build (pwsh)
+      if: matrix.shell == 'pwsh'
+      shell: pwsh
+      working-directory: airbnb
+      run: uv run dbt build
+    - name: dbt build (powershell)
+      if: matrix.shell == 'powershell'
+      shell: powershell
       working-directory: airbnb
       run: uv run dbt build
     - name: Inline command quoting tests (pwsh cell)
