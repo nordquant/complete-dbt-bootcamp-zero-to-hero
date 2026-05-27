@@ -397,6 +397,32 @@ Making a full-refresh:
 ```
 dbt run --full-refresh
 ```
+
+### Reference Only - Incremental Strategies
+Link to the docs: https://docs.getdbt.com/docs/build/incremental-strategy
+
+#### Merge Strategy Example
+Taking the `fct/fct_reviews.sql` model:
+```sql
+{{
+  config(
+    materialized='incremental',
+    incremental_strategy='merge',
+    unique_key='review_id'
+  )
+}}
+WITH src_reviews AS (
+  SELECT * FROM {{ ref('src_reviews') }}
+)
+SELECT * FROM src_reviews
+WHERE review_text is not null
+
+{% if is_incremental() %}
+  AND review_date > (select max(review_date) from {{ this }})
+{% endif %}
+```
+
+
 ## DIM listings with hosts
 The contents of `dim/dim_listings_w_hosts.sql`:
 ```sql
@@ -1104,6 +1130,10 @@ _Watch out, the resulting table will be empty as we don't have data in `dim_list
 
 You can check the SQL that's been executed in `target/run/airbnb/models/dim/dim_listings_w_hosts.sql`
 
+### Using Flags
+* Supported Flags: https://docs.getdbt.com/reference/global-configs/about-global-configs
+* Managing behavior changes with Flags: https://docs.getdbt.com/reference/global-configs/behavior-changes
+ 
 ## Tags and Selectors
 
 We are adding tags to `dbt_project.yml`:
