@@ -126,7 +126,10 @@ jobs:
       matrix:
         shell: [pwsh, powershell]   # PowerShell 7 and Windows PowerShell 5.1
     env:
-      UV_PYTHON: ${{ env.full_test_python }}
+      # Hardcoded to match the workflow-level full_test_python value above.
+      # The `env` context is NOT available inside jobs.<id>.env, so we can't
+      # write `${{ env.full_test_python }}` here — bump both together.
+      UV_PYTHON: "3.13"
     steps:
     - uses: actions/checkout@v6
     - name: Install uv
@@ -134,8 +137,8 @@ jobs:
       with:
         enable-cache: true
         cache-dependency-glob: "pyproject.toml"
-    - name: Set up Python ${{ env.full_test_python }}
-      run: uv python install ${{ env.full_test_python }}
+    - name: Set up Python 3.13
+      run: uv python install 3.13
     - name: Install dependencies
       run: uv sync
     - name: Create dbt profile
