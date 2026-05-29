@@ -10,9 +10,9 @@ name: Test App
 
 on:
   push:
-    branches: [ "**" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "**" ]
+    branches: [ "main" ]
   workflow_dispatch:
   schedule:
     - cron: '0 1 * * *'  # 2 AM CET (1 AM UTC)
@@ -116,6 +116,83 @@ jobs:
       run: |
         cd airbnb
         PATH="$HOME/.local/bin:$PATH" bash ../.github/scripts/test_commands.sh fusion
+
+  windows-quote-test:
+    if: github.repository == 'nordquant/complete-dbt-bootcamp-zero-to-hero' && github.event_name == 'workflow_dispatch'
+    name: dbt inline quoting (Windows / ${{ matrix.shell }})
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shell: [pwsh, powershell]   # PowerShell 7 and Windows PowerShell 5.1
+    env:
+      # Hardcoded to match the workflow-level full_test_python value above.
+      # The `env` context is NOT available inside jobs.<id>.env, so we can't
+      # write `${{ env.full_test_python }}` here — bump both together.
+      UV_PYTHON: "3.13"
+    steps:
+    - uses: actions/checkout@v6
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+      with:
+        enable-cache: true
+        cache-dependency-glob: "pyproject.toml"
+    - name: Set up Python 3.13
+      run: uv python install 3.13
+    - name: Install dependencies
+      run: uv sync
+    - name: Create dbt profile
+      shell: bash
+      env:
+        PROFILES_YML: ${{ secrets.PROFILES_YML }}
+      run: |
+        mkdir -p ~/.dbt
+        echo "$PROFILES_YML" > ~/.dbt/profiles.yml
+    # NOTE: the step-level `shell:` key does NOT accept ${{ matrix.* }}
+    # expressions — the parser rejects matrix context there and refuses to
+    # load the whole workflow. We therefore duplicate each dbt step per
+    # shell and gate with `if: matrix.shell == '...'`, the same pattern
+    # used for the inline-quoting test steps below.
+    - name: dbt debug (pwsh)
+      if: matrix.shell == 'pwsh'
+      shell: pwsh
+      working-directory: airbnb
+      run: uv run dbt debug
+    - name: dbt debug (powershell)
+      if: matrix.shell == 'powershell'
+      shell: powershell
+      working-directory: airbnb
+      run: uv run dbt debug
+    - name: dbt deps (pwsh)
+      if: matrix.shell == 'pwsh'
+      shell: pwsh
+      working-directory: airbnb
+      run: uv run dbt deps
+    - name: dbt deps (powershell)
+      if: matrix.shell == 'powershell'
+      shell: powershell
+      working-directory: airbnb
+      run: uv run dbt deps
+    - name: dbt build (pwsh)
+      if: matrix.shell == 'pwsh'
+      shell: pwsh
+      working-directory: airbnb
+      run: uv run dbt build
+    - name: dbt build (powershell)
+      if: matrix.shell == 'powershell'
+      shell: powershell
+      working-directory: airbnb
+      run: uv run dbt build
+    - name: Inline command quoting tests (pwsh cell)
+      if: matrix.shell == 'pwsh'
+      shell: pwsh
+      working-directory: airbnb
+      run: uv run pwsh -File ../.github/scripts/test_commands.ps1
+    - name: Inline command quoting tests (powershell cell)
+      if: matrix.shell == 'powershell'
+      shell: powershell
+      working-directory: airbnb
+      run: uv run powershell -File ../.github/scripts/test_commands.ps1
 
   block-poweruser-to-main:
     if: github.event_name == 'pull_request' && github.head_ref == 'poweruser' && github.base_ref == 'main'
