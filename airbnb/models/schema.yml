@@ -3,7 +3,7 @@ version: 2
 models:
   - name: dim_listings_cleansed
 
-    tests:
+    data_tests:
       - minimum_row_count:
           arguments:
             min_row_count: 10000000
@@ -11,12 +11,12 @@ models:
     columns:
 
       - name: listing_id
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: host_id
-        tests:
+        data_tests:
           - not_null
           - relationships:
               arguments:
@@ -24,7 +24,7 @@ models:
                 field: host_id
 
       - name: room_type
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values:
@@ -34,7 +34,7 @@ models:
                   - 'Hotel room'
         
       - name: minimum_nights
-        tests:
+        data_tests:
           - positive_values
 
   - name: dim_hosts_cleansed
@@ -49,7 +49,7 @@ models:
         data_type: integer
         constraints:
           - type: not_null
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -57,12 +57,12 @@ models:
         data_type: string
         constraints:
           - type: not_null
-        tests:
+        data_tests:
           - not_null
 
       - name: is_superhost
         data_type: string
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values:
