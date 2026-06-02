@@ -39,6 +39,19 @@ models:
         data_tests:
           - positive_values
   - name: dim_hosts_cleansed
+    versions:
+      - v: 1
+        defined_in: dim_hosts_cleansed
+      - v: 2
+        columns:
+          - include: '*'
+            exclude: [host_name]
+          - name: host_name
+            description: "The name of the host (N/A if not available)"
+            data_type: string
+            constraints:
+              - type: not_null
+    latest_version: 1
     description: replace empty hosts name with a value
     config:
       contract:

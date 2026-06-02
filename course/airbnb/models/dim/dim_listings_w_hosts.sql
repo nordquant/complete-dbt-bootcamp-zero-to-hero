@@ -4,7 +4,7 @@ with l as (
 ),
 h as (
     select HOST_ID, HOST_NAME, IS_SUPERHOST, CREATED_AT, UPDATED_AT
-    from {{ ref('dim_hosts_cleansed') }}
+    from {{ ref('dim_hosts_cleansed', v=1) }}
 )
 select l.LISTING_ID,
        l.LISTING_NAME,
