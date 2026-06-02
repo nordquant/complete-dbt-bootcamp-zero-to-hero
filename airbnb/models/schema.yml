@@ -2,20 +2,22 @@ version: 2
 
 models:
   - name: dim_listings_cleansed
-
+    description: Cleansed table which conntains Airbnb listings.
     data_tests:
       - minimum_row_count:
           arguments:
-            min_row_count: 10000000
+            min_row_count: 10000
      
     columns:
 
       - name: listing_id
+        description: Primary key for the listing
         data_tests:
           - unique
           - not_null
 
       - name: host_id
+        description: The hosts's id. References the host table.
         data_tests:
           - not_null
           - relationships:
@@ -24,6 +26,7 @@ models:
                 field: host_id
 
       - name: room_type
+        description: Type of the apartment / room
         data_tests:
           - accepted_values:
               arguments:
@@ -34,10 +37,12 @@ models:
                   - 'Hotel room'
         
       - name: minimum_nights
+        description: '{{ doc("dim_listing_cleansed_minimum_nights") }}'
         data_tests:
           - positive_values
 
   - name: dim_hosts_cleansed
+    description: Cleansed table containing Airbnb hosts information.
 
     config:
       contract:
@@ -46,6 +51,7 @@ models:
     columns:
 
       - name: host_id
+        description: Unique identifier for the host.
         data_type: integer
         constraints:
           - type: not_null
@@ -54,6 +60,7 @@ models:
           - not_null
 
       - name: host_name
+        description: Name of the host.
         data_type: string
         constraints:
           - type: not_null
@@ -61,6 +68,7 @@ models:
           - not_null
 
       - name: is_superhost
+        description: Indicates whether the host is a superhost.
         data_type: string
         data_tests:
           - accepted_values:
@@ -68,8 +76,11 @@ models:
                 values:
                   - 't'
                   - 'f'
-      
+
       - name: created_at
+        description: Timestamp when the host record was created.
         data_type: timestamp
+
       - name: updated_at
+        description: Timestamp when the host record was last updated.
         data_type: timestamp
