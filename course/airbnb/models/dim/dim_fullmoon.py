@@ -7,7 +7,8 @@ def is_holiday(date_col):
 def model(dbt, _session):
     dbt.config(
         materialized = "table",
-        packages = ["holidays"]
+        packages = ["holidays"],
+        enabled=False
     )
 
     # df means data frame

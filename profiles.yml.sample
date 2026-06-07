@@ -10,5 +10,16 @@ airbnb:
       private_key: "-----BEGIN RSA PRIVATE KEY-----...-----END RSA PRIVATE KEY-----"
       database: AIRBNB
       schema: DEV
-      threads: 1
+      threads: 4
+      warehouse: COMPUTE_WH
+    dev:
+      type: snowflake
+      account: WEEXWAW-TE80357
+      user: dbt
+      role: TRANSFORM
+      # Setup helper: https://dbtsetup.nordquant.com/
+      private_key: "-----BEGIN RSA PRIVATE KEY-----...-----END RSA PRIVATE KEY-----"
+      database: AIRBNB
+      schema: PROD
+      threads: 4
       warehouse: COMPUTE_WH
