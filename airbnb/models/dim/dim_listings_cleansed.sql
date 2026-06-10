@@ -18,7 +18,7 @@ WITH src_listings AS (
     REPLACE(
         price_str,'$'
     ) :: NUMBER(
-        10,
+        10, 
         2
     ) AS price,
     created_at,
