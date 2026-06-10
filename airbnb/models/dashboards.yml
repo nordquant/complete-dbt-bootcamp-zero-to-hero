@@ -1,0 +1,16 @@
+version: 2
+
+exposures:
+  - name: Executive_Dashboard
+    type: dashboard
+    maturity: low
+    url: https://e3f7d37c.us2a.app.preset.io/superset/dashboard/p/Aa0myQ02GpX/
+    description: Executive Dashboard about Airbnb llistings and hosts
+
+    depends_on:
+      - ref('dim_listings_w_host')
+      - ref('mart_fullmoon_reviews')
+
+    owner:
+      name: Diepe Kameni Patrick Franck
+      email: diepe.dkpf@gmail.com
