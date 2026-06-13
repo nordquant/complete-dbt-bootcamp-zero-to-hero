@@ -1487,7 +1487,7 @@ The custom schema behavior is defined in [`macros/generate_schema_name.sql`](../
 
 ## Cleaning up Schemas
 
-The schema cleanup behavior is defined in [`macros/drop_dev_schemas.sql`](../macros/drop_dev_schemas.sql).
+The schema cleanup behavior is defined in [`../macros/drop_dev_schemas.sql`](../macros/drop_dev_schemas.sql).
 
 Run this command to execute it:
 ```
