@@ -1483,11 +1483,11 @@ Building for `prod` with the new profile (custom schema materialization test):
 dbt build --target prod --profiles-dir=_prod_profiles --empty
 ```
 
-The custom schema behavior is defined in [`macros/generate_schema_name.sql`](../macros/generate_schema_name.sql).
+The custom schema behavior is defined in [`macros/generate_schema_name.sql`](../airbnb/macros/generate_schema_name.sql).
 
 ## Cleaning up Schemas
 
-The schema cleanup behavior is defined in [`../macros/drop_dev_schemas.sql`](../macros/drop_dev_schemas.sql).
+The schema cleanup behavior is defined in [`macros/drop_dev_schemas.sql`](../airbnb/macros/drop_dev_schemas.sql).
 
 Run this command to execute it:
 ```
