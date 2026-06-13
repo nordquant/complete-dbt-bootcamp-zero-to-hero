@@ -51,6 +51,10 @@ models:
 tests:
   +store_failures: true
   +schema: _test_failures
+
+
+vars:
+  user_name: default_user_name_for_this_project
   
     # Config indicated by + and applies to all files under models/example/
     #example:
