@@ -1,5 +1,8 @@
 # Introduction and Environment Setup
 
+## How the Course Sections Map to the Certification Topics
+You can use this gist for searching for a topic: https://gist.github.com/zoltanctoth/d224be98dfe8c6ec299fedb688db2977
+
 ## How to figure out my Snowflake Account URL?
 The easiest way is to take a look at your Snowflake Registration email and copy the string before `.snowflakecomputing.com`. In my case, this is `frgcsyo-ie17820`. Keep in mind that sometimes URLs include the `.aws` tag, too, such as `frgcsyo-ie17820.aws`. This isn't simple, I know. Even _dbt Labs_ [has its own section](https://docs.getdbt.com/docs/cloud/connect-data-platform/connect-snowflake) on how to figure it out.
 
