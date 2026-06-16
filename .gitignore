@@ -30,3 +30,7 @@ set-env.sh
 set-env.ps1
 /airbnb/target*/
 .env
+
+# Airflow (instructional integration) — keep the empty home dir, ignore its run data
+airflow/.airflow_home/*
+!airflow/.airflow_home/.gitkeep
