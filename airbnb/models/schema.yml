@@ -42,6 +42,23 @@ models:
           - positive_values
 
   - name: dim_hosts_cleansed
+
+    versions:
+      - v: 1
+        defined_in: dim_hosts_cleansed
+        deprecation_date: 2030-01-01
+      - v: 2
+        columns:
+          - include: '*'
+            exclude: [host_name]
+          - name: host_name
+            description: The name of the host (N/A if not available)
+            data_type: string
+            constraints:
+              - type: not_null
+        defined_in: dim_hosts_cleansed_v2
+    latest_version: 2
+
     description: Cleansed table containing Airbnb hosts information.
 
     config:
@@ -90,7 +107,8 @@ models:
 
     data_tests:
       - dbt_expectations.expect_table_row_count_to_equal_other_table:
-          compare_model: source('airbnb', 'listings')
+          arguments:
+            compare_model: source('airbnb', 'listings')
 
     columns:
 
@@ -109,4 +127,5 @@ models:
                   severity: warn
 
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
+              arguments:
+                column_type: number

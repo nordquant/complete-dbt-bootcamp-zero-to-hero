@@ -11,7 +11,7 @@ AS (
     SELECT  
         *
     FROM 
-        {{ ref('dim_hosts_cleansed') }}
+        {{ ref('dim_hosts_cleansed', v=2) }}
 )
 SELECT
     l.listing_id,
