@@ -792,6 +792,10 @@ Compile and execute the macro:
 dbt compile --inline "SELECT * FROM {{ ref('dim_listings_cleansed') }} WHERE {{ no_empty_strings(ref('dim_listings_cleansed')) }}"
 dbt show --inline "SELECT * FROM {{ ref('dim_listings_cleansed') }} WHERE {{ no_empty_strings(ref('dim_listings_cleansed')) }}"
 ```
+
+Want to dive deep into `adapter`? [Here is the documentation.](https://docs.getdbt.com/reference/dbt-jinja-functions/adapter?version=2.0&name=Fusion)
+
+
 ## Custom Generic Tests
 The contents of `tests/generic/positive_values.sql`
 ```sql

@@ -1,15 +1,16 @@
 {
 	"name": "dbt Zero to Hero",
 	"image": "ghcr.io/nordquant/complete-dbt-bootcamp-zero-to-hero/dbt-bootcamp-devcontainer:latest",
-	"forwardPorts": [5000],
-	"postCreateCommand": "uv pip install -r pyproject.toml",
+	"forwardPorts": [
+		5000
+	],
+	"postCreateCommand": "uv sync --frozen --no-install-project",
 	"customizations": {
 		"vscode": {
 			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python3",
+				"python.defaultInterpreterPath": "/opt/venv/bin/python",
 				"extensions.ignoreRecommendations": true,
 				"settingsSync.enabled": false,
-				"terminal.integrated.cwd": "${containerWorkspaceFolder}/airbnb",
 				"python.terminal.useEnvFile": false
 			}
 		}
