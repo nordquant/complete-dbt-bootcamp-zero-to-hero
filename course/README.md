@@ -56,7 +56,18 @@ In a directory where you have `pyproject.toml` (root project directory):
 * `dbt clean`: Clear target folder
 * `dbt ls --resource-type model`: what models can dbt see
 * `dbt ls -s tag:fact`: select models with tag 'fact'
+* `dbt ls --profiles-dir _prod_profiles --target dev --state target-prod --select state:modified`: The filter `state:modified` is a state comparison filter that selects resources changed since a previous run.
+  * `--state target-prod` points to a previous state (manifest.json from a prior run)
+  * `state:modified` compares your current project against that state
+  * Returns only resources that have been modified (SQL changed, config changed, dependencies changed, etc.)
+
+**Use case:**
+This is typically used in CI/CD to only run/test what changed, or to understand the impact of your changes before deploying. In your command, it's comparing your current `dev` target against the `target-prod` state to see what's different.
 * `dbt init --skip-profile-setup airbnb`: create project.
+* `dbt retry`: When you run dbt retry, dbt:
+  * Reads run_results.json to see what command was last run
+  * Re-executes that same command
+  * Only re-runs the nodes that failed (skipping the ones that succeeded)
 * `dbt run`: materialize the models
 * `dbt run --debug`: shows every SQL that is executed against the data warehouse, also grant SQLs.
 * `dbt run --full-refresh`: to rebuild the whole model.
@@ -66,7 +77,7 @@ In a directory where you have `pyproject.toml` (root project directory):
 * `dbt run-operation --help`: execute a macro in itself, not as part of a test.
 * `dbt run-operation learn_variables --vars '{user_name: wlei07}'`
 * `dbt parse`: validate yaml, write manifest.json
-* `dbt compile`: check if all models are connected correctly. It renders from Jinja -> SQL. For DBT Fusion, it also checks SQL syntax.
+* `dbt compile --target-path target-prod`: check if all models are connected correctly. It renders from Jinja -> SQL. For DBT Fusion, it also checks SQL syntax.
 * `dbt compile --inline '{# This is a comment #}{% set my_name = "Lei" %}{{ my_name }}'`: ompile the whole project, but also this Jinja code and put result to the screen.
 * `dbt compile --inline '{{ select_positive_values("dim_listings_cleansed", "minimum_nights") }}'`: another example of the above
 * `dbt show --inline '{{ select_positive_values("dim_listings_cleansed", "minimum_nights") }}'`: execute the query

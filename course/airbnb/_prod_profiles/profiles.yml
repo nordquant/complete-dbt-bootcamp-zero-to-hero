@@ -10,7 +10,7 @@ airbnb:
       private_key: "{{ env_var('PRIVATE_KEY') }}"
 
       database: AIRBNB
-      schema: DEV
+      schema: staging
       threads: 4
       warehouse: COMPUTE_WH
     prod:
@@ -22,7 +22,7 @@ airbnb:
       private_key: "{{ env_var('PRIVATE_KEY') }}"
 
       database: AIRBNB
-      schema: DEV
+      schema: prod
       threads: 4
       warehouse: COMPUTE_WH
     dev:

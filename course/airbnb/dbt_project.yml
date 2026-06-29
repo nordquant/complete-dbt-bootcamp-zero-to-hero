@@ -9,7 +9,7 @@ profile: 'airbnb'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
+# found in the "models/" directory.
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
