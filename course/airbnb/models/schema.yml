@@ -94,7 +94,7 @@ models:
           arguments:
             compare_model: source('airbnb', 'listings')
     columns:
-      - name: price
+      - name: price_usd
         tests:
           - dbt_expectations.expect_column_quantile_values_to_be_between:
               arguments:
