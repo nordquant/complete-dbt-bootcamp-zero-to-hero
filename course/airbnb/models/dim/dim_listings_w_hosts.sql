@@ -1,5 +1,5 @@
 with l as (
-    select LISTING_ID, LISTING_NAME, ROOM_TYPE, MINIMUM_NIGHTS, HOST_ID, PRICE, CREATED_AT, UPDATED_AT
+    select LISTING_ID, LISTING_NAME, ROOM_TYPE, MINIMUM_NIGHTS, HOST_ID, PRICE, PRICE_STR, CREATED_AT, UPDATED_AT
     from {{ ref('dim_listings_cleansed') }}
 ),
 h as (
@@ -11,6 +11,7 @@ select l.LISTING_ID,
        l.ROOM_TYPE,
        l.MINIMUM_NIGHTS,
        l.PRICE as price_usd,
+       l.PRICE_STR,
        l.HOST_ID,
        h.HOST_NAME,
        h.IS_SUPERHOST as host_is_superhost,

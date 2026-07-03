@@ -30,6 +30,7 @@ select
         10,
         2
     ) as price,
+    price_str,
     created_at,
     updated_at
 from src_listings
