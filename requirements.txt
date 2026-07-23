@@ -1,5 +1,7 @@
-dbt-core==1.11.0
-dbt-snowflake==1.11.0
-dbt-autofix==0.18.0
-dagster-dbt==0.28.0
-dagster-webserver==1.12.0
+# This file is kept for reference only. 
+# Use the uv-based pyproject.toml file to install dependencies.
+dbt-core==1.11.12
+dbt-snowflake==1.11.6
+dbt-autofix==0.21.3
+dagster-dbt==0.29.13
+dagster-webserver==1.13.13
