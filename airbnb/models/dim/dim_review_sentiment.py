@@ -1,13 +1,13 @@
 from textblob import TextBlob
 
+
 def get_sentiment(text):
     return TextBlob(text).sentiment.polarity
 
 def model(dbt, session):
     dbt.config(
-        materialized = "table",
-        enabled= False, # We are disabling this Model later in the Model Lifecycle section
-        packages = ["textblob"]
+        materialized="table",
+        packages=["textblob", "snowflake-connector-python[pandas]"]
     )
 
     reviews_df = dbt.ref("fct_reviews")
