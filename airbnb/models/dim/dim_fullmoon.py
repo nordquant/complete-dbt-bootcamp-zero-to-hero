@@ -6,6 +6,7 @@ def is_holiday(date_col):
     is_holiday = (date_col in german_holidays)
     return is_holiday
 
+
 def model(dbt, session):
     dbt.config(
         materialized="table",
